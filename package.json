@@ -1,0 +1,28 @@
+{
+  "name": "serversummative",
+  "version": "1.0.0",
+  "description": "webpage which contains trailers that can be commented on, and customise to account details and search params",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Julian-Wyatt/ServerSummative.git"
+  },
+  "keywords": [
+    "Trailers",
+    "Server",
+    "Summative"
+  ],
+  "author": "Julian Wyatt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Julian-Wyatt/ServerSummative/issues"
+  },
+  "homepage": "https://github.com/Julian-Wyatt/ServerSummative#readme",
+  "dependencies": {
+    "node": "^11.10.0",
+    "nodejs": "0.0.0"
+  }
+}
