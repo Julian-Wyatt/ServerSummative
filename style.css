@@ -1,0 +1,48 @@
+body{
+	background: #fafafa;
+}
+
+.wrapper{
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar{
+    min-width: 250px;
+    max-width: 250px;
+	min-height: 100vh;
+	background: #F4A950;
+    color: #fff;
+	transition: all 0.3s;
+	border-color: #343a40;
+	border: 1px solid #343a40;
+  	
+
+}
+
+#sidebar.active{
+    margin-left: -250px;
+}
+
+#sidebar .sidebar-header{
+    padding: 20px;
+}
+#sidebar ul.components{
+    padding: 20px;
+    border-bottom: 1px solid #6c757d;
+} 
+
+#content {
+    width: 100%;
+
+    transition: all 0.3s;
+}
+
+h1,h2,h3{
+	color:  #fafafa;
+}
+
+p{
+	padding: 20px;
+}
