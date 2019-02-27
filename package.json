@@ -4,7 +4,8 @@
   "description": "webpage which contains trailers that can be commented on, and customise to account details and search params",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -22,8 +23,12 @@
   },
   "homepage": "https://github.com/Julian-Wyatt/ServerSummative#readme",
   "dependencies": {
+    "boostrap": "^2.0.0",
     "eslint": "^5.14.1",
     "node": "^11.10.0",
     "nodejs": "0.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
   }
 }
