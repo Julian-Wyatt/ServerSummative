@@ -12,7 +12,7 @@ body{
     min-width: 250px;
     max-width: 250px;
 	min-height: 100vh;
-	background: #F4A950;
+	background: #ce7910;
     color: #fff;
 	transition: all 0.3s;
 	border-color: #343a40;
@@ -45,4 +45,38 @@ h1,h2,h3{
 
 p{
 	padding: 20px;
+}
+
+.cardRow{
+	margin:40px;
+}
+
+.spacer{
+	height:50px;
+}
+
+
+ion-icon {
+	margin-top: 5px;
+	font-size-adjust: initial
+  }
+
+@media (max-width: 768px) {
+    #sidebar {
+		margin-left: -250px;
+		
+    }
+    #sidebar.active {
+		margin-left: 0;
+		min-width: 150px;
+		max-width: 150px;
+	}
+	.cardRow{
+		margin:10px;
+	}
+	.card{
+		margin-top:10px;
+	}
+
+	
 }

@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
 
@@ -7,5 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		sidebar.classList.toggle("active");
 	}
 	collapseBtn.addEventListener("click",collapse);
+
+
 
 });             
