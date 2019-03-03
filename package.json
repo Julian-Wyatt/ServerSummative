@@ -2,10 +2,10 @@
   "name": "serversummative",
   "version": "1.0.0",
   "description": "webpage which contains trailers that can be commented on, and customise to account details and search params",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -25,8 +25,10 @@
   "dependencies": {
     "boostrap": "^2.0.0",
     "eslint": "^5.14.1",
+    "express": "^4.16.4",
     "node": "^11.10.0",
-    "nodejs": "0.0.0"
+    "nodejs": "0.0.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
