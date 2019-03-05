@@ -35,7 +35,6 @@ body{
 
 #content {
     width: 100%;
-
     transition: all 0.3s;
 }
 
@@ -54,12 +53,38 @@ p{
 .spacer{
 	height:50px;
 }
+.card{
+	margin-top:10px;
+	
+}
 
 
 ion-icon {
 	margin-top: 5px;
 	font-size-adjust: initial
   }
+
+.signOut{
+	background: white;
+	margin:50px;
+	height: 36px;
+	width:120px;
+	border-radius:1.5px;
+	box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.2);
+  	transition-property: background-color, box-shadow;
+ 	transition-duration: 150ms;
+	transition-timing-function: ease-in-out;
+}
+.signOut:hover,.signOut:focus{
+	box-shadow: 0px 0px 5px 1px rgba(72, 133, 237, 0.5);
+	background: white;
+}
+
+.signOut:active{
+	
+    box-shadow: 0px 0px 5px 1px rgba(72, 133, 237, 0.5);
+    transition-duration: 10ms;
+}
 
 @media (max-width: 768px) {
     #sidebar {
@@ -73,10 +98,13 @@ ion-icon {
 	}
 	.cardRow{
 		margin:10px;
+		
 	}
 	.card{
 		margin-top:10px;
+		
 	}
+
 
 	
 }
