@@ -26,6 +26,9 @@
     "boostrap": "^2.0.0",
     "eslint": "^5.14.1",
     "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "google-auth-library": "^3.1.0",
+    "googleapis": "^37.2.0",
     "node": "^11.10.0",
     "nodejs": "0.0.0",
     "path": "^0.12.7"
