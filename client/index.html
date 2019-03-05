@@ -4,12 +4,17 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
         <title>Trailers Central</title>
-        <!-- add scripts/ source links here -->
+		<!-- add scripts/ source links here -->
+		<meta name="google-signin-scope" content="profile email">
+    	<meta name="google-signin-client_id" content="491328057569-tbj9sldvtc9td42p05ge9h522fhhtgn7.apps.googleusercontent.com">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="stylesheet" href="style.css">
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<script src="index.js"></script>
+
+
+
 
     </head>
 
@@ -18,18 +23,30 @@
 
             <nav id="sidebar">
                 <div class="sidebar-header">
-                    <h2>Account Name</h2>
+						<h3>Welcome,</h3>
+						<h3 id="accntName"></h3>
+					
+                    
                 </div>
                 <ul class="list-unstyled components">
                     <li>
                         For Me
-                    </li>
-                    <h3>Genres</h3>
+					</li>
+                </ul>
+					<h3 style="margin:20px">Genres</h3>
+				<ul class="list-unstyled components">
                     <li>
                         Action & Adventure etc
-                    </li>
-                </ul>
-
+					</li>
+				</ul>
+                
+				<div class="g-signin2" data-onsuccess="onSignIn" data-theme="light" data-border-radius="0.25rem" style="margin:50px; border-radius:0.25rem !important "></div>
+				<div class="containter" >
+						<button onclick="signOut()" class="btn signOut">
+								<img src="https://img.icons8.com/color/96/000000/google-logo.png" style="height:20px;width:20;float:left">
+								<span style="float:right;color: #6c757d;" >Sign out</span>
+						</button>
+				</div>
             </nav>
             <div id="content">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -39,32 +56,33 @@
 								<ion-icon name="menu"></ion-icon>
                                
                         </button>
-					</div>
-					<div class="container fluid">
-						<h2>Film and TV Trailers Central</h2>
+					
+						<h2 style="text-align: center; margin-top:5px">Trailers Central</h2>
 					</div>
 					<div class="container fluid">
 						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-								<ul class="nav navbar-nav ml-auto">
+								<div class="nav navbar-nav ml-auto">
 										<form class="form-inline">
 												<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
 												<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" style="color:#fafafa">Search</button>
 										</form>
-								</ul>
+									</div>
 						</div>
 					</div>
                 </nav>
-            
-				<!-- <div class="flex-column"> -->
+
 					<!-- <p>
 						content:
 						Place 4 evenly split cards, which act as video frames. Can play small or fullscreen
 					</p> -->
 
-					<div class="row cardRow" >
-						<div class="col">
+					<div class="row cardRow align-items-stretch" id ="rowForCards">
+						<div class="col-lg-3 col-sm-6">
 							<div class="card" >
-								<img class="card-img-top" src="placeholder.png" alt="Card image cap">
+								<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+								<div class="embed-responsive embed-responsive-16by9">
+									<iframe class="embed-responsive-item" id = "video1" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+								  </div>
 								<div class="card-body">
 									<h5 class="card-title">Card title</h5>
 									<button>Like button</button>
@@ -72,7 +90,7 @@
 								</div>
 							  </div>
 						</div>
-						<div class="col">
+						<div class="col-lg-3 col-sm-6">
 							<div class="card" >
 								<img class="card-img-top" src="placeholder.png" alt="Card image cap">
 								<div class="card-body">
@@ -82,7 +100,7 @@
 							  </div>
 						</div>
 						
-						<div class="col">
+						<div class="col-lg-3 col-sm-6">
 							<div class="card" >
 								<img class="card-img-top" src="placeholder.png" alt="Card image cap">
 								<div class="card-body">
@@ -91,7 +109,7 @@
 								</div>
 							  </div>
 						</div>
-						<div class="col">
+						<div class="col-lg-3 col-sm-6">
 							<div class="card" >
 								<img class="card-img-top" src="placeholder.png" alt="Card image cap">
 								<div class="card-body">
@@ -103,7 +121,6 @@
 						
 					</div>
 					
-				<!-- </div> -->
 			</div>
 		</div>
 		
