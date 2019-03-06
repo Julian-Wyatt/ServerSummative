@@ -40,9 +40,9 @@
 					</li>
 				</ul>
                 
-				<div class="g-signin2" data-onsuccess="onSignIn" data-theme="light" data-border-radius="0.25rem" style="margin:50px; border-radius:0.25rem !important "></div>
+				<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn" data-theme="light" data-border-radius="0.25rem" style="margin:50px; border-radius:0.25rem !important "></div>
 				<div class="containter" >
-						<button onclick="signOut()" class="btn signOut">
+						<button id = "gSignOut" class="btn signOut">
 								<img src="https://img.icons8.com/color/96/000000/google-logo.png" style="height:20px;width:20;float:left">
 								<span style="float:right;color: #6c757d;" >Sign out</span>
 						</button>
@@ -84,7 +84,7 @@
 									<iframe class="embed-responsive-item" id = "video1" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
 								  </div>
 								<div class="card-body">
-									<h5 class="card-title">Card title</h5>
+									<h5 class="card-title" id="title1">Card title</h5>
 									<button>Like button</button>
 									
 								</div>
@@ -92,9 +92,11 @@
 						</div>
 						<div class="col-lg-3 col-sm-6">
 							<div class="card" >
-								<img class="card-img-top" src="placeholder.png" alt="Card image cap">
+								<div class="embed-responsive embed-responsive-16by9">
+									<iframe class="embed-responsive-item" id = "video2" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+								  </div>
 								<div class="card-body">
-								  <h5 class="card-title">Card title</h5>
+								  <h5 class="card-title" id="title2">Card title</h5>
 								  <button>Like button</button>
 								</div>
 							  </div>
@@ -102,18 +104,22 @@
 						
 						<div class="col-lg-3 col-sm-6">
 							<div class="card" >
-								<img class="card-img-top" src="placeholder.png" alt="Card image cap">
+								<div class="embed-responsive embed-responsive-16by9">
+									<iframe class="embed-responsive-item" id = "video3" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+								  </div>
 								<div class="card-body">
-								  <h5 class="card-title">Card title</h5>
+								  <h5 class="card-title" id="title3">Card title</h5>
 								  <button>Like button</button>
 								</div>
 							  </div>
 						</div>
 						<div class="col-lg-3 col-sm-6">
 							<div class="card" >
-								<img class="card-img-top" src="placeholder.png" alt="Card image cap">
+								<div class="embed-responsive embed-responsive-16by9">
+									<iframe class="embed-responsive-item" id = "video4" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+								  </div>
 								<div class="card-body">
-								  <h5 class="card-title">Card title</h5>
+								  <h5 class="card-title" id="title4">Card title</h5>
 								  <button>Like button</button>
 								</div>
 							  </div>
