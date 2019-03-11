@@ -2,7 +2,9 @@
     "env": {
         "browser": true,
 		"es6": true,
-		"node": true
+		"node":true,
+		"jquery": true
+	
 
     },
     "extends": "eslint:recommended",
@@ -27,6 +29,17 @@
             "error",
             "always"
 		],
-		"no-console": "off"
+		"no-console": "off",
+		"padded-blocks":"error",
+		"padding-line-between-statements":"error",
+		"space-before-blocks":"error",
+		"space-before-function-paren":"error",
+		"space-in-parens":"error",
+		"space-infix-ops":"error",
+		"no-trailing-spaces":"error",
+		"no-multiple-empty-lines":"error",
+		"spaced-comment":"error",
+		"no-var":"error",
+		"vars-on-top":"error"
     }
 }
