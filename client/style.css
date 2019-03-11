@@ -37,6 +37,18 @@ body{
     width: 100%;
     transition: all 0.3s;
 }
+/* #mainNav{
+	position: fixed;
+	top:0px;
+	overflow: hidden; 
+	z-index: 300;
+	width:100%
+	
+} 
+#mainNav.active{
+	/* margin-left:0px; */
+	
+} */
 
 h1,h2,h3{
 	color:  #fafafa;
@@ -57,6 +69,8 @@ p{
 	margin-top:10px;
 	
 }
+
+
 
 
 ion-icon {
