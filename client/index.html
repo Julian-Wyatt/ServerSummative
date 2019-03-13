@@ -11,8 +11,10 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 		<link rel="stylesheet" href="style.css">
+		
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<script src="index.js"></script>
+		
 
 
 
@@ -44,13 +46,13 @@
 				<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn" data-theme="light" data-border-radius="0.25rem" style="margin:50px; border-radius:0.25rem !important "></div>
 				<div class="containter" >
 						<button id = "gSignOut" class="btn signOut">
-								<img src="https://img.icons8.com/color/96/000000/google-logo.png" style="height:20px;width:20;float:left">
+								<img src="https://img.icons8.com/color/96/000000/google-logo.png" style="height:20px;width:20px;float:left" alt="google-logo">
 								<span style="float:right;color: #6c757d;" >Sign out</span>
 						</button>
 				</div>
             </nav>
             <div id="content" >
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="mainNav">
+                <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark " id="mainNav">
                     <div class="container fluid">
                         <button type="button" id="sidebarCollapse" class="btn btn-secondary">
 								
@@ -70,64 +72,161 @@
 									</div>
 						</div>
 					</div>
+					
                 </nav>
-					<div style="overflow: scroll" id="rows">
+					<div class="container-fluid" style="overflow: scroll" id="rows">
 					<!-- <p>
 						content:
 						Place 4 evenly split cards, which act as video frames. Can play small or fullscreen
 					</p> -->
-
-					<div class="row cardRow align-items-stretch" id ="rowForCards1">
-						<div class="col-lg-3 col-sm-6">
-							<div class="card" >
-								<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-								<div class="embed-responsive embed-responsive-16by9">
-									<iframe class="embed-responsive-item" id = "video1" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+					<div class="blur" id="blur" ></div>
+						<div class="row cardRow align-items-stretch" id ="rowForCards1">
+							<div class="col-lg col-sm-6 colTrans" id="col1">
+								<div class="card" >
+									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video1" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+										<h6 class="card-title" id="title1">Card title</h6>
+										<button>Like button</button>
+										
+									</div>
 								</div>
-								<div class="card-body">
-									<h6 class="card-title" id="title1">Card title</h5>
+							</div>
+							<div class="col-lg col-sm-6 colTrans" id="col2">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video2" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title2">Card title</h6>
 									<button>Like button</button>
-									
+									</div>
 								</div>
-							  </div>
-						</div>
-						<div class="col-lg-3 col-sm-6">
-							<div class="card" >
-								<div class="embed-responsive embed-responsive-16by9">
-									<iframe class="embed-responsive-item" id = "video2" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
-								  </div>
-								<div class="card-body">
-								  <h6 class="card-title" id="title2">Card title</h6>
-								  <button>Like button</button>
+							</div>
+							
+							<div class="col-lg col-sm-6 colTrans" id="col3">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video3" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title3">Card title</h6>
+									<button>Like button</button>
+									</div>
 								</div>
-							  </div>
-						</div>
-						
-						<div class="col-lg-3 col-sm-6">
-							<div class="card" >
-								<div class="embed-responsive embed-responsive-16by9">
-									<iframe class="embed-responsive-item" id = "video3" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
-								  </div>
-								<div class="card-body">
-								  <h6 class="card-title" id="title3">Card title</h6>
-								  <button>Like button</button>
+							</div>
+							<div class="col-lg col-sm-6 colTrans" id="col4">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video4" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title4">Card title</h6>
+									<button>Like button</button>
+									</div>
 								</div>
-							  </div>
+							</div>
 						</div>
-						<div class="col-lg-3 col-sm-6">
-							<div class="card" >
-								<div class="embed-responsive embed-responsive-16by9">
-									<iframe class="embed-responsive-item" id = "video4" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
-								  </div>
-								<div class="card-body">
-								  <h6 class="card-title" id="title4">Card title</h6>
-								  <button>Like button</button>
+						<div class="row cardRow align-items-stretch" id ="rowForCards2">
+							<div class="col-lg col-sm-6 colTrans" id="col5">
+								<div class="card" >
+									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video5" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+										<h6 class="card-title" id="title5">Card title</h6>
+										<button>Like button</button>
+										
+									</div>
 								</div>
-							  </div>
+							</div>
+							<div class="col-lg col-sm-6 colTrans" id="col6">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video6" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title6">Card title</h6>
+									<button>Like button</button>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-lg col-sm-6 colTrans" id="col7">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video7" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title7">Card title</h6>
+									<button>Like button</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg col-sm-6 colTrans" id="col8">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video8" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title8">Card title</h6>
+									<button>Like button</button>
+									</div>
+								</div>
+							</div>
 						</div>
-
-						
-					</div>
+						<div class="row cardRow align-items-stretch" id ="rowForCards3">
+							<div class="col-lg col-sm-6 colTrans" id="col9">
+								<div class="card" >
+									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video9" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+										<h6 class="card-title" id="title9">Card title</h6>
+										<button>Like button</button>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-lg col-sm-6 colTrans" id="col10">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video10" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title10">Card title</h6>
+									<button>Like button</button>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-lg col-sm-6 colTrans" id="col11">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video11" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title11">Card title</h6>
+									<button>Like button</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg col-sm-6 colTrans" id="col12">
+								<div class="card" >
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" id = "video12" src="https://www.youtube.com/embed/z-fVkkAaRfw" allowfullscreen></iframe>
+									</div>
+									<div class="card-body">
+									<h6 class="card-title" id="title12">Card title</h6>
+									<button>Like button</button>
+									</div>
+								</div>
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>
