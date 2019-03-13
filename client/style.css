@@ -35,20 +35,30 @@ body{
 
 #content {
     width: 100%;
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
-/* #mainNav{
-	position: fixed;
+#mainNav{
+	position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    position: sticky;
 	top:0px;
 	overflow: hidden; 
 	z-index: 300;
-	width:100%
+	background: rgba(20,23,25,0.85);
+	-webkit-backdrop-filter: blur(5px);
+	backdrop-filter: blur(5px);
+	/* this may not work on browsers outside of safari ****Experimental at the moment**** */
 	
 } 
-#mainNav.active{
-	/* margin-left:0px; */
-	
- */
+
+.colTrans{
+	transition: 1s;
+	-webkit-animation-timing-function: linear;
+	animation-timing-function: linear;
+	z-index: 0;
+}
 
 h1,h2,h3{
 	color:  #fafafa;
@@ -66,10 +76,30 @@ p{
 	height:50px;
 }
 .card{
-	margin-top:10px;
-	
+	margin-top:10px;	
+	background-color: rgba(51, 51, 51, 0);
 }
 
+.blur{
+	position: absolute;
+	-webkit-backdrop-filter: blur(7px);
+	backdrop-filter: blur(7px);
+	z-index: -1 !important;
+	background-color: rgba(51, 51, 51, 0);
+	width: calc(100% - 250px);
+	min-height: 100vh;
+	height: inherit;
+	margin-left: -15px;
+	transition: 0.7s;
+	-webkit-animation-timing-function: linear;
+	animation-timing-function: linear;
+	display: -webkit-flex;
+	
+}
+#blur.active{
+	z-index: 100 !important;
+	background-color: rgba(51, 51, 51, 0.5);
+}
 
 ion-icon {
 	margin-top: 5px;
@@ -99,7 +129,9 @@ ion-icon {
 }
 
 @media (max-width: 768px) {
+
     #sidebar {
+		/* position:fixed; change when fixing mobile version */
 		margin-left: -250px;
 		
     }
@@ -107,6 +139,7 @@ ion-icon {
 		margin-left: 0;
 		min-width: 150px;
 		max-width: 150px;
+		z-index: 450;
 	}
 	.cardRow{
 		margin:10px;
