@@ -30,7 +30,14 @@ function signOut () {		// add this with DOM
 
 $(document).ready(function () {
 
-	let totalRows = 1;
+	let tag = document.createElement("script");
+	tag.id = "iframe-demo";
+	tag.src = "https://www.youtube.com/iframe_api";
+	let firstScriptTag = document.getElementsByTagName("script")[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+	let totalRows = 3;
 	$(window).scroll(function () {
 
 		if($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -41,6 +48,7 @@ $(document).ready(function () {
 				createVideoRow(totalRows);
 				totalRows++;
 
+
 			}
 
 		}
@@ -48,6 +56,71 @@ $(document).ready(function () {
 	});
 
 });
+
+function onYouTubeIframeAPIReady () {
+
+
+	for (let i = 1 ; i <= 12;i++) {
+
+		new YT.Player("video" + i, {
+			events: {
+				"onStateChange": onPlayerStateChange
+			}
+		});
+
+	}
+
+
+}
+
+function onPlayerStateChange (event) {
+
+	// changeBorderColor(event.data);
+
+
+	// here do the required css.
+	if (event.data == 1) {
+
+		// document.getElementById("rows").classList.add("blur");
+
+
+		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.remove("col-lg");
+		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.add("col-lg-6");
+		document.getElementById("col" + event.target["a"]["id"].substring(5)).style.zIndex = 200;
+		document.getElementById("blur").classList.toggle("active");
+		document.getElementById("blur").style.height = ($("#rows").height() + 19) + "px";
+
+	}
+	else if (event.data == 2 || event.data == 0) {
+
+		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.remove("col-lg-6");
+		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.add("col-lg");
+		document.getElementById("col" + event.target["a"]["id"].substring(5)).style.zIndex = 0;
+		document.getElementById("blur").classList.toggle("active");
+		document.getElementById("blur").style.height = ($("#rows").height() + 19) + "px";
+	}
+
+}
+
+
+async function requestRecent () {
+
+	try{
+
+		let response = await fetch("http://localhost:8080/requestrecent");
+		let body = await response.text();
+
+		let recents = JSON.parse(body);
+		return recents;
+
+	}
+	catch (e) {
+
+		alert(e);
+
+	}
+
+}
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -82,13 +155,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
+
 	recent().then(function (videoData) {
 
+
 		console.log(videoData);
-		for (let i = 1;i <= 4;i++) {
+		for (let i = 1;i <= 12;i++) {
 
 			let frame = document.getElementById("video" + i);
-			frame.src = "https://www.youtube.com/embed/" + videoData["data"]["items"][i - 1]["id"]["videoId"];
+			frame.src = "https://www.youtube.com/embed/" + videoData["data"]["items"][i - 1]["id"]["videoId"] + "?enablejsapi=1";
+
 			let title = document.getElementById("title" + i);
 			title.innerHTML = videoData["data"]["items"][i - 1]["snippet"]["title"];
 
@@ -117,17 +193,45 @@ function createVideoRow  (num) {
 		let card = createCard(cardNum);
 		row.appendChild(card);
 
+
 	}
 
+
 	document.getElementById("rows").appendChild(row);
+
+	requestRecent().then(function (videoData) {
+
+		for (let i = 0;i < 4;i++) {
+
+			let videoNum = num * 4 + i + 1;
+			new YT.Player("video" + videoNum, {
+				events: {
+					"onStateChange": onPlayerStateChange
+				}
+			});
+
+			let frame = document.getElementById("video" + videoNum);
+			frame.src = "https://www.youtube.com/embed/" + videoData["data"]["items"][videoNum - 1]["id"]["videoId"] + "?enablejsapi=1";
+
+			let title = document.getElementById("title" + videoNum);
+			title.innerHTML = videoData["data"]["items"][videoNum - 1]["snippet"]["title"];
+
+
+		}
+
+	});
+
+	document.getElementById("blur").style.height = ($("#rows").height() + 19) + "px";
+
 
 }
 function createCard (videoNum) {
 
 	let col = document.createElement("div");
-	col.classList.add("col-lg-3");
+	col.classList.add("col-lg");
 	col.classList.add("col-sm-6");
-
+	col.classList.add("colTrans");
+	col.id = "col" + videoNum;
 	let card = document.createElement("div");
 	card.classList.add("card");
 
@@ -138,9 +242,10 @@ function createCard (videoNum) {
 
 	let video = document.createElement("iframe");
 	video.setAttribute("allowfullscreen","");
-	video.setAttribute("src","https://www.youtube.com/embed/z-fVkkAaRfw");
+	video.setAttribute("src","https://www.youtube.com/embed/z-fVkkAaRfw?enablejsapi=1");
 	video.classList.add("embed-responsive-item");
 	video.id = "video" + videoNum;
+
 
 	let cardBody = document.createElement("card-body");
 	cardBody.classList.add("card-body");
@@ -148,7 +253,7 @@ function createCard (videoNum) {
 	let title = document.createElement("h6");
 	title.classList.add("card-title");
 	title.appendChild(document.createTextNode("title"));
-	title.id = "Title" + videoNum;
+	title.id = "title" + videoNum;
 
 	let likeBtn = document.createElement("button");
 	likeBtn.appendChild(document.createTextNode("Like Button"));
