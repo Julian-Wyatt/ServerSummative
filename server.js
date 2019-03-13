@@ -35,7 +35,16 @@ app.get("/placeholder.png", function (req, res) {
 
 app.get("/recent", function (req,res) {
 
-	//callRecents();
+	// callRecents();
+	res.send(fs.readFileSync("recents.json"));
+	// res.send(recents);
+	res.end();
+
+});
+
+app.get("/requestrecent", function (req,res) {
+
+	// callRecents();
 	res.send(fs.readFileSync("recents.json"));
 	// res.send(recents);
 	res.end();
@@ -49,6 +58,7 @@ let TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
 let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
 
 function callRecents () {
+
 	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
 		if (err) {
@@ -70,6 +80,7 @@ function callRecents () {
 		}}, searchListByKeyword);
 
 	});
+
 }
 
 
@@ -228,11 +239,15 @@ function searchListByKeyword (auth, requestData) {
 		// 	console.log(response["data"]["items"][i]["snippet"]["title"]);
 
 		// }
-		// fs.writeFileSync("recents.json",JSON.stringify(response),function(err){
-		// 	if (err){
-		// 		console.log("error occured when writing");
-		// 	}
-		// });
+		fs.writeFileSync("recents.json",JSON.stringify(response),function (err) {
+
+			if (err) {
+
+				console.log("error occured when writing");
+
+			}
+
+		});
 
 	});
 
