@@ -35,18 +35,10 @@ app.get("/placeholder.png", function (req, res) {
 
 app.get("/recent", function (req,res) {
 
-	// callRecents();
+	res.statusCode = 200;
+	// callRecents(res);
 	res.send(fs.readFileSync("recents.json"));
-	// res.send(recents);
-	res.end();
-
-});
-
-app.get("/requestrecent", function (req,res) {
-
-	// callRecents();
-	res.send(fs.readFileSync("recents.json"));
-	// res.send(recents);
+	console.log("once");
 	res.end();
 
 });
@@ -57,7 +49,7 @@ let TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + "/.credentials/";
 let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
 
-function callRecents () {
+function callRecents (res) {
 
 	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
@@ -77,14 +69,14 @@ function callRecents () {
 			// "videoDuration": "short",
 			// "relevanceLanguage": "en"
 			// "videoLicense": "creativeCommon"
-		}}, searchListByKeyword);
+		}}, searchListByKeyword, res);
 
 	});
 
 }
 
 
-function authorize (credentials, requestData, callback) {
+function authorize (credentials, requestData, callback, res) {
 
 	let clientSecret = credentials.installed.client_secret;
 	let clientId = credentials.installed.client_id;
@@ -102,7 +94,7 @@ function authorize (credentials, requestData, callback) {
 		} else {
 
 			oauth2Client.credentials = JSON.parse(token);
-			callback(oauth2Client, requestData);
+			callback(oauth2Client, requestData, res);
 
 		}
 
@@ -214,7 +206,7 @@ function createResource(properties) {
 }
 */
 
-function searchListByKeyword (auth, requestData) {
+function searchListByKeyword (auth, requestData, res) {
 
 	let service = google.youtube("v3");
 	// var parameters = requestData["params"];
@@ -229,25 +221,9 @@ function searchListByKeyword (auth, requestData) {
 
 		}
 		console.log("pinged Youtube");
-		// console.log(response);
-		// console.log(response["data"]["items"][0]);
-		// console.log(response["data"]["items"][2]);
-		// console.log(response["data"]["items"][3]);
-		// console.log(response["data"]["items"][6]);
-		// for (let i = 0;i < response["data"]["items"].length;i++) {
 
-		// 	console.log(response["data"]["items"][i]["snippet"]["title"]);
-
-		// }
-		fs.writeFileSync("recents.json",JSON.stringify(response),function (err) {
-
-			if (err) {
-
-				console.log("error occured when writing");
-
-			}
-
-		});
+		res.json(response);
+		res.end();
 
 	});
 
