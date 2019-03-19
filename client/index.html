@@ -32,14 +32,47 @@
                     
                 </div>
                 <ul class="list-unstyled components">
-                    <li>
-                        For Me
+					<li style="padding:5px;">
+						<button class="btn btn-light" style="width:100%" id="Home"> Home - Recent Trailers</button>
 					</li>
                 </ul>
-					<h3 style="margin:20px">Genres</h3>
+					<h3 style="margin:20px">Channels</h3>
 				<ul class="list-unstyled components">
-                    <li>
-                        Action & Adventure etc
+                    <li style="padding:5px;">
+						<button class="btn btn-light" style="width:100%" id="Disney">Disney</button>
+					</li>
+					<li style="padding:5px; ">
+							<button class="btn btn-light" style="width:100%" id="Marvel">Marvel</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="DC" >DC</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="GoT">Game of Thrones</button>
+					</li>
+					<li style="padding:5px;"> 
+							<button class="btn btn-light" style="width:100%"  id="Netflix">Netflix</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="Prime">Amazon Prime Video</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="FOX">20th Century FOX</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="Paramount" >Paramount</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="WB">Warner Bros.</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="Sony">Sony</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="Lionsgate">Lionsgate</button>
+					</li>
+					<li style="padding:5px;">
+							<button class="btn btn-light" style="width:100%" id="MGM">MGM</button>
 					</li>
 				</ul>
                 
@@ -51,7 +84,7 @@
 						</button>
 				</div>
             </nav>
-            <div id="content" >
+            <div id="content" style="min-height: 100%">
                 <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark " id="mainNav">
                     <div class="container fluid">
                         <button type="button" id="sidebarCollapse" class="btn btn-secondary">
@@ -61,26 +94,26 @@
                         </button>
 					
 						<h2 style="text-align: center; margin-top:5px">Trailers Central</h2>
+						
 					</div>
 					<div class="container fluid">
 						<div class="collapse navbar-collapse" id="navbarSupportedContent">
 								<div class="nav navbar-nav ml-auto">
+
 										<!-- <form class="form-inline" action="/search" method="GET">
-												<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" autofocus="false" name="search">
-												<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" style="color:#fafafa" id="searchBtn">Search</button>
+												<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" autofocus="false" name="q" id="search_query">
+												<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
 										</form> -->
-
-
-										<form class="form-inline" >
-											<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" autofocus="false" name="search">
-											<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" style="color:#fafafa" id="searchBtn">Search</button>
-									</form>
+										<div class="form-inline">
+											<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query">
+											<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
+										</div>
 									</div>
 						</div>
 					</div>
 					
                 </nav>
-					<div class="container-fluid" style="overflow: scroll" id="rows">
+				<div class="container-fluid" style="overflow: scroll" id="rows">
 					<!-- <p>
 						content:
 						Place 4 evenly split cards, which act as video frames. Can play small or fullscreen
@@ -91,7 +124,9 @@
 								<div class="card" >
 									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
 									<div class="embed-responsive embed-responsive-16by9">
+										<div id="video0"></div>
 										<iframe class="embed-responsive-item" id = "video1" allowfullscreen></iframe>
+										
 									</div>
 									<div class="card-body">
 										<h6 class="card-title" id="title1">Card title</h6>
@@ -233,7 +268,32 @@
 								</div>
 							</div>
 						</div>
+
 				</div>
+
+				<footer class="footer" style="padding:25px;z-index: 600; background-color: #6c757d;">
+					<div class="container">
+						<div class="row" style="color: #fafafa">
+							<div class="col">
+								<h5> Desc and picture</h5>
+								<p style="color: #fafafa">Welcome to Trailers Central, where you can peacefully view the latest trailers with just the refresh of the page or a quick search.</p>
+							</div>
+							<div class="col">
+								<h5> links </h5>
+								<ul class="list-unstyled components">
+									<li>Page Documentation</li>
+									<li>Server Documentation</li>
+								</ul>
+							</div>
+							<div class="col">
+								<h5>other links (post peer mark)</h5>
+								<ul class="list-unstyled components">
+									<li>My Github</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</footer>
 			</div>
 		</div>
 		

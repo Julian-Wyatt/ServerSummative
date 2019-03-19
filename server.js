@@ -32,14 +32,71 @@ app.get("/placeholder.png", function (req, res) {
 
 });
 
+app.get("/search",function (req,res) {
+
+	if (req.query.q != "") {
+
+		res.statusCode = 200;
+		console.log("here",req.query.q);
+		callTrailers(res,req.query.q);
+		// res.send("got " + req.query.q + " as a response");
+		// res.send(fs.readFileSync("search.json"));
+		// res.end();
+
+	}
+	else{
+
+		res.statusCode = 400;
+		res.end();
+
+	}
+
+});
+
+app.get("/channeldata",function (req,res) {
+
+	if (req.query.channel != "") {
+
+		res.statusCode = 200;
+		console.log("here",req.query.channel);
+		callChannelData(res,req.query.channel);
+		// res.send("got " + req.query.q + " as a response");
+		// res.send(fs.readFileSync("search.json"));
+		// res.end();
+
+	}
+	else{
+
+		res.statusCode = 400;
+		res.end();
+
+	}
+
+});
+
 
 app.get("/recent", function (req,res) {
 
-	res.statusCode = 200;
-	// callRecents(res);
-	res.send(fs.readFileSync("recents.json"));
-	console.log("once");
-	res.end();
+	let testing = false;
+
+	if (testing) {
+
+		res.statusCode = 200;
+
+		res.send(fs.readFileSync("recents.json"));
+		console.log("once");
+		res.end();
+
+	} else{
+
+		res.statusCode = 200;
+
+		callTrailers(res);
+		console.log("once");
+
+
+	}
+
 
 });
 
@@ -49,7 +106,10 @@ let TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + "/.credentials/";
 let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
 
-function callRecents (res) {
+
+// https://issuetracker.google.com/128835104 - won't sort output
+
+function callChannelData (res,channel) {
 
 	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
@@ -61,15 +121,75 @@ function callRecents (res) {
 		}
 		// Authorize a client with the loaded credentials, then call the YouTube API.
 		// See full code sample for authorize() function code.
-		authorize(JSON.parse(content), {"params": {
-			"maxResults": "50",
-			"part": "snippet",
-			"q": "Trailer",
-			"type": "video",
-			// "videoDuration": "short",
-			// "relevanceLanguage": "en"
-			// "videoLicense": "creativeCommon"
-		}}, searchListByKeyword, res);
+
+		fs.readFile("channels.json", function processChannelData (err, data) {
+
+			if (err) {
+
+				console.log("Error loading channels.json: " + err);
+				return;
+
+			}
+			data = JSON.parse(data);
+			authorize(JSON.parse(content), {"params": {
+				"maxResults": "24",
+				"part": "snippet",
+				"q": "Trailer",
+				"type": "video",
+				"channelId": data["channels"][channel]["channelID"],
+				"order": "date"
+				// "videoDuration": "short",
+				// "relevanceLanguage": "en"
+				// "videoLicense": "creativeCommon"
+			}}, searchListByKeyword,res);
+
+		});
+
+		// change max results sizes once ive sorted repeats and reaction videos
+
+
+	});
+
+}
+
+function callTrailers (res, q) {
+
+	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
+
+		if (err) {
+
+			console.log("Error loading client secret file: " + err);
+			return;
+
+		}
+		// Authorize a client with the loaded credentials, then call the YouTube API.
+		// See full code sample for authorize() function code.
+		if (q === undefined) {
+
+			// change max results sizes once ive sorted repeats and reaction videos
+			authorize(JSON.parse(content), {"params": {
+				"maxResults": "24",
+				"part": "snippet",
+				"q": "Trailer",
+				"type": "video",
+				// "videoDuration": "short",
+				// "relevanceLanguage": "en"
+				// "videoLicense": "creativeCommon"
+			}}, searchListByKeyword, res);
+
+		}else {
+
+			authorize(JSON.parse(content), {"params": {
+				"maxResults": "4",
+				"part": "snippet",
+				"q": q + " Trailer",
+				"type": "video",
+				// "videoDuration": "short",
+				// "relevanceLanguage": "en"
+				// "videoLicense": "creativeCommon"
+			}}, searchListByKeyword, res);
+
+		}
 
 	});
 
@@ -222,8 +342,9 @@ function searchListByKeyword (auth, requestData, res) {
 		}
 		console.log("pinged Youtube");
 
-		res.json(response);
+		res.json(response["data"]["items"]);
 		res.end();
+
 
 	});
 
