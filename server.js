@@ -4,7 +4,41 @@ let fs = require("fs");
 let readline = require("readline");
 const {google} = require("googleapis");
 // const {OAuth2Client} = require("google-auth-library");
+let testing = true;
 
+
+function getChannelID (title) {
+
+	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
+
+		if (err) {
+
+			console.log("Error loading client secret file: " + err);
+			return;
+
+		}
+		// Authorize a client with the loaded credentials, then call the YouTube API.
+		// See full code sample for authorize() function code.
+
+
+		authorize(JSON.parse(content), {"params": {
+			"maxResults": "3",
+			"part": "snippet",
+			"q": title,
+			"type": "channel",
+			"order": "date"
+			// "videoDuration": "short",
+			// "relevanceLanguage": "en"
+			// "videoLicense": "creativeCommon"
+		}}, searchListByKeyword);
+
+
+		// change max results sizes once ive sorted repeats and reaction videos
+
+
+	});
+
+}
 
 app.use(express.static("client"));
 
@@ -59,7 +93,7 @@ app.get("/channeldata",function (req,res) {
 
 		res.statusCode = 200;
 		console.log("here",req.query.channel);
-		callChannelData(res,req.query.channel);
+		callChannelData(req.query.channel,res);
 		// res.send("got " + req.query.q + " as a response");
 		// res.send(fs.readFileSync("search.json"));
 		// res.end();
@@ -77,7 +111,6 @@ app.get("/channeldata",function (req,res) {
 
 app.get("/recent", function (req,res) {
 
-	let testing = false;
 
 	if (testing) {
 
@@ -100,6 +133,50 @@ app.get("/recent", function (req,res) {
 
 });
 
+setInterval(intervalSavingRecents, 1000 * 60 * 60 * 6);
+// TEST THE CODE WITH THIS: setInterval(intervalSavingRecents, 1000 * 60);
+setInterval(internalSavingChannels, 1000 * 60 * 60 * 24);
+
+function intervalSavingRecents () {
+
+	console.log("min passed so save recents");
+	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
+
+		if (err) {
+
+			console.log("Error loading client secret file: " + err);
+			return;
+
+		}
+		// Authorize a client with the loaded credentials, then call the YouTube API.
+		// See full code sample for authorize() function code.
+
+		authorize(JSON.parse(content), {"params": {
+			"maxResults": "4",
+			"part": "snippet",
+			"q": "Trailer",
+			"type": "video",
+			// "videoDuration": "short",
+			// "relevanceLanguage": "en"
+			// "videoLicense": "creativeCommon"
+		}}, searchListByKeyword);
+
+
+	});
+
+}
+
+function internalSavingChannels () {
+
+	callChannelData("Disney");
+	callChannelData("Marvel");
+	callChannelData("DC");
+	callChannelData("Netflix");
+	callChannelData("FOX");
+	callChannelData("WarnerBros");
+	callChannelData("Sony");
+
+}
 
 let SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl","https://www.googleapis.com/auth/youtube"];
 let TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
@@ -109,7 +186,7 @@ let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
 
 // https://issuetracker.google.com/128835104 - won't sort output
 
-function callChannelData (res,channel) {
+function callChannelData (channel,res) {
 
 	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
@@ -141,7 +218,7 @@ function callChannelData (res,channel) {
 				// "videoDuration": "short",
 				// "relevanceLanguage": "en"
 				// "videoLicense": "creativeCommon"
-			}}, searchListByKeyword,res);
+			}}, searchListByKeyword,res,channel);
 
 		});
 
@@ -175,7 +252,7 @@ function callTrailers (res, q) {
 				// "videoDuration": "short",
 				// "relevanceLanguage": "en"
 				// "videoLicense": "creativeCommon"
-			}}, searchListByKeyword, res);
+			}}, searchListByKeyword,res);
 
 		}else {
 
@@ -196,7 +273,7 @@ function callTrailers (res, q) {
 }
 
 
-function authorize (credentials, requestData, callback, res) {
+function authorize (credentials, requestData, callback, res = undefined ,channel = undefined) {
 
 	let clientSecret = credentials.installed.client_secret;
 	let clientId = credentials.installed.client_id;
@@ -214,7 +291,7 @@ function authorize (credentials, requestData, callback, res) {
 		} else {
 
 			oauth2Client.credentials = JSON.parse(token);
-			callback(oauth2Client, requestData, res);
+			callback(oauth2Client, requestData, res, channel);
 
 		}
 
@@ -326,7 +403,7 @@ function createResource(properties) {
 }
 */
 
-function searchListByKeyword (auth, requestData, res) {
+function searchListByKeyword (auth, requestData, res, channel) {
 
 	let service = google.youtube("v3");
 	// var parameters = requestData["params"];
@@ -334,16 +411,59 @@ function searchListByKeyword (auth, requestData, res) {
 	parameters["auth"] = auth;
 	service.search.list(parameters, function (err, response) {
 
-		if (err) {
+		try {
 
-			console.log("The API returned an error: " + err);
-			return;
+			if (err) {
+
+				console.log("The API returned an error: " + err);
+				return;
+
+			}
+			console.log("pinged Youtube");
+			console.log(parameters["params"]);
+
+			if (!testing) {
+
+				if (res === undefined && channel === undefined) {
+
+					fs.writeFile("recents.json",JSON.stringify(response["data"]["items"]),function (err) {
+
+						if (err) {
+
+							console.log("error occured when writing");
+
+						}
+
+					});
+
+				} else if (res === undefined && channel != undefined) {
+
+					fs.writeFile(channel + ".json",JSON.stringify(response["data"]["items"]),function (err) {
+
+						if (err) {
+
+							console.log("error occured when writing");
+
+						}
+
+					});
+
+				}
+
+			}
+			else{
+
+				res.json(response["data"]["items"]);
+				res.end();
+
+			}
 
 		}
-		console.log("pinged Youtube");
+		catch (er) {
 
-		res.json(response["data"]["items"]);
-		res.end();
+			console.log(er);
+
+		}
 
 
 	});
