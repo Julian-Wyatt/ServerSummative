@@ -200,24 +200,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	function getRecents (){
-	requestData().then(function (videoData) {
+	function getRecents () {
 
-		recents = videoData;
-		console.log(videoData);
-		for (let i = 1;i <= 12;i++) {
+		requestData().then(function (videoData) {
 
-			let frame = document.getElementById("video" + i);
-			frame.src = "https://www.youtube.com/embed/" + videoData["data"]["items"][i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+			recents = videoData;
+			console.log(videoData);
+			for (let i = 1;i <= 12;i++) {
 
-			let title = document.getElementById("title" + i);
-			title.innerHTML = videoData["data"]["items"][i - 1]["snippet"]["title"];
+				let frame = document.getElementById("video" + i);
+				frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+
+				let title = document.getElementById("title" + i);
+				title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
 
-		}
+			}
 
-	});
-}
+		});
+	}
 
 	getRecents();
 
@@ -236,10 +237,10 @@ document.addEventListener("DOMContentLoaded", function () {
 					for (let i = 1; i <= 4;i++) {
 
 						let frame = document.getElementById("video" + i);
-						frame.src = "https://www.youtube.com/embed/" + videoData["data"]["items"][i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
 
 						let title = document.getElementById("title" + i);
-						title.innerHTML = videoData["data"]["items"][i - 1]["snippet"]["title"];
+						title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
 					}
 					for (let i = 5; i <= 24; i++) {
@@ -290,10 +291,10 @@ document.addEventListener("DOMContentLoaded", function () {
 						if (document.getElementById("video" + i)) {
 
 							let frame = document.getElementById("video" + i);
-							frame.src = "https://www.youtube.com/embed/" + videoData["data"]["items"][i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+							frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
 
 							let title = document.getElementById("title" + i);
-							title.innerHTML = videoData["data"]["items"][i - 1]["snippet"]["title"];
+							title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
 						}
 
@@ -317,6 +318,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.getElementById("Disney").addEventListener("click",function () {
 
 		channel("Disney");
+
+	});
+	document.getElementById("Pixar").addEventListener("click",function () {
+
+		channel("Disney-Pixar");
 
 	});
 	document.getElementById("Marvel").addEventListener("click", function () {
@@ -415,10 +421,10 @@ function createVideoRow  (num) {
 		});
 
 		let frame = document.getElementById("video" + videoNum);
-		frame.src = "https://www.youtube.com/embed/" + recents["data"]["items"][videoNum - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+		frame.src = "https://www.youtube.com/embed/" + recents[videoNum - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
 
 		let title = document.getElementById("title" + videoNum);
-		title.innerHTML = recents["data"]["items"][videoNum - 1]["snippet"]["title"];
+		title.innerHTML = recents[videoNum - 1]["snippet"]["title"];
 
 
 	}
