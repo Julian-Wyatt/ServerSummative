@@ -42,27 +42,27 @@ $(document).ready(function () {
 	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 
-	let totalRows = 3;
-	$(window).scroll(function () {
+	// let totalRows = 3;
+	// $(window).scroll(function () {
 
-		if (document.getElementById("col5").style.display != "none") {
+	// 	if (document.getElementById("col5").style.display != "none") {
 
-			if($(window).scrollTop() + $(window).height() == $(document).height()) {
+	// 		if($(window).scrollTop() + $(window).height() == $(document).height()) {
 
-				// add more divs with videos at this point, leaving this point in the page to no longer be at the bottom
-				if (totalRows < 6) {
+	// 			// add more divs with videos at this point, leaving this point in the page to no longer be at the bottom
+	// 			if (totalRows < 6) {
 
-					createVideoRow(totalRows);
-					totalRows++;
+	// 				// createVideoRow(totalRows);
+	// 				// totalRows++;
 
 
-				}
+	// 			}
 
-			}
+	// 		}
 
-		}
+	// 	}
 
-	});
+	// });
 
 	$("#search_query").keyup(function (event) {
 
@@ -78,12 +78,14 @@ $(document).ready(function () {
 
 function onYouTubeIframeAPIReady () {
 
-	for (let i = 0 ; i <= 12;i++) {
+	for (let i = 0 ; i <= 24;i++) {
 
 		new YT.Player("video" + i, {
 			events: {
 				"onStateChange": onPlayerStateChange
-			}
+			},
+			host: "https://www.youtube.com",
+
 		});
 
 	}
@@ -130,6 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		let sidebar = document.getElementById("sidebar");
 		sidebar.classList.toggle("active");
+		let footer = document.getElementById("footer");
+		footer.classList.toggle("active");
 
 	}
 
@@ -160,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		try{
 
-
+			
 			let response = await fetch("http://localhost:8080/recent");
 			let body = await response.text();
 			console.log("called recent fetch");
@@ -204,9 +208,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		requestData().then(function (videoData) {
 
+
 			recents = videoData;
 			console.log(videoData);
-			for (let i = 1;i <= 12;i++) {
+			for (let i = 1;i <= 24;i++) {
+
+				document.getElementById("col" + i).style.display = "block";
 
 				let frame = document.getElementById("video" + i);
 				frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
@@ -218,6 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 
 		});
+
 	}
 
 	getRecents();
@@ -253,15 +261,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					}
 
-					// for (let i = 1 ; i <= 4;i++) {
+					for (let i = 1 ; i <= 4;i++) {
 
-					// 	new YT.Player("video" + i, {
-					// 		events: {
-					// 			"onStateChange": onPlayerStateChange
-					// 		}
-					// 	});
+						new YT.Player("video" + i, {
+							events: {
+								"onStateChange": onPlayerStateChange
+							}
+						});
 
-					// }
+					}
 
 				}
 				catch(err) {
@@ -388,6 +396,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+
+// //////////////////////////////////
+
+// //////////////
 
 function createVideoRow  (num) {
 
