@@ -5,12 +5,13 @@
 # 2.5 make footer ###half tick###
 # 3. set up categories and filtering - based on channels not genre ###done### - need to check bug however
 # 3.5 set up time interval for requesting recents and channel data (less frequent request) from youtube ###tick###
-# 4. start with accounts - mainly server accounts and setting preferences - add images for account (only available with google accounts) - hide sign in button and activate sign out btn and vice versa 
-# 5. finish accounts setting up.
+
+# 4. Implement accounts - mainly server accounts and setting preferences - add images for account (only available with google accounts) - hide sign in button and activate sign out btn and vice versa 
+# 5. Fix: https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer.OnFullscreenListener
 # 6. add liking of posts - either with youtube's liking system or my local one
 # 7. double check layouts - possibly change colour scheme - check different displays and devices
 # 8. HTML validate
-# 9. documentation
-# 10. see spec and go from there 
-
+# 9. documentation - as good as twitter api docs
+# 10. see spec and go from there & attach licenses
+# 11. More animations if time
 
