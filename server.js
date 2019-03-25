@@ -42,6 +42,13 @@ function getChannelID (title) {
 
 app.use(express.static("client"));
 
+app.get("/favicon.ico", function (req, res) {
+
+	res.sendFile(__dirname + "/favicon.ico");
+	console.log("icon");
+
+});
+
 app.get("/",function (req,resp) {
 
 	resp.sendFile("client/index.html",{root: __dirname });
@@ -50,19 +57,19 @@ app.get("/",function (req,resp) {
 
 app.get("/style.css", function (req, res) {
 
-	res.sendFile(__dirname + "/client/" + "style.css");
+	res.sendFile(__dirname + "/client/style.css");
 
 });
 
 app.get("/index.js", function (req, res) {
 
-	res.sendFile(__dirname + "/client/" + "index.js");
+	res.sendFile(__dirname + "/client/index.js");
 
 });
 
 app.get("/placeholder.png", function (req, res) {
 
-	res.sendFile(__dirname + "/client/" + "placeholder.png");
+	res.sendFile(__dirname + "/client/placeholder.png");
 
 });
 
@@ -109,16 +116,27 @@ app.get("/channeldata",function (req,res) {
 });
 
 
-app.get("/recent", function (req,res) {
+app.get("/recent",function (req,res) {
 
 
 	if (testing) {
 
 		res.statusCode = 200;
 
-		res.send(fs.readFileSync("recents.json"));
-		console.log("once");
-		res.end();
+		fs.readFile(__dirname + "/recents.json",function (err,data) {
+
+			if (err) {
+
+				console.log(err);
+				return;
+
+			}
+
+			res.json(JSON.parse(data));
+			res.end();
+
+		});
+
 
 	} else{
 
@@ -416,11 +434,12 @@ function searchListByKeyword (auth, requestData, res, channel) {
 			if (err) {
 
 				console.log("The API returned an error: " + err);
+
 				return;
 
 			}
 			console.log("pinged Youtube");
-			console.log(parameters["params"]);
+
 
 			if (!testing) {
 
