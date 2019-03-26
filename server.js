@@ -3,10 +3,13 @@ let app  = express();
 let fs = require("fs");
 let readline = require("readline");
 const {google} = require("googleapis");
+let bcrypt = require("bcrypt");
 // const {OAuth2Client} = require("google-auth-library");
 let testing = true;
 
+app.use(express.urlencoded({ extended: true }));
 
+// eslint-disable-next-line no-unused-vars
 function getChannelID (title) {
 
 	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
@@ -150,6 +153,97 @@ app.get("/recent",function (req,res) {
 
 
 });
+
+app.post("/register",function (req,res) {
+
+	fs.readFile("accounts.json",function (er,accounts) {
+
+		if (er) {
+
+			console.log("Error loading accounts.json: " + er);
+
+
+		}
+		let user = {"fName": req.body.fName, "lName": req.body.lName, "eMail": req.body.email,};
+
+		bcrypt.genSalt(11, function (er,salt) {
+
+			if (er) {
+
+				console.log("Error generating salt: " + er);
+				res.end("unsuccessful");
+				return;
+
+			}
+			// user["salt"] = salt;
+			bcrypt.hash(req.body.password, salt, function (er,hash) {
+
+				if (er) {
+
+					console.log("Error hashing password: " + er);
+					res.end("unsuccessful");
+					return;
+
+				}
+				user["password"] = hash;
+				accounts = JSON.parse(accounts);
+				accounts["users"].push(user);
+				fs.writeFile("accounts.json",JSON.stringify(accounts),function (er) {
+
+					if (er) {
+
+						console.log("error writing to accounts: " + er);
+
+					}
+					res.end("successful");
+
+				});
+
+			});
+
+		});
+
+
+	});
+	console.log(req.body.RegfName);
+	console.log(req.body.RegEmail);
+	console.log("here");
+	res.end();
+
+});
+
+app.post("/checkAccount",function (req,res) {
+
+	checkEmail(req.body.email,res);
+
+});
+
+function checkEmail (input,res) {
+
+	fs.readFile("accounts.json",function (er,accounts) {
+
+		if (er) {
+
+			console.log("error loading accounts.json: " + er);
+			return;
+
+		}
+		accounts = JSON.parse(accounts);
+		for (let i = 0; i < accounts["users"].length; i++) {
+
+			if (accounts["users"][i]["eMail"].toLowerCase() == input.toLowerCase()) {
+
+				res.end("true");
+				return;
+
+			}
+
+		}
+		res.end("false");
+
+	});
+
+}
 
 setInterval(intervalSavingRecents, 1000 * 60 * 60 * 6);
 // TEST THE CODE WITH THIS: setInterval(intervalSavingRecents, 1000 * 60);
