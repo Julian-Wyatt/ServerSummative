@@ -12,73 +12,74 @@ function onSignIn (googleUser) {
 	console.log("Image URL: " + profile.getImageUrl());
 	console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-
 	// send info to server and handle there
-
 
 }
 
-function signOut () {		// add this with DOM
+function signOut () { // add this with DOM
 
 	// same here, ping server, then ping back with sign out
 	let auth2 = gapi.auth2.getAuthInstance();
-	auth2.signOut().then(function () {
+	auth2.signOut()
+		.then(function () {
 
-		console.log("User signed out.");
+			console.log("User signed out.");
 
-	});
+		});
 
 }
 
-$(document).ready(function () {
+$(document)
+	.ready(function () {
 
-	$(document).scrollTop(0);
-
-
-	let tag = document.createElement("script");
-	tag.id = "iframe-demo";
-	tag.src = "https://www.youtube.com/iframe_api";
-	let firstScriptTag = document.getElementsByTagName("script")[0];
-	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		$(document)
+			.scrollTop(0);
 
 
-	// let totalRows = 3;
-	// $(window).scroll(function () {
+		let tag = document.createElement("script");
+		tag.id = "iframe-demo";
+		tag.src = "https://www.youtube.com/iframe_api";
+		let firstScriptTag = document.getElementsByTagName("script")[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-	// 	if (document.getElementById("col5").style.display != "none") {
+		// let totalRows = 3;
+		// $(window).scroll(function () {
 
-	// 		if($(window).scrollTop() + $(window).height() == $(document).height()) {
+		// 	if (document.getElementById("col5").style.display != "none") {
 
-	// 			// add more divs with videos at this point, leaving this point in the page to no longer be at the bottom
-	// 			if (totalRows < 6) {
+		// 		if($(window).scrollTop() + $(window).height() == $(document).height()) {
 
-	// 				// createVideoRow(totalRows);
-	// 				// totalRows++;
+		// 			// add more divs with videos at this point, leaving this point in the page to no longer be at the bottom
+		// 			if (totalRows < 6) {
 
+		// 				// createVideoRow(totalRows);
+		// 				// totalRows++;
 
-	// 			}
+		// 			}
 
-	// 		}
+		// 		}
 
-	// 	}
+		// 	}
 
-	// });
+		// });
 
-	$("#search_query").keyup(function (event) {
+		$("#search_query")
+			.keyup(function (event) {
 
-		if (event.keyCode === 13) {
+				if (event.keyCode === 13) {
 
-			$("#searchBtn").click();
+					$("#searchBtn")
+						.click();
 
-		}
+				}
+
+			});
 
 	});
 
-});
-
 function onYouTubeIframeAPIReady () {
 
-	for (let i = 0 ; i <= 24;i++) {
+	for (let i = 0; i <= 24; i++) {
 
 		new YT.Player("video" + i, {
 			events: {
@@ -89,7 +90,6 @@ function onYouTubeIframeAPIReady () {
 		});
 
 	}
-
 
 }
 
@@ -103,31 +103,40 @@ function onPlayerStateChange (event) {
 
 		// document.getElementById("rows").classList.add("blur");
 
+		document.getElementById("col" + event.target["a"]["id"].substring(5))
+			.classList.remove("col-lg");
+		document.getElementById("col" + event.target["a"]["id"].substring(5))
+			.classList.add("col-lg-6");
+		document.getElementById("col" + event.target["a"]["id"].substring(5))
+			.style.zIndex = 200;
+		document.getElementById("blur")
+			.classList.toggle("active");
+		document.getElementById("blur")
+			.style.height = ($("#rows")
+				.height() + 19) + "px";
 
-		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.remove("col-lg");
-		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.add("col-lg-6");
-		document.getElementById("col" + event.target["a"]["id"].substring(5)).style.zIndex = 200;
-		document.getElementById("blur").classList.toggle("active");
-		document.getElementById("blur").style.height = ($("#rows").height() + 19) + "px";
+	} else if (event.data == 2 || event.data == 0) {
 
-	}
-	else if (event.data == 2 || event.data == 0) {
-
-		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.remove("col-lg-6");
-		document.getElementById("col" + event.target["a"]["id"].substring(5)).classList.add("col-lg");
-		document.getElementById("col" + event.target["a"]["id"].substring(5)).style.zIndex = 0;
-		document.getElementById("blur").classList.toggle("active");
-		document.getElementById("blur").style.height = ($("#rows").height()) + "px";
+		document.getElementById("col" + event.target["a"]["id"].substring(5))
+			.classList.remove("col-lg-6");
+		document.getElementById("col" + event.target["a"]["id"].substring(5))
+			.classList.add("col-lg");
+		document.getElementById("col" + event.target["a"]["id"].substring(5))
+			.style.zIndex = 0;
+		document.getElementById("blur")
+			.classList.toggle("active");
+		document.getElementById("blur")
+			.style.height = ($("#rows")
+				.height()) + "px";
 
 	}
 
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
 
-
 	let collapseBtn = document.getElementById("sidebarCollapse");
+
 	function collapse () {
 
 		let sidebar = document.getElementById("sidebar");
@@ -137,11 +146,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	collapseBtn.addEventListener("click",collapse);
+	collapseBtn.addEventListener("click", collapse);
 
 	async function requestChannelData (channel) {
 
-		try{
+		try {
 
 			let response = await fetch("http://localhost:8080/channeldata?channel=" + channel);
 			let body = await response.text();
@@ -149,9 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			let recents = JSON.parse(body);
 			return recents;
 
-
-		}
-		catch (e) {
+		} catch (e) {
 
 			alert(e);
 
@@ -159,21 +166,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-
 	async function requestData () {
 
-		try{
+		try {
 
-			
 			let response = await fetch("http://localhost:8080/recent");
 			let body = await response.text();
 			console.log("called recent fetch");
 			let recents = JSON.parse(body);
 			return recents;
 
-
-		}
-		catch (e) {
+		} catch (e) {
 
 			alert(e);
 
@@ -183,10 +186,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	async function requestSearchData (query) {
 
-		try{
+		try {
 
 			console.log(query);
-
 
 			let response = await fetch("http://localhost:8080/search?q=" + query);
 			let body = await response.text();
@@ -194,9 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			let recents = JSON.parse(body);
 			return recents;
 
-
-		}
-		catch (e) {
+		} catch (e) {
 
 			alert(e);
 
@@ -206,25 +206,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	function getRecents () {
 
-		requestData().then(function (videoData) {
+		requestData()
+			.then(function (videoData) {
 
+				recents = videoData;
+				console.log(videoData);
+				for (let i = 1; i <= 24; i++) {
 
-			recents = videoData;
-			console.log(videoData);
-			for (let i = 1;i <= 24;i++) {
+					document.getElementById("col" + i)
+						.style.display = "block";
 
-				document.getElementById("col" + i).style.display = "block";
+					let frame = document.getElementById("video" + i);
+					frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] +
+						"?enablejsapi=1&origin=http://localhost:8080";
 
-				let frame = document.getElementById("video" + i);
-				frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+					let title = document.getElementById("title" + i);
+					title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
-				let title = document.getElementById("title" + i);
-				title.innerHTML = videoData[i - 1]["snippet"]["title"];
+				}
 
-
-			}
-
-		});
+			});
 
 	}
 
@@ -232,176 +233,270 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	async function search () {
 
-		let q = document.getElementById("search_query").value;
+		let q = document.getElementById("search_query")
+			.value;
 
 		console.log(q);
 		if (q != "") {
 
-			requestSearchData(q).then(function (videoData) {
+			requestSearchData(q)
+				.then(function (videoData) {
 
-				try{
+					try {
 
-					console.log(videoData);
-					for (let i = 1; i <= 4;i++) {
-
-						let frame = document.getElementById("video" + i);
-						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
-
-						let title = document.getElementById("title" + i);
-						title.innerHTML = videoData[i - 1]["snippet"]["title"];
-
-					}
-					for (let i = 5; i <= 24; i++) {
-
-						if (document.getElementById("video" + i)) {
-
-							document.getElementById("col" + i).style.display = "none";
-
-						}
-
-					}
-
-					for (let i = 1 ; i <= 4;i++) {
-
-						new YT.Player("video" + i, {
-							events: {
-								"onStateChange": onPlayerStateChange
-							}
-						});
-
-					}
-
-				}
-				catch(err) {
-
-					alert(err);
-
-				}
-
-			});
-
-		}
-
-	}
-
-
-	async function channel (q) {
-
-		if (q != "") {
-
-			requestChannelData(q).then(function (videoData) {
-
-				try{
-
-					console.log(videoData);
-					for (let i = 1; i <= 24;i++) {
-
-						if (document.getElementById("video" + i)) {
+						console.log(videoData);
+						for (let i = 1; i <= 4; i++) {
 
 							let frame = document.getElementById("video" + i);
-							frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+							frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
+								"videoId"] +
+								"?enablejsapi=1&origin=http://localhost:8080";
 
 							let title = document.getElementById("title" + i);
 							title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
 						}
+						for (let i = 5; i <= 24; i++) {
+
+							if (document.getElementById("video" + i)) {
+
+								document.getElementById("col" + i)
+									.style.display = "none";
+
+							}
+
+						}
+
+						for (let i = 1; i <= 4; i++) {
+
+							new YT.Player("video" + i, {
+								events: {
+									"onStateChange": onPlayerStateChange
+								}
+							});
+
+						}
+
+					} catch (err) {
+
+						alert(err);
 
 					}
 
-
-				}
-				catch(err) {
-
-					alert(err);
-
-				}
-
-			});
+				});
 
 		}
 
 	}
 
-	document.getElementById("searchBtn").addEventListener("click",search);
-	document.getElementById("Disney").addEventListener("click",function () {
+	async function channel (q) {
 
-		channel("Disney");
+		if (q != "") {
 
-	});
-	document.getElementById("Pixar").addEventListener("click",function () {
+			requestChannelData(q)
+				.then(function (videoData) {
 
-		channel("Disney-Pixar");
+					try {
 
-	});
-	document.getElementById("Marvel").addEventListener("click", function () {
+						console.log(videoData);
+						for (let i = 1; i <= 24; i++) {
 
-		channel("Marvel");
+							if (document.getElementById("video" + i)) {
 
-	});
-	document.getElementById("DC").addEventListener("click", function () {
+								let frame = document.getElementById("video" + i);
+								frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
+									"videoId"] +
+									"?enablejsapi=1&origin=http://localhost:8080";
 
-		channel("DC");
+								let title = document.getElementById("title" + i);
+								title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
-	});
-	document.getElementById("GoT").addEventListener("click",function () {
+							}
 
-		channel("GoT");
+						}
 
-	});
-	document.getElementById("Netflix").addEventListener("click", function () {
+					} catch (err) {
 
-		channel("Netflix");
+						alert(err);
 
-	});
-	document.getElementById("Prime").addEventListener("click",function () {
+					}
 
-		channel("Prime");
+				});
 
-	});
-	document.getElementById("FOX").addEventListener("click",function () {
+		}
 
-		channel("FOX");
+	}
 
-	});
-	document.getElementById("Paramount").addEventListener("click",function () {
+	document.getElementById("searchBtn")
+		.addEventListener("click", search);
+	document.getElementById("Disney")
+		.addEventListener("click", function () {
 
-		channel("Paramount");
+			channel("Disney");
 
-	});
-	document.getElementById("WB").addEventListener("click", function () {
+		});
+	document.getElementById("Pixar")
+		.addEventListener("click", function () {
 
-		channel("WarnerBros");
+			channel("Disney-Pixar");
 
-	});
-	document.getElementById("Sony").addEventListener("click",function () {
+		});
+	document.getElementById("Marvel")
+		.addEventListener("click", function () {
 
-		channel("Sony");
+			channel("Marvel");
 
-	});
-	document.getElementById("Lionsgate").addEventListener("click",function () {
+		});
+	document.getElementById("DC")
+		.addEventListener("click", function () {
 
-		channel("Lionsgate");
+			channel("DC");
 
-	});
-	document.getElementById("MGM").addEventListener("click",function () {
+		});
+	document.getElementById("GoT")
+		.addEventListener("click", function () {
 
-		channel("MGM");
+			channel("GoT");
 
-	});
-	document.getElementById("Home").addEventListener("click",getRecents);
+		});
+	document.getElementById("Netflix")
+		.addEventListener("click", function () {
+
+			channel("Netflix");
+
+		});
+	document.getElementById("Prime")
+		.addEventListener("click", function () {
+
+			channel("Prime");
+
+		});
+	document.getElementById("FOX")
+		.addEventListener("click", function () {
+
+			channel("FOX");
+
+		});
+	document.getElementById("Paramount")
+		.addEventListener("click", function () {
+
+			channel("Paramount");
+
+		});
+	document.getElementById("WB")
+		.addEventListener("click", function () {
+
+			channel("WarnerBros");
+
+		});
+	document.getElementById("Sony")
+		.addEventListener("click", function () {
+
+			channel("Sony");
+
+		});
+	document.getElementById("Lionsgate")
+		.addEventListener("click", function () {
+
+			channel("Lionsgate");
+
+		});
+	document.getElementById("MGM")
+		.addEventListener("click", function () {
+
+			channel("MGM");
+
+		});
+	document.getElementById("Home")
+		.addEventListener("click", getRecents);
 
 	let gSignOut = document.getElementById("gSignOut");
 	gSignOut.addEventListener("click",signOut);
 
 
+	function register () {
+
+		let title = document.getElementById("RegTitle");
+		let fname = document.getElementById("RegfName");
+		let lname = document.getElementById("ReglName");
+		let email = document.getElementById("RegEmail");
+		let password = document.getElementById("RegPassword");
+		let confPwd = document.getElementById("RegConfPWord");
+
+		if (confPwd.value != password.value) {
+
+			title.innerHTML = "Create Account - The passwords don't match";
+			return;
+
+		}
+		if (checkEmail(email)) {
+
+			if (checkPassword(password)) {
+
+				console.log("post results");
+				document.forms.register.submit();
+
+			}
+			else {
+
+				title.innerHTML = "Create Account - The password doesn't meet the requirements";
+
+			}
+
+		}
+		else {
+
+			title.innerHTML = "Create Account - The email is incorrect";
+
+		}
+
+
+	}
+
+	document.getElementById("registerBtn").addEventListener("click",register);
+
 });
 
 
-// //////////////////////////////////
+function checkPassword (input) {
 
-// //////////////
+	let passExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+	if (passExp.test(input.value)) {
 
-function createVideoRow  (num) {
+		console.log("password ok");
+		return true;
+
+	}
+	else {
+
+		return false;
+
+	}
+
+}
+function checkEmail (input) {
+
+	let emailExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	if (input.value.match(emailExp)) {
+
+		// check whether email is linked to account on server
+		console.log("email ok");
+		return true;
+
+	}
+	else{
+
+		return false;
+
+	}
+
+}
+
+// /////////////////////////////
+// /////////////////////////////
+
+
+function createVideoRow (num) {
 
 	let row = document.createElement("div");
 	row.classList.add("row");
@@ -409,21 +504,20 @@ function createVideoRow  (num) {
 	row.classList.add("align-items-stretch");
 	row.id = "rowForCards" + num + 1;
 
-	for (let i = 0; i < 4;i++) {
+	for (let i = 0; i < 4; i++) {
 
 		let cardNum = num * 4 + i + 1;
 		let card = createCard(cardNum);
 		row.appendChild(card);
 
-
 	}
 
-
-	document.getElementById("rows").appendChild(row);
+	document.getElementById("rows")
+		.appendChild(row);
 
 	// requestRecent().then(function (videoData) {
 
-	for (let i = 0;i < 4;i++) {
+	for (let i = 0; i < 4; i++) {
 
 		let videoNum = num * 4 + i + 1;
 		new YT.Player("video" + videoNum, {
@@ -433,20 +527,22 @@ function createVideoRow  (num) {
 		});
 
 		let frame = document.getElementById("video" + videoNum);
-		frame.src = "https://www.youtube.com/embed/" + recents[videoNum - 1]["id"]["videoId"] + "?enablejsapi=1&origin=http://localhost:8080";
+		frame.src = "https://www.youtube.com/embed/" + recents[videoNum - 1]["id"]["videoId"] +
+			"?enablejsapi=1&origin=http://localhost:8080";
 
 		let title = document.getElementById("title" + videoNum);
 		title.innerHTML = recents[videoNum - 1]["snippet"]["title"];
-
 
 	}
 
 	// });
 
-	document.getElementById("blur").style.height = ($("#rows").height() + 19) + "px";
-
+	document.getElementById("blur")
+		.style.height = ($("#rows")
+			.height() + 19) + "px";
 
 }
+
 function createCard (videoNum) {
 
 	let col = document.createElement("div");
@@ -457,17 +553,15 @@ function createCard (videoNum) {
 	let card = document.createElement("div");
 	card.classList.add("card");
 
-
 	let videoDiv = document.createElement("div");
 	videoDiv.classList.add("embed-responsive");
 	videoDiv.classList.add("embed-responsive-16by9");
 
 	let video = document.createElement("iframe");
-	video.setAttribute("allowfullscreen","");
+	video.setAttribute("allowfullscreen", "");
 	// video.setAttribute("src","https://www.youtube.com/embed/z-fVkkAaRfw?enablejsapi=1");
 	video.classList.add("embed-responsive-item");
 	video.id = "video" + videoNum;
-
 
 	let cardBody = document.createElement("card-body");
 	cardBody.classList.add("card-body");

@@ -1,436 +1,517 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Trailers Central</title>
-		<!-- add scripts/ source links here -->
-		<meta name="google-signin-scope" content="profile email">
-    	<meta name="google-signin-client_id" content="491328057569-tbj9sldvtc9td42p05ge9h522fhhtgn7.apps.googleusercontent.com">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-		<link rel="stylesheet" href="style.css">
-		
-		<script src="https://apis.google.com/js/platform.js" async defer></script>
-		<script src="index.js"></script>
-		
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Trailers Central</title>
+	<!-- add scripts/ source links here -->
+	<meta name="google-signin-scope" content="profile email">
+	<meta name="google-signin-client_id"
+		content="491328057569-tbj9sldvtc9td42p05ge9h522fhhtgn7.apps.googleusercontent.com">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="style.css">
+
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<script src="index.js"></script>
 
 
+</head>
+
+<body id="body">
+	<div class="wrapper">
+
+		<nav id="sidebar">
+			<div class="sidebar-header">
+				<h3>Welcome,</h3>
+				<h3 id="accntName"></h3>
 
 
-    </head>
+			</div>
+			<ul class="list-unstyled components">
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="Home"> Home - Recent Trailers</button>
+				</li>
+			</ul>
+			<h3 style="margin:20px">Channels</h3>
+			<ul class="list-unstyled components">
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="Disney">Disney</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="Pixar">Disney•Pixar</button>
+				</li>
+				<li style="padding:5px; ">
+					<button class="btn btn-light" style="width:100%" id="Marvel">Marvel</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="DC" >DC</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="GoT">Game of Thrones</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%"  id="Netflix">Netflix</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="Prime">Amazon Prime Video</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="FOX">20th Century FOX</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="Paramount" >Paramount</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="WB">Warner Bros.</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="Sony">Sony</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="Lionsgate">Lionsgate</button>
+				</li>
+				<li style="padding:5px;">
+					<button class="btn btn-light" style="width:100%" id="MGM">MGM</button>
+				</li>
+			</ul>
 
-    <body id="body">
-        <div class="wrapper">
-
-            <nav id="sidebar">
-                <div class="sidebar-header">
-						<h3>Welcome,</h3>
-						<h3 id="accntName"></h3>
-					
-                    
-                </div>
-                <ul class="list-unstyled components">
-					<li style="padding:5px;">
-						<button class="btn btn-light" style="width:100%" id="Home"> Home - Recent Trailers</button>
-					</li>
-                </ul>
-					<h3 style="margin:20px">Channels</h3>
-				<ul class="list-unstyled components">
-                    <li style="padding:5px;">
-						<button class="btn btn-light" style="width:100%" id="Disney">Disney</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="Pixar">Disney•Pixar</button>
-					</li>
-					<li style="padding:5px; ">
-							<button class="btn btn-light" style="width:100%" id="Marvel">Marvel</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="DC" >DC</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="GoT">Game of Thrones</button>
-					</li>
-					<li style="padding:5px;"> 
-							<button class="btn btn-light" style="width:100%"  id="Netflix">Netflix</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="Prime">Amazon Prime Video</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="FOX">20th Century FOX</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="Paramount" >Paramount</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="WB">Warner Bros.</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="Sony">Sony</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="Lionsgate">Lionsgate</button>
-					</li>
-					<li style="padding:5px;">
-							<button class="btn btn-light" style="width:100%" id="MGM">MGM</button>
-					</li>
-				</ul>
-                
-				<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn" data-theme="light" data-border-radius="0.25rem" style="margin:50px; border-radius:0.25rem !important "></div>
-				<div class="containter" >
-						<button id = "gSignOut" class="btn signOut">
+			<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn" data-theme="light"
+				data-border-radius="0.25rem" style="margin:50px; border-radius:0.25rem !important;display:none "></div>
+			<div class="containter">
+				<button  class="btn signOut" id="gSignOut" >
 								<img src="https://img.icons8.com/color/96/000000/google-logo.png" style="height:20px;width:20px;float:left" alt="google-logo">
 								<span style="float:right;color: #6c757d;" >Sign out</span>
 						</button>
-				</div>
-            </nav>
-            <div id="content" style="min-height: 100%">
-                <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark " id="mainNav">
+
+				<button class="btn btn-light btn-sm" type="button" data-toggle="modal" data-target="#accountModal">Moving arrow</button>
+			</div>
+		</nav>
+		<div id="content" style="min-height: 100%">
+			<nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark " id="mainNav">
 
 
-					<!-- place in adjustable size column and row for responsive changes -->
-                    <div class="container fluid">
-                        <button type="button" id="sidebarCollapse" class="btn btn-secondary">
-								
+				<!-- place in adjustable size column and row for responsive changes -->
+				<div class="container fluid">
+					<button type="button" id="sidebarCollapse" class="btn btn-secondary">
+
 								<ion-icon name="menu"></ion-icon>
                                
                         </button>
-					
-						<h2 style="text-align: center; margin-top:5px">Trailers Central</h2>
-						
-					</div>
-					<div class="container fluid">
-						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-								<div class="nav navbar-nav ml-auto">
 
-										<!-- <form class="form-inline" action="/search" method="GET">
+					<h2 style="text-align: center; margin-top:5px">Trailers Central</h2>
+
+				</div>
+				<div class="container fluid">
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<div class="nav navbar-nav ml-auto">
+
+							<!-- <form class="form-inline" action="/search" method="GET">
 												<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" autofocus="false" name="q" id="search_query">
 												<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
 										</form> -->
-										<div class="form-inline">
-											<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query">
-											<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
-										</div>
-									</div>
+							<div class="form-inline">
+								<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query">
+								<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
+							</div>
 						</div>
 					</div>
-					
-                </nav>
-				<div class="container-fluid" style="overflow: scroll" id="rows">
-					<!-- <p>
+				</div>
+
+			</nav>
+			<div class="container-fluid" style="overflow: scroll" id="rows">
+				<!-- <p>
 						content:
 						Place 4 evenly split cards, which act as video frames. Can play small or fullscreen
 					</p> -->
-					<div class="blur" id="blur" ></div>
-						<div class="row cardRow align-items-stretch" id ="rowForCards1">
-							<div class="col-lg col-sm-6 colTrans" id="col1">
-								<div class="card" >
-									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-									<div class="embed-responsive embed-responsive-16by9">
-										<div id="video0"></div>
-										<iframe class="embed-responsive-item" id = "video1" allowfullscreen></iframe>
-										
-									</div>
-									<div class="card-body">
-										<h6 class="card-title" id="title1">Card title</h6>
-										<button>Like button</button>
-										
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col2">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video2" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title2">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg col-sm-6 colTrans" id="col3">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video3" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title3">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col4">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video4" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title4">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row cardRow align-items-stretch" id ="rowForCards2">
-							<div class="col-lg col-sm-6 colTrans" id="col5">
-								<div class="card" >
-									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video5" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-										<h6 class="card-title" id="title5">Card title</h6>
-										<button>Like button</button>
-										
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col6">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video6" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title6">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg col-sm-6 colTrans" id="col7">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video7" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title7">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col8">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video8" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title8">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row cardRow align-items-stretch" id ="rowForCards3">
-							<div class="col-lg col-sm-6 colTrans" id="col9">
-								<div class="card" >
-									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video9" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-										<h6 class="card-title" id="title9">Card title</h6>
-										<button>Like button</button>
-										
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col10">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video10" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title10">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg col-sm-6 colTrans" id="col11">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video11" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title11">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col12">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video12" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title12">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-						</div>
+				<div class="blur" id="blur"></div>
+				<div class="row cardRow align-items-stretch" id="rowForCards1">
+					<div class="col-lg col-sm-6 colTrans" id="col1">
+						<div class="card">
+							<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+							<div class="embed-responsive embed-responsive-16by9">
+								<div id="video0"></div>
+								<iframe class="embed-responsive-item" id = "video1" allowfullscreen></iframe>
 
-						<div class="row cardRow align-items-stretch" id ="rowForCards4">
-							<div class="col-lg col-sm-6 colTrans" id="col13">
-								<div class="card" >
-									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video13" allowfullscreen></iframe>
-										
-									</div>
-									<div class="card-body">
-										<h6 class="card-title" id="title13">Card title</h6>
-										<button>Like button</button>
-										
-									</div>
-								</div>
 							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col14">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video14" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title14">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg col-sm-6 colTrans" id="col15">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video15" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title15">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col16">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video16" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title16">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title1">Card title</h6>
+								<button>Like button</button>
+
 							</div>
 						</div>
-						<div class="row cardRow align-items-stretch" id ="rowForCards5">
-							<div class="col-lg col-sm-6 colTrans" id="col17">
-								<div class="card" >
-									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video17" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-										<h6 class="card-title" id="title17">Card title</h6>
-										<button>Like button</button>
-										
-									</div>
-								</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col2">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video2" allowfullscreen></iframe>
 							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col18">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video18" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title18">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg col-sm-6 colTrans" id="col19">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video19" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title19">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col20">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video20" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title20">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title2">Card title</h6>
+								<button>Like button</button>
 							</div>
 						</div>
-						<div class="row cardRow align-items-stretch" id ="rowForCards6">
-							<div class="col-lg col-sm-6 colTrans" id="col21">
-								<div class="card" >
-									<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video21" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-										<h6 class="card-title" id="title21">Card title</h6>
-										<button>Like button</button>
-										
-									</div>
-								</div>
+					</div>
+
+					<div class="col-lg col-sm-6 colTrans" id="col3">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video3" allowfullscreen></iframe>
 							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col22">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video22" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title22">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg col-sm-6 colTrans" id="col23">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video23" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title23">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg col-sm-6 colTrans" id="col24">
-								<div class="card" >
-									<div class="embed-responsive embed-responsive-16by9">
-										<iframe class="embed-responsive-item" id = "video24" allowfullscreen></iframe>
-									</div>
-									<div class="card-body">
-									<h6 class="card-title" id="title24">Card title</h6>
-									<button>Like button</button>
-									</div>
-								</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title3">Card title</h6>
+								<button>Like button</button>
 							</div>
 						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col4">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video4" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title4">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row cardRow align-items-stretch" id="rowForCards2">
+					<div class="col-lg col-sm-6 colTrans" id="col5">
+						<div class="card">
+							<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video5" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title5">Card title</h6>
+								<button>Like button</button>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col6">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video6" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title6">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg col-sm-6 colTrans" id="col7">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video7" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title7">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col8">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video8" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title8">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row cardRow align-items-stretch" id="rowForCards3">
+					<div class="col-lg col-sm-6 colTrans" id="col9">
+						<div class="card">
+							<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video9" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title9">Card title</h6>
+								<button>Like button</button>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col10">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video10" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title10">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg col-sm-6 colTrans" id="col11">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video11" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title11">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col12">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video12" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title12">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
 				</div>
 
-				<footer class="footer" id="footer" style="padding:25px;z-index: 600; background-color: #6c757d;">
+				<div class="row cardRow align-items-stretch" id="rowForCards4">
+					<div class="col-lg col-sm-6 colTrans" id="col13">
+						<div class="card">
+							<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video13" allowfullscreen></iframe>
+
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title13">Card title</h6>
+								<button>Like button</button>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col14">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video14" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title14">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg col-sm-6 colTrans" id="col15">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video15" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title15">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col16">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video16" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title16">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row cardRow align-items-stretch" id="rowForCards5">
+					<div class="col-lg col-sm-6 colTrans" id="col17">
+						<div class="card">
+							<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video17" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title17">Card title</h6>
+								<button>Like button</button>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col18">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video18" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title18">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg col-sm-6 colTrans" id="col19">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video19" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title19">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col20">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video20" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title20">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row cardRow align-items-stretch" id="rowForCards6">
+					<div class="col-lg col-sm-6 colTrans" id="col21">
+						<div class="card">
+							<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video21" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title21">Card title</h6>
+								<button>Like button</button>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col22">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video22" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title22">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg col-sm-6 colTrans" id="col23">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video23" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title23">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col-sm-6 colTrans" id="col24">
+						<div class="card">
+							<div class="embed-responsive embed-responsive-16by9">
+								<iframe class="embed-responsive-item" id = "video24" allowfullscreen></iframe>
+							</div>
+							<div class="card-body">
+								<h6 class="card-title" id="title24">Card title</h6>
+								<button>Like button</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<!-- Modal -->
+
+				<div class="modal fade in" id="accountModal">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="row align-items-stretch">
+								<div class="col col-md-7" style="padding-right:20px; border-right: 1px solid rgba(51, 51, 51, 0.3)">
+									<div class="modal-header">
+										<h5 class="modal-title" id="RegTitle">Create Account</h5>
+										
+									</div>
+									<div class="modal-body">
+										<form name = "register" action="/register" method="POST" target="_top">
+											<div class="form-group">
+												<div class="row" style="margin-bottom: 5px">
+													<div class="col">
+														<input type="text" class="form-control" name="fName" id="RegfName" placeholder="First name" style="display: inline">
+													</div>
+													<div class="col">
+														<input type="text" class="form-control" name="lName" id="ReglName" placeholder="Surname" style="display: inline">
+													</div>
+												</div>
+												<input type="email" class="form-control" name="email" id="RegEmail" placeholder="Email Address" style="margin-bottom: 5px">
+												<input type="password" class="form-control" name="password" id="RegPassword" placeholder="Password" style="margin-bottom: 5px">
+												<input type="password" class="form-control" id="RegConfPWord" placeholder="Confirm password" style="margin-bottom: 5px">
+												<p>The password must contain at least one lowercase character, at least one uppercase characters and be between 6 to 16 characters in length</p>
+											</div>
+											
+											
+										</form>
+									</div>
+									<div class="modal-footer">
+										
+										<button type="button" class="btn btn-secondary" id="registerBtn">Register</button>
+									</div>
+								</div>
+								<div class="col col-md-5">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Log in</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<form name = "log-in">
+												<div class="form-group">
+													<input type="email" class="form-control" id="email" placeholder="Email Address" style="margin-bottom: 5px">
+													<input type="password" class="form-control" id="pword" placeholder="Password" style="margin-bottom: 5px">
+												</div>
+											</form>
+										</div>
+										<div class="modal-footer">
+											<div class="row">
+												<div class="col" style="float:left">
+													<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn" data-dismiss="modal" data-theme="light" data-border-radius="0.25rem" ></div>
+												</div>
+
+												<div class="col">
+													<button type="button" class="btn btn-secondary">Log in</button>
+												</div>
+											</div>
+											
+										</div>
+									
+									</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- /.modal -->
+
+
+				<footer class="footer" id="footer" style="padding:25px; background-color: #6c757d;">
 					<div class="container">
 						<div class="row" style="color: #fafafa">
 							<div class="col">
 								<h5> Desc and picture</h5>
-								<p style="color: #fafafa">Welcome to Trailers Central, where you can peacefully view the latest trailers with just the refresh of the page or a quick search.</p>
+								<p style="color: #fafafa">Welcome to Trailers Central, where you can peacefully view the
+									latest trailers
+									with just the refresh of the page or a quick search.</p>
 							</div>
 							<div class="col">
 								<h5> links </h5>
@@ -448,10 +529,14 @@
 						</div>
 					</div>
 				</footer>
+
+
 			</div>
 		</div>
-		
-		<script src="https://unpkg.com/ionicons@4.4.4/dist/ionicons.js"></script>
-    </body>
+	</div>
+
+
+	<script src="https://unpkg.com/ionicons@4.4.4/dist/ionicons.js"></script>
+</body>
 
 </html>
