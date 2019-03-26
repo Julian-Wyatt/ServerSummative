@@ -35,7 +35,8 @@ body{
 
 #content {
     width: 100%;
-    transition: all 0.2s;
+	transition: all 0.2s;
+	margin: 0 0 10px
 }
 #mainNav{
 	position: -webkit-sticky;
@@ -128,18 +129,7 @@ ion-icon {
     transition-duration: 10ms;
 }
 
-#footer {
-	position: absolute;
-	width: calc(100%+250px);
-	left:250px;
-    bottom: 0;
-	overflow:hidden;
-	margin-left:0px;
-	transition: all 0.3s
-}
-#footer.active{
-	left:0;
-}
+
 
 
 
