@@ -3,7 +3,8 @@
         "browser": true,
 		"es6": true,
 		"node":true,
-		"jquery": true
+		"jquery": true,
+		"jest":true
 	
 
     },
@@ -41,5 +42,9 @@
 		"spaced-comment":"error",
 		"no-var":"error",
 		"vars-on-top":"error"
-    }
+	},
+	"globals": {
+		"YT":"readonly",
+		"gapi": "readonly"
+	}
 }
