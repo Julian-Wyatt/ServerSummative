@@ -1,6 +1,6 @@
 /* global gapi recents*/
 
-let recents = "";
+// let recents = "";
 let channels = ["Disney","Pixar","Marvel","DC","GoT","Netflix", "Prime", "FOX", "Paramount","WB", "Sony", "Lionsgate", "MGM"];
 
 function onSignIn (googleUser) {
@@ -11,9 +11,31 @@ function onSignIn (googleUser) {
 	let accntText = document.getElementById("accntName");
 	accntText.textContent = profile.getName();
 	console.log("Image URL: " + profile.getImageUrl());
+	let accntImage = document.getElementById("accntImage");
+	accntImage.src = profile.getImageUrl();
+	accntImage.classList.remove("hide");
 	console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
 
+
+	getPrefs(profile.getEmail())
+		.then(function (response) {
+
+			document.getElementById("prefEmail").value = profile.getEmail();
+			updateOnSignIn();
+			customisePage(response,profile.getName());
+
+		});
+
 	// send info to server and handle there
+
+}
+
+async function getPrefs (email) {
+
+	let response = await fetch("http://localhost:8080/prefs?email=" + email);
+	let body = await response.text();
+	console.log(body);
+	return body;
 
 }
 
@@ -21,12 +43,23 @@ function signOut () { // add this with DOM
 
 	// same here, ping server, then ping back with sign out
 	let auth2 = gapi.auth2.getAuthInstance();
-	auth2.signOut()
-		.then(function () {
+	if (!auth2.isSignedIn.get()) {
 
-			console.log("User signed out.");
+		auth2.signOut()
+			.then(function () {
 
-		});
+				console.log("User signed out.");
+
+			});
+
+	}
+	customisePage(channels," ");
+	document.getElementById("accntImage").classList.add("hide");
+	let signInBtn = document.getElementById("signInBtn");
+	signInBtn.innerHTML = "Sign in";
+	let signOutBtn = document.getElementById("signOutBtn");
+	signOutBtn.classList.add("hide");
+	$("#signInBtn").attr("data-target","#accountModal");
 
 }
 
@@ -80,7 +113,7 @@ $(document)
 
 function onYouTubeIframeAPIReady () {
 
-	for (let i = 0; i <= 24; i++) {
+	for (let i = 0; i <= 20; i++) {
 
 		new YT.Player("video" + i, {
 			events: {
@@ -114,7 +147,7 @@ function onPlayerStateChange (event) {
 			.classList.toggle("active");
 		document.getElementById("blur")
 			.style.height = ($("#rows")
-				.height() + 19) + "px";
+				.height() - 138) + "px";
 
 	} else if (event.data == 2 || event.data == 0) {
 
@@ -127,8 +160,7 @@ function onPlayerStateChange (event) {
 		document.getElementById("blur")
 			.classList.toggle("active");
 		document.getElementById("blur")
-			.style.height = ($("#rows")
-				.height()) + "px";
+			.style.height = "0px";
 
 	}
 
@@ -148,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	collapseBtn.addEventListener("click", collapse);
+	document.getElementById("signOutBtn").addEventListener("click",signOut);
 
 	async function requestChannelData (channel) {
 
@@ -167,11 +200,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	async function requestData () {
+	async function requestData (page) {
 
 		try {
 
-			let response = await fetch("http://localhost:8080/recent");
+			let response = await fetch("http://localhost:8080/recent?page=" + page);
 			let body = await response.text();
 			console.log("called recent fetch");
 			let recents = JSON.parse(body);
@@ -205,24 +238,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	function getRecents () {
+	function getRecents (page) {
 
-		requestData()
+		requestData(page)
 			.then(function (videoData) {
 
-				recents = videoData;
+				if (page == 1) {
+
+					document.getElementById("nextPage").classList.remove("hide");
+					document.getElementById("backPage").classList.add("hide");
+
+				}
+				else if (page == 2) {
+
+					document.getElementById("nextPage").classList.add("hide");
+					document.getElementById("backPage").classList.remove("hide");
+
+				}
 				console.log(videoData);
-				for (let i = 1; i <= 24; i++) {
+				for (let i = 1; i <= 20; i++) {
 
-					document.getElementById("col" + i)
-						.style.display = "block";
+					if (videoData[i - 1]) {
 
-					let frame = document.getElementById("video" + i);
-					frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] +
+						document.getElementById("col" + i)
+							.style.display = "block";
+
+						let frame = document.getElementById("video" + i);
+						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] +
 						"?enablejsapi=1&origin=http://localhost:8080";
 
-					let title = document.getElementById("title" + i);
-					title.innerHTML = videoData[i - 1]["snippet"]["title"];
+						let title = document.getElementById("title" + i);
+						title.innerHTML = videoData[i - 1]["snippet"]["title"];
+
+					}
+					else{
+
+						document.getElementById("col" + i)
+							.style.display = "none";
+
+					}
+
+				}
+				for (let i = 0; i <= 20; i++) {
+
+					new YT.Player("video" + i, {
+						events: {
+							"onStateChange": onPlayerStateChange
+						},
+						host: "https://www.youtube.com",
+
+					});
 
 				}
 
@@ -230,7 +295,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	getRecents();
+	getRecents(1);
+
+	function nextPage () {
+
+		$(document)
+			.scrollTop(0);
+		getRecents(2);
+
+	}
+	function backPage () {
+
+		$(document)
+			.scrollTop(0);
+		getRecents(1);
+
+	}
+
+
+	document.getElementById("nextPage").addEventListener("click",nextPage);
+	document.getElementById("backPage").addEventListener("click",backPage);
 
 	async function search () {
 
@@ -245,6 +329,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					try {
 
+						document.getElementById("nextPage").classList.add("hide");
+						document.getElementById("backPage").classList.add("hide");
+						document.getElementById("search_query").value = "";
 						console.log(videoData);
 						for (let i = 1; i <= 4; i++) {
 
@@ -299,10 +386,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					try {
 
+						document.getElementById("nextPage").classList.add("hide");
+						document.getElementById("backPage").classList.add("hide");
 						console.log(videoData);
-						for (let i = 1; i <= 24; i++) {
+						for (let i = 1; i <= 20; i++) {
 
 							if (document.getElementById("video" + i)) {
+
+								document.getElementById("col" + i)
+									.style.display = "block";
 
 								let frame = document.getElementById("video" + i);
 								frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
@@ -313,6 +405,17 @@ document.addEventListener("DOMContentLoaded", function () {
 								title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
 							}
+
+						}
+						for (let i = 0; i <= 20; i++) {
+
+							new YT.Player("video" + i, {
+								events: {
+									"onStateChange": onPlayerStateChange
+								},
+								host: "https://www.youtube.com",
+
+							});
 
 						}
 
@@ -409,10 +512,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		});
 	document.getElementById("Home")
-		.addEventListener("click", getRecents);
+		.addEventListener("click", function () {
 
-	let gSignOut = document.getElementById("gSignOut");
-	gSignOut.addEventListener("click",signOut);
+			getRecents(1);
+
+		});
+
+	// let gSignOut = document.getElementById("gSignOut");
+	// gSignOut.addEventListener("click",signOut);
 
 
 	async function register () {
@@ -448,7 +555,14 @@ document.addEventListener("DOMContentLoaded", function () {
 						let selectedChannels = $("#channelSelect").val();
 						console.log("post results");
 						$.post("http://localhost:8080/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
+						email.value = "";
+						password.value = "";
+						confPwd.value = "";
+						title.innerHTML = "Create Account";
+						lname.value = "";
 						customisePage(selectedChannels,fname.value);
+						fname.value = "";
+
 
 					}
 					else {
@@ -492,6 +606,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					console.log("logged in");
 					console.log(result);
+					document.getElementById("prefEmail").value = email.value;
+					email.value = "";
+					pword.value = "";
+					title.innerHTML = "Log in";
 					customisePage(result["prefs"],result["fName"]);
 
 				}
@@ -513,6 +631,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 	document.getElementById("logInBtn").addEventListener("click",logIn);
+
+	async function updatePrefs () {
+
+		let email = document.getElementById("prefEmail");
+		let pword = document.getElementById("prefPword");
+		let title = document.getElementById("prefTitle");
+		console.log(email.value);
+		if (email.value == "" || pword.value == "") {
+
+			return;
+
+		}
+
+
+		else {
+
+			$.post("http://localhost:8080/prefs",{email: email.value, pword:pword.value,prefs:$("#updateChannelSelect").val()},function (result) {
+
+				if (result["success"]) {
+
+					console.log("logged in");
+					console.log(result);
+					pword.value = "";
+					title.innerHTML = "Log in";
+					customisePage($("#updateChannelSelect").val(),result["fName"]);
+
+				}
+				else if (result["exists"] && !result["correctPassword"]) {
+
+					title.innerHTML = "Preferences - The password is incorrect for this account";
+
+				}
+				else if (!result["exists"] && !result["correctPassword"]) {
+
+					title.innerHTML = "Preferences - The account doesn't exist";
+
+				}
+
+			});
+
+
+		}
+
+	}
+	document.getElementById("updatePrefsBtn").addEventListener("click",updatePrefs);
+
 
 });
 
@@ -561,30 +725,39 @@ async function checkEmail (input,title) {
 function customisePage (selectedChannels,fname) {
 
 	$("#accountModal").modal("hide");
+	$("#prefsModal").modal("hide");
 	if (selectedChannels.length >= 1) {
 
 		for (let i = 0;i < channels.length;i++) {
 
 			if (selectedChannels.includes(channels[i])) {
 
-				//document.getElementById(channels[i]).style.display = "block";
+				// document.getElementById(channels[i]).style.display = "block";
 				document.getElementById(channels[i]).parentElement.classList.remove("hide");
+				document.getElementById("pref" + channels[i]).selected = true;
 
 			}
 			else {
 
-				//document.getElementById(channels[i]).style.display = "none";
+				// document.getElementById(channels[i]).style.display = "none";
 				document.getElementById(channels[i]).parentElement.classList.add("hide");
-				//document.getElementById(channels[i]).style.height = "0px";
+				document.getElementById("pref" + channels[i]).selected = false;
+				// document.getElementById(channels[i]).style.height = "0px";
 
 			}
 
 		}
 
 	}
-	document.getElementById("accntName").innerHTML = fname + " ";
+	let accntName = document.getElementById("accntName");
+	if (accntName.innerHTML == " " || fname == " ") {
+
+		document.getElementById("accntName").innerHTML = fname;
+
+	}
 
 }
+
 
 // /////////////////////////////
 // /////////////////////////////
@@ -679,5 +852,17 @@ function createCard (videoNum) {
 	col.appendChild(card);
 
 	return col;
+
+}
+
+
+function updateOnSignIn () {
+
+	let signInBtn = document.getElementById("signInBtn");
+	signInBtn.innerHTML = "Preferences";
+	let signOutBtn = document.getElementById("signOutBtn");
+	signOutBtn.classList.remove("hide");
+	$("#signInBtn").attr("data-target","#prefsModal");
+
 
 }

@@ -29,69 +29,76 @@
 
 		<nav id="sidebar">
 			<div class="sidebar-header">
-				<h3>Welcome,</h3>
+
+				<h3>Welcome</h3>
 				<h3 id="accntName"> </h3>
-
+				<img class="hide rounded-circle mx-auto d-block" id = "accntImage" style="height: 40%;width:40%">
 
 			</div>
-			<ul class="list-unstyled components">
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Home"> Home - Recent Trailers</button>
-				</li>
-			</ul>
-			<h3 style="margin:20px">Channels</h3>
-			<ul class="list-unstyled components">
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Disney">Disney</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Pixar">Disney Pixar</button>
-				</li>
-				<li style="padding:5px; ">
-					<button class="btn btn-light" style="width:100%" id="Marvel">Marvel</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="DC" >DC</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="GoT">Game of Thrones</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%"  id="Netflix">Netflix</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Prime">Amazon Prime Video</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="FOX">20th Century FOX</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Paramount" >Paramount</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="WB">Warner Bros.</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Sony">Sony</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Lionsgate">Lionsgate</button>
-				</li>
-				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="MGM">MGM</button>
-				</li>
-			</ul>
+				<ul class="list-unstyled components">
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="Home"> Home - Recent Trailers</button>
+					</li>
+				</ul>
+				<h3 style="margin:20px">Channels</h3>
+				<ul class="list-unstyled components">
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="Disney">Disney</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="Pixar">Disney Pixar</button>
+					</li>
+					<li style="padding:5px; ">
+						<button class="btn btn-light navBtn" style="width:100%" id="Marvel">Marvel</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="DC" >DC</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="GoT">Game of Thrones</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%"  id="Netflix">Netflix</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="Prime">Amazon Prime Video</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="FOX">20th Century FOX</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="Paramount" >Paramount</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="WB">Warner Bros.</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="Sony">Sony</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="Lionsgate">Lionsgate</button>
+					</li>
+					<li style="padding:5px;">
+						<button class="btn btn-light navBtn" style="width:100%" id="MGM">MGM</button>
+					</li>
+				</ul>
 
-			<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn" data-theme="light"
-				data-border-radius="0.25rem" style="margin:50px; border-radius:0.25rem !important;display:none "></div>
-			<div class="containter">
-				<button  class="btn signOut" id="gSignOut" >
-								<img src="https://img.icons8.com/color/96/000000/google-logo.png" style="height:20px;width:20px;float:left" alt="google-logo">
-								<span style="float:right;color: #6c757d;" >Sign out</span>
+				<h3 style="margin:20px">Account</h3>
+				<ul class="list-unstyled components">
+
+					<li style="padding: 5px">
+						<button  class="btn btn-light navBtn" id="signInBtn" style="width:100%" data-toggle="modal" data-target="#accountModal">
+								Sign in
 						</button>
+					</li>
+					<li style="padding:5px">
+						<button  class="btn btn-light navBtn hide" id="signOutBtn" style="width:100%">
+								Sign out
+						</button>
+					</li>
 
-				<button class="btn btn-light btn-sm" type="button" data-toggle="modal" data-target="#accountModal">Moving arrow</button>
-			</div>
+				</ul>
+
 		</nav>
 		<div id="content" style="min-height: 100%">
 			<nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark " id="mainNav">
@@ -99,7 +106,7 @@
 
 				<!-- place in adjustable size column and row for responsive changes -->
 				<div class="container fluid">
-					<button type="button" id="sidebarCollapse" class="btn btn-secondary">
+					<button type="button" id="sidebarCollapse" class="btn btn-secondary navBtn">
 
 								<ion-icon name="menu"></ion-icon>
                                
@@ -112,10 +119,6 @@
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<div class="nav navbar-nav ml-auto">
 
-							<!-- <form class="form-inline" action="/search" method="GET">
-												<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" autofocus="false" name="q" id="search_query">
-												<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
-										</form> -->
 							<div class="form-inline">
 								<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query">
 								<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
@@ -142,7 +145,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title1">Card title</h6>
-								<button>Like button</button>
 
 							</div>
 						</div>
@@ -154,7 +156,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title2">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -166,7 +167,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title3">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -177,7 +177,7 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title4">Card title</h6>
-								<button>Like button</button>
+								
 							</div>
 						</div>
 					</div>
@@ -191,7 +191,7 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title5">Card title</h6>
-								<button>Like button</button>
+								
 
 							</div>
 						</div>
@@ -203,7 +203,7 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title6">Card title</h6>
-								<button>Like button</button>
+								
 							</div>
 						</div>
 					</div>
@@ -215,7 +215,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title7">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -226,7 +225,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title8">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -240,7 +238,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title9">Card title</h6>
-								<button>Like button</button>
 
 							</div>
 						</div>
@@ -252,7 +249,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title10">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -264,7 +260,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title11">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -275,7 +270,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title12">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -291,7 +285,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title13">Card title</h6>
-								<button>Like button</button>
 
 							</div>
 						</div>
@@ -303,7 +296,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title14">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -315,7 +307,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title15">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -326,7 +317,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title16">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -340,7 +330,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title17">Card title</h6>
-								<button>Like button</button>
 
 							</div>
 						</div>
@@ -352,7 +341,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title18">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -364,7 +352,6 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title19">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
@@ -375,94 +362,49 @@
 							</div>
 							<div class="card-body">
 								<h6 class="card-title" id="title20">Card title</h6>
-								<button>Like button</button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row cardRow align-items-stretch" id="rowForCards6">
-					<div class="col-lg col-sm-6 colTrans" id="col21">
-						<div class="card">
-							<!-- <img class="card-img-top" src="placeholder.png" alt="Card image cap"> -->
-							<div class="embed-responsive embed-responsive-16by9">
-								<iframe class="embed-responsive-item" id = "video21" allowfullscreen></iframe>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title" id="title21">Card title</h6>
-								<button>Like button</button>
-
-							</div>
-						</div>
-					</div>
-					<div class="col-lg col-sm-6 colTrans" id="col22">
-						<div class="card">
-							<div class="embed-responsive embed-responsive-16by9">
-								<iframe class="embed-responsive-item" id = "video22" allowfullscreen></iframe>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title" id="title22">Card title</h6>
-								<button>Like button</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg col-sm-6 colTrans" id="col23">
-						<div class="card">
-							<div class="embed-responsive embed-responsive-16by9">
-								<iframe class="embed-responsive-item" id = "video23" allowfullscreen></iframe>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title" id="title23">Card title</h6>
-								<button>Like button</button>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg col-sm-6 colTrans" id="col24">
-						<div class="card">
-							<div class="embed-responsive embed-responsive-16by9">
-								<iframe class="embed-responsive-item" id = "video24" allowfullscreen></iframe>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title" id="title24">Card title</h6>
-								<button>Like button</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
+				<button class="btn btn-light navBtn mx-auto d-block" style="margin-bottom: 20px" id="nextPage">More Trailers</button>
+				<button class="btn btn-light navBtn mx-auto d-block hide" style="margin-bottom: 20px" id="backPage">Back</button>
 				<!-- Modal -->
 
 				<div class="modal fade in" id="accountModal">
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 							<div class="row align-items-stretch">
-								<div class="col col-md-7" style="padding-right:20px; border-right: 1px solid rgba(51, 51, 51, 0.3)">
+								<div class="col col-md-7"
+									style="padding-right:20px; border-right: 1px solid rgba(51, 51, 51, 0.3)">
 									<div class="modal-header">
 										<h5 class="modal-title" id="RegTitle">Create Account</h5>
-										
+
 									</div>
 									<div class="modal-body">
-										<form name = "register" action="./register" method="post" >
+										<form name="register" action="./register" method="post">
 											<div class="form-group">
 												<div class="row" style="margin-bottom: 5px">
 													<div class="col">
 														<input type="text" class="form-control" name="fName" id="RegfName" placeholder="First name" style="display: inline" value="Julian">
 													</div>
-													<div class="col">
-														<input type="text" class="form-control" name="lName" id="ReglName" placeholder="Surname" style="display: inline" value = "Wyatt">
+														<div class="col">
+															<input type="text" class="form-control" name="lName" id="ReglName" placeholder="Surname" style="display: inline" value = "Wyatt">
 													</div>
-												</div>
-												<input type="email" class="form-control" name="email" id="RegEmail" placeholder="Email Address" style="margin-bottom: 5px" value="Jul@Wya.com">
+														</div>
+														<input type="email" class="form-control" name="email" id="RegEmail" placeholder="Email Address" style="margin-bottom: 5px" value="Jul@Wya.com">
 
-												<p style="margin-bottom:5px">The password must contain at least one lowercase character, at least one uppercase characters and be between 6 to 16 characters in length</p>
+														<p style="margin-bottom:5px">The password must contain at least
+															one lowercase character, at least one uppercase characters
+															and be between 6 to 16 characters in length</p>
 
-												<input type="password" class="form-control" name="password" id="RegPassword" placeholder="Password" style="margin-bottom: 5px" value="Password1">
-												<input type="password" class="form-control" id="RegConfPWord" placeholder="Confirm password" style="margin-bottom: 5px" value="Password1">
+														<input type="password" class="form-control" name="password" id="RegPassword" placeholder="Password" style="margin-bottom: 5px" value="Password1">
+														<input type="password" class="form-control" id="RegConfPWord" placeholder="Confirm password" style="margin-bottom: 5px" value="Password1">
 
-												<p style="margin-bottom: 5px">Please select which channels you like from the list: (use ctrl (or cmd) + click for multiple)</p>
-												
-												<select class="custom-select" name="channel" id="channelSelect" multiple>
+														<p style="margin-bottom: 5px">Please select which channels you
+															like from the list: (use ctrl (or cmd) + click for multiple)
+														</p>
+
+														<select class="custom-select" name="channel" id="channelSelect" multiple>
 														<option value="Disney">Disney</option>
 														<option value="Pixar">Disney Pixar</option>
 														<option value="Marvel">Marvel</option>
@@ -472,55 +414,109 @@
 														<option value="Prime">Amazon Prime Video</option>
 														<option value="FOX">FOX</option>
 														<option value="Paramount">Paramount</option>
-														<option value="WarnerBros">Warner Brothers</option>
+														<option value="WB">Warner Brothers</option>
 														<option value="Sony">Sony</option>
 														<option value="Lionsgate">Lionsgate</option>
 														<option value="MGM">MGM</option>
 												</select>
-												</div>
-											
-											
+													</div>
+
+
 										</form>
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" id="registerBtn">Register</button>
 									</div>
 								</div>
-								<div class="col col-md-5">
-										<div class="modal-header">
-											<h5 class="modal-title" id="logInTitle">Log in</h5>
-											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<div class="col col-md-5" id="logInCol">
+									<div class="modal-header">
+										<h5 class="modal-title" id="logInTitle">Log in</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												<span aria-hidden="true">&times;</span>
 											</button>
-										</div>
-										<div class="modal-body">
-											<form name = "log-in">
-												<div class="form-group">
-													<input type="email" class="form-control" id="email" placeholder="Email Address" style="margin-bottom: 5px">
-													<input type="password" class="form-control" id="pword" placeholder="Password" style="margin-bottom: 5px">
-												</div>
-											</form>
-										</div>
-										<div class="modal-footer">
-											<div class="row">
-												<div class="col" style="float:left">
-													<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn" data-dismiss="modal" data-theme="light" data-border-radius="0.25rem" ></div>
-												</div>
-
-												<div class="col">
-													<button type="button" class="btn btn-secondary" id="logInBtn">Log in</button>
-												</div>
-											</div>
-											
-										</div>
-									
 									</div>
+									<div class="modal-body">
+										<form name="log-in">
+											<div class="form-group">
+												<input type="email" class="form-control" id="email" placeholder="Email Address" style="margin-bottom: 5px">
+												<input type="password" class="form-control" id="pword" placeholder="Password" style="margin-bottom: 5px">
+												</div>
+										</form>
+									</div>
+									<div class="modal-footer">
+										<div class="row">
+											<div class="col" style="float:left">
+												<div class="g-signin2" id="googleSignIn" data-onsuccess="onSignIn"
+													data-dismiss="modal" data-theme="light"
+													data-border-radius="0.25rem"></div>
+											</div>
+
+											<div class="col">
+												<button type="button" class="btn btn-secondary" id="logInBtn">Log in</button>
+											</div>
+										</div>
+
+									</div>
+
+								</div>
 							</div>
 						</div>
 
 					</div>
 				</div>
 				<!-- /.modal -->
+
+
+				<div class="modal fade in" id="prefsModal">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+
+							<div class="modal-header">
+								<h5 class="modal-title" id="prefTitle">Preferences</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+
+							</div>
+							<div class="modal-body">
+								<form name="updatePrefs" action="./updatePrefs" method="post">
+									<div class="form-group">
+
+										<input type="email" class="form-control" name="email" id="prefEmail" readonly placeholder="Email Address" style="margin-bottom: 5px" value="Jul@Wya.com">
+
+										<input type="password" class="form-control" name="password" id="prefPword" placeholder="Password" style="margin-bottom: 5px" value="Password1">
+
+										<p style="margin-bottom: 5px">Please select which channels you like from the
+											list: (use ctrl (or cmd) + click for multiple)</p>
+
+										<select class="custom-select" name="channel" id="updateChannelSelect" multiple>
+												<option value="Disney" id = "prefDisney">Disney</option>
+												<option value="Pixar" id = "prefPixar">Disney Pixar</option>
+												<option value="Marvel" id = "prefMarvel">Marvel</option>
+												<option value="DC" id = "prefDC">DC</option>
+												<option value="GoT" id = "prefGoT">Game of Thrones</option>
+												<option value="Netflix"id = "prefNetflix">Netflix</option>
+												<option value="Prime" id = "prefPrime">Amazon Prime Video</option>
+												<option value="FOX" id = "prefFOX">FOX</option>
+												<option value="Paramount" id = "prefParamount">Paramount</option>
+												<option value="WB" id = "prefWB">Warner Brothers</option>
+												<option value="Sony" id = "prefSony">Sony</option>
+												<option value="Lionsgate" id = "prefLionsgate">Lionsgate</option>
+												<option value="MGM" id = "prefMGM">MGM</option>
+										</select>
+									</div>
+
+
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" id="updatePrefsBtn">Update Preferences</button>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
 
 
 				<footer class="footer" id="footer" style="padding:25px; background-color: #6c757d;">
