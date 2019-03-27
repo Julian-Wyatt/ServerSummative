@@ -4,11 +4,14 @@ let fs = require("fs");
 let readline = require("readline");
 const {google} = require("googleapis");
 let bcrypt = require("bcrypt");
+let moment = require("moment");
 // const {OAuth2Client} = require("google-auth-library");
-let testing = true;
+
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("client"));
 
+// used only really in testing to find the ID of channels for prefs section in accounts.json and saved in channels.json
 // eslint-disable-next-line no-unused-vars
 function getChannelID (title) {
 
@@ -16,8 +19,7 @@ function getChannelID (title) {
 
 		if (err) {
 
-			console.log("Error loading client secret file: " + err);
-			return;
+			throw new Error(err);
 
 		}
 		// Authorize a client with the loaded credentials, then call the YouTube API.
@@ -43,45 +45,43 @@ function getChannelID (title) {
 
 }
 
-app.use(express.static("client"));
-
+// gets the icon for the webpage
+/**
+ * @param  {} req
+ * @param  {} res
+ */
 app.get("/favicon.ico", function (req, res) {
 
 	res.sendFile(__dirname + "/favicon.ico");
-	console.log("icon");
 
 });
 
+
+/** gets the main html page, css, and the js
+ * @param  {} req
+ * @param  {} resp
+ */
 app.get("/",function (req,resp) {
 
 	resp.sendFile("client/index.html",{root: __dirname });
+	resp.sendFile(__dirname + "/client/style.css");
+	resp.sendFile(__dirname + "/client/index.js");
 
 });
 
-app.get("/style.css", function (req, res) {
-
-	res.sendFile(__dirname + "/client/style.css");
-
-});
-
-app.get("/index.js", function (req, res) {
-
-	res.sendFile(__dirname + "/client/index.js");
-
-});
-
+// used to get the placeholder image for videos
 app.get("/placeholder.png", function (req, res) {
 
 	res.sendFile(__dirname + "/client/placeholder.png");
 
 });
 
+// used to search for specific trailers, the query is provided in the URL
 app.get("/search",function (req,res) {
 
 	if (req.query.q != "") {
 
 		res.statusCode = 200;
-		console.log("here",req.query.q);
 		callTrailers(res,req.query.q);
 		// res.send("got " + req.query.q + " as a response");
 		// res.send(fs.readFileSync("search.json"));
@@ -97,15 +97,28 @@ app.get("/search",function (req,res) {
 
 });
 
+// gets the channel data, ie all trailers from specfic channel
 app.get("/channeldata",function (req,res) {
 
 	if (req.query.channel != "") {
 
 		res.statusCode = 200;
-		console.log("here",req.query.channel);
-		callChannelData(req.query.channel,res);
-		// res.send("got " + req.query.q + " as a response");
-		// res.end();
+		fs.readFile(req.query.channel + ".json",function (err,data) {
+
+			if (err) {
+
+				callChannelData(req.query.channel,res);
+
+			}
+			else {
+
+				data = JSON.parse(data);
+				res.json(data);
+				res.end();
+
+			}
+
+		});
 
 	}
 	else{
@@ -117,50 +130,144 @@ app.get("/channeldata",function (req,res) {
 
 });
 
-
+// gets recents - typically newest videos from saved in recents.json
 app.get("/recent",function (req,res) {
 
 
-	if (testing) {
+	res.statusCode = 200;
 
-		res.statusCode = 200;
+	fs.readFile(__dirname + "/recents.json",function (err,data) {
 
-		fs.readFile(__dirname + "/recents.json",function (err,data) {
+		if (err) {
 
-			if (err) {
-
-				console.log(err);
-				return;
-
-			}
-
-			res.json(JSON.parse(data));
-			res.end();
-
-		});
+			throw new Error(err);
 
 
-	} else{
+		}
+		data = JSON.parse(data);
 
-		res.statusCode = 200;
-
-		callTrailers(res);
-		console.log("once");
+		if (req.query.page == 1) {
 
 
-	}
+			data = data.slice(0,20);
+
+			res.json(data);
+
+		}
+		else if (req.query.page == 2) {
+
+			res.json(data.slice(20));
+
+
+		}
+		res.end();
+
+	});
 
 
 });
 
+// gets prerferences for specific user
+app.get("/prefs",function (req,res) {
+
+	fs.readFile("accounts.json",function (er,accounts) {
+
+		if (er) {
+
+			throw new Error(er);
+
+		}
+		accounts = JSON.parse(accounts);
+		for (let i = 0; i < accounts["users"].length; i++) {
+
+			if (accounts["users"][i]["eMail"].toLowerCase() == req.query.email.toLowerCase()) {
+
+				res.json(accounts["users"][i]["prefs"]);
+				res.end();
+				return;
+
+			}
+
+		}
+
+		res.end();
+
+	});
+
+});
+
+// updates prefs for user if their email and password are correct
+app.post ("/prefs", function (req,res) {
+
+	fs.readFile("accounts.json",function (er,accounts) {
+
+		if (er) {
+
+			throw new Error(er);
+
+		}
+		accounts = JSON.parse(accounts);
+		for (let i = 0; i < accounts["users"].length; i++) {
+
+			if (accounts["users"][i]["eMail"].toLowerCase() == req.body.email.toLowerCase()) {
+
+				bcrypt.compare(req.body.pword,accounts["users"][i]["password"],function (er,equal) {
+
+					if (er) {
+
+						throw new Error(er);
+
+					}
+					if (equal) {
+
+
+						accounts["users"][i]["prefs"] = req.body.prefs;
+						fs.writeFile("accounts.json",JSON.stringify(accounts),function (er) {
+
+							if (er) {
+
+
+								throw new Error(er);
+
+							}
+							res.json({"success":true,});
+							res.end();
+
+						});
+
+					}
+					else{
+
+						res.json({"success":false,"correctPassword":false});
+
+					}
+
+
+				});
+
+				return;
+
+			}
+
+
+		}
+
+		res.json({"success":false,"correctPassword":false,"exists":false});
+
+
+	});
+
+});
+
+
+// adds the account to accounts.json
 app.post("/register",function (req,res) {
 
 	fs.readFile("accounts.json",function (er,accounts) {
 
 		if (er) {
 
-			console.log("Error loading accounts.json: " + er);
-			return;
+			throw new Error(er);
 
 		}
 		let user = {"fName": req.body.fName, "lName": req.body.lName, "eMail": req.body.email,};
@@ -169,9 +276,8 @@ app.post("/register",function (req,res) {
 
 			if (er) {
 
-				console.log("Error generating salt: " + er);
 				res.end("unsuccessful");
-				return;
+				throw new Error(er);
 
 			}
 			// user["salt"] = salt;
@@ -179,9 +285,8 @@ app.post("/register",function (req,res) {
 
 				if (er) {
 
-					console.log("Error hashing password: " + er);
 					res.end("unsuccessful");
-					return;
+					throw new Error(er);
 
 				}
 				user["password"] = hash;
@@ -190,13 +295,12 @@ app.post("/register",function (req,res) {
 				accounts["users"].push(user);
 				fs.writeFile("accounts.json",JSON.stringify(accounts),function (er) {
 
+					res.end();
 					if (er) {
 
-						console.log("error writing to accounts: " + er);
+						throw new Error(er);
 
 					}
-
-					res.end();
 
 				});
 
@@ -209,9 +313,9 @@ app.post("/register",function (req,res) {
 
 });
 
+// checks if the account exists
 app.get("/checkAccount",function (req,res) {
 
-	console.log(req.query.email);
 	checkEmail(req.query.email,res);
 
 });
@@ -222,8 +326,7 @@ function checkEmail (input,res) {
 
 		if (er) {
 
-			console.log("error loading accounts.json: " + er);
-			return;
+			throw new Error(er);
 
 		}
 		accounts = JSON.parse(accounts);
@@ -245,6 +348,7 @@ function checkEmail (input,res) {
 
 }
 
+// logs in depending on whether the username and password is correct
 app.post("/login", function (req,res) {
 
 	let email = req.body.email;
@@ -254,8 +358,7 @@ app.post("/login", function (req,res) {
 
 		if (er) {
 
-			console.log("error loading accounts.json: " + er);
-			return;
+			throw new Error(er);
 
 		}
 		accounts = JSON.parse(accounts);
@@ -273,7 +376,6 @@ app.post("/login", function (req,res) {
 					if (equal) {
 
 						// sign in
-						console.log("sign in");
 						let response = {"fName":accounts["users"][i]["fName"], "prefs": accounts["users"][i]["prefs"], "exists":true, "correctPassword":true};
 						res.json(response);
 
@@ -281,7 +383,6 @@ app.post("/login", function (req,res) {
 					else {
 
 						// can't sign in
-						console.log("password wrong");
 						res.json({"exists":true,"correctPassword":false});
 
 					}
@@ -297,7 +398,7 @@ app.post("/login", function (req,res) {
 			}
 
 		}
-		console.log("account doesn't exist");
+
 		res.json({"exists":false, "correctPassword":false});
 		res.end();
 
@@ -305,29 +406,35 @@ app.post("/login", function (req,res) {
 
 });
 
-setInterval(intervalSavingRecents, 1000 * 60 * 60 * 6);
+
+// ////////////////////////////////////////////////////
+// External API Code
+
+
+setInterval(intervalSavingRecents, 1000 * 60 * 45);
 // TEST THE CODE WITH THIS: setInterval(intervalSavingRecents, 1000 * 60);
-setInterval(internalSavingChannels, 1000 * 60 * 60 * 24);
+setInterval(intervalSavingChannels, 1000 * 60 * 60 * 6);
+
 
 function intervalSavingRecents () {
 
-	console.log("min passed so save recents");
+
 	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
 		if (err) {
 
-			console.log("Error loading client secret file: " + err);
-			return;
+			throw new Error(err);
 
 		}
 		// Authorize a client with the loaded credentials, then call the YouTube API.
 		// See full code sample for authorize() function code.
-
+		let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
 		authorize(JSON.parse(content), {"params": {
-			"maxResults": "4",
+			"maxResults": "50",
 			"part": "snippet",
 			"q": "Trailer",
 			"type": "video",
+			"publishedAfter":d
 			// "videoDuration": "short",
 			// "relevanceLanguage": "en"
 			// "videoLicense": "creativeCommon"
@@ -338,7 +445,7 @@ function intervalSavingRecents () {
 
 }
 
-function internalSavingChannels () {
+function intervalSavingChannels () {
 
 	callChannelData("Disney");
 	callChannelData("Marvel");
@@ -364,8 +471,7 @@ function callChannelData (channel,res) {
 
 		if (err) {
 
-			console.log("Error loading client secret file: " + err);
-			return;
+			throw new Error(err);
 
 		}
 		// Authorize a client with the loaded credentials, then call the YouTube API.
@@ -375,8 +481,7 @@ function callChannelData (channel,res) {
 
 			if (err) {
 
-				console.log("Error loading channels.json: " + err);
-				return;
+				throw new Error(err);
 
 			}
 			data = JSON.parse(data);
@@ -407,20 +512,21 @@ function callTrailers (res, q) {
 
 		if (err) {
 
-			console.log("Error loading client secret file: " + err);
-			return;
+			throw new Error(err);
 
 		}
 		// Authorize a client with the loaded credentials, then call the YouTube API.
 		// See full code sample for authorize() function code.
 		if (q === undefined) {
 
+			let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
 			// change max results sizes once ive sorted repeats and reaction videos
 			authorize(JSON.parse(content), {"params": {
-				"maxResults": "24",
+				"maxResults": "50",
 				"part": "snippet",
 				"q": "Trailer",
 				"type": "video",
+				"publishedAfter":d
 				// "videoDuration": "short",
 				// "relevanceLanguage": "en"
 				// "videoLicense": "creativeCommon"
@@ -491,8 +597,7 @@ function getNewToken (oauth2Client, requestData, callback) {
 
 			if (err) {
 
-				console.log("Error while trying to retrieve access token", err);
-				return;
+				throw new Error(err);
 
 			}
 			oauth2Client.credentials = token;
@@ -541,39 +646,6 @@ function removeEmptyParameters (params) {
 
 }
 
-/*
-function createResource(properties) {
-	var resource = {};
-	var normalizedProps = properties;
-	for (var p in properties) {
-		var value = properties[p];
-		if (p && p.substr(-2, 2) == "[]") {
-			var adjustedName = p.replace("[]", "");
-			if (value) {
-				normalizedProps[adjustedName] = value.split(",");
-			}
-			delete normalizedProps[p];
-		}
-	}
-	for (var p in normalizedProps) {
-	// Leave properties that don't have values out of inserted resource.
-		if (normalizedProps.hasOwnProperty(p) && normalizedProps[p]) {
-			var propArray = p.split(".");
-			var ref = resource;
-			for (var pa = 0; pa < propArray.length; pa++) {
-				var key = propArray[pa];
-				if (pa == propArray.length - 1) {
-					ref[key] = normalizedProps[p];
-				}
-				else {
-					ref = ref[key] = ref[key] || {};
-				}
-			}
-		}
-	}
-	return resource;
-}
-*/
 
 function searchListByKeyword (auth, requestData, res, channel) {
 
@@ -587,54 +659,60 @@ function searchListByKeyword (auth, requestData, res, channel) {
 
 			if (err) {
 
-				console.log("The API returned an error: " + err);
-
-				return;
+				throw new Error(err);
 
 			}
 			console.log("pinged Youtube");
 
+			for (let i = 0; i < response["data"]["items"].length;i++) {
 
-			if (testing) {
+				// videoData[i - 1]["snippet"]["title"]
+				let title = response["data"]["items"][i]["snippet"]["title"].toLowerCase();
+				if (title.includes("reaction") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in")) {
 
-				if (res === undefined && channel === undefined) {
-
-					fs.writeFile("recents.json",JSON.stringify(response["data"]["items"]),function (err) {
-
-						if (err) {
-
-							console.log("error occured when writing");
-
-						}
-
-					});
-
-				} else if (res === undefined && channel != undefined) {
-
-					fs.writeFile(channel + ".json",JSON.stringify(response["data"]["items"]),function (err) {
-
-						if (err) {
-
-							console.log("error occured when writing");
-
-						}
-
-					});
+					response["data"]["items"].splice(i,1);
 
 				}
 
 			}
-			else{
+			if (res != undefined) {
 
-				res.json(response["data"]["items"]);
+				res.json(response);
 				res.end();
 
 			}
 
+			if (res === undefined && channel === undefined) {
+
+				fs.writeFile("recents.json",JSON.stringify(response["data"]["items"]),function (err) {
+
+					if (err) {
+
+						throw new Error(err);
+
+					}
+
+				});
+
+			} else if (res === undefined && channel != undefined) {
+
+				fs.writeFile(channel + ".json",JSON.stringify(response["data"]["items"]),function (err) {
+
+					if (err) {
+
+						throw new Error(err);
+
+					}
+
+				});
+
+			}
+
+
 		}
 		catch (er) {
 
-			console.log(er);
+			throw new Error(er);
 
 		}
 
