@@ -1,15 +1,14 @@
-/* global gapi recents*/
-
-// let recents = "";
 let channels = ["Disney","Pixar","Marvel","DC","GoT","Netflix", "Prime", "FOX", "Paramount","WB", "Sony", "Lionsgate", "MGM"];
 
+// disabled as it is defined in html and in JQuery section below approx line 77
+// eslint-disable-next-line no-unused-vars
 function onSignIn (googleUser) {
 
 	let profile = googleUser.getBasicProfile();
 	console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
 	console.log("Name: " + profile.getName());
-	let accntText = document.getElementById("accntName");
-	accntText.textContent = profile.getName();
+	// let accntText = document.getElementById("accntName");
+	// accntText.textContent = profile.getName();
 	console.log("Image URL: " + profile.getImageUrl());
 	let accntImage = document.getElementById("accntImage");
 	accntImage.src = profile.getImageUrl();
@@ -20,11 +19,16 @@ function onSignIn (googleUser) {
 	getPrefs(profile.getEmail())
 		.then(function (response) {
 
+			if (response == undefined) {
+
+				return;
+
+			}
 			document.getElementById("prefEmail").value = profile.getEmail();
 			updateOnSignIn();
 			customisePage(response,profile.getName());
 
-		});
+		}).catch(e=>alert(e));
 
 	// send info to server and handle there
 
@@ -32,10 +36,19 @@ function onSignIn (googleUser) {
 
 async function getPrefs (email) {
 
-	let response = await fetch("http://localhost:8080/prefs?email=" + email);
-	let body = await response.text();
-	console.log(body);
-	return body;
+	try {
+
+		let response = await fetch("http://localhost:8080/prefs?email=" + email);
+		let body = await response.text();
+		console.log(body);
+		return body;
+
+	}
+	catch(e) {
+
+		alert(e);
+
+	}
 
 }
 
@@ -43,16 +56,15 @@ function signOut () { // add this with DOM
 
 	// same here, ping server, then ping back with sign out
 	let auth2 = gapi.auth2.getAuthInstance();
-	if (!auth2.isSignedIn.get()) {
 
-		auth2.signOut()
-			.then(function () {
+	auth2.signOut()
+		.then(function () {
 
-				console.log("User signed out.");
+			console.log("User signed out.");
 
-			});
+		}).catch(e=>alert(e));
 
-	}
+
 	customisePage(channels," ");
 	document.getElementById("accntImage").classList.add("hide");
 	let signInBtn = document.getElementById("signInBtn");
@@ -76,26 +88,7 @@ $(document)
 		let firstScriptTag = document.getElementsByTagName("script")[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-		// let totalRows = 3;
-		// $(window).scroll(function () {
-
-		// 	if (document.getElementById("col5").style.display != "none") {
-
-		// 		if($(window).scrollTop() + $(window).height() == $(document).height()) {
-
-		// 			// add more divs with videos at this point, leaving this point in the page to no longer be at the bottom
-		// 			if (totalRows < 6) {
-
-		// 				// createVideoRow(totalRows);
-		// 				// totalRows++;
-
-		// 			}
-
-		// 		}
-
-		// 	}
-
-		// });
+		$("#googleSignIn").attr("data-onsuccess","onSignIn");
 
 		$("#search_query")
 			.keyup(function (event) {
@@ -111,6 +104,7 @@ $(document)
 
 	});
 
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 function onYouTubeIframeAPIReady () {
 
 	for (let i = 0; i <= 20; i++) {
@@ -126,6 +120,7 @@ function onYouTubeIframeAPIReady () {
 	}
 
 }
+
 
 function onPlayerStateChange (event) {
 
@@ -212,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		} catch (e) {
 
+			console.log("here");
 			alert(e);
 
 		}
@@ -238,10 +234,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	function getRecents (page) {
+	function getRecents (page,initial) {
 
 		requestData(page)
 			.then(function (videoData) {
+
+				if (videoData == undefined) {
+
+					return;
+
+				}
 
 				if (page == 1) {
 
@@ -279,36 +281,42 @@ document.addEventListener("DOMContentLoaded", function () {
 					}
 
 				}
-				for (let i = 0; i <= 20; i++) {
+				if (!initial) {
 
-					new YT.Player("video" + i, {
-						events: {
-							"onStateChange": onPlayerStateChange
-						},
-						host: "https://www.youtube.com",
+					for (let i = 0; i <= 20; i++) {
 
-					});
+						new YT.Player("video" + i, {
+							events: {
+								"onStateChange": onPlayerStateChange
+							},
+							host: "https://www.youtube.com",
+
+						});
+
+					}
 
 				}
 
-			});
+			})
+			.catch(e => alert(e));
+
 
 	}
 
-	getRecents(1);
+	getRecents(1,true);
 
 	function nextPage () {
 
 		$(document)
 			.scrollTop(0);
-		getRecents(2);
+		getRecents(2,false);
 
 	}
 	function backPage () {
 
 		$(document)
 			.scrollTop(0);
-		getRecents(1);
+		getRecents(1,false);
 
 	}
 
@@ -316,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.getElementById("nextPage").addEventListener("click",nextPage);
 	document.getElementById("backPage").addEventListener("click",backPage);
 
-	async function search () {
+	function search () {
 
 		let q = document.getElementById("search_query")
 			.value;
@@ -327,51 +335,50 @@ document.addEventListener("DOMContentLoaded", function () {
 			requestSearchData(q)
 				.then(function (videoData) {
 
-					try {
+					if (videoData == undefined) {
 
-						document.getElementById("nextPage").classList.add("hide");
-						document.getElementById("backPage").classList.add("hide");
-						document.getElementById("search_query").value = "";
-						console.log(videoData);
-						for (let i = 1; i <= 4; i++) {
-
-							let frame = document.getElementById("video" + i);
-							frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
-								"videoId"] +
-								"?enablejsapi=1&origin=http://localhost:8080";
-
-							let title = document.getElementById("title" + i);
-							title.innerHTML = videoData[i - 1]["snippet"]["title"];
-
-						}
-						for (let i = 5; i <= 24; i++) {
-
-							if (document.getElementById("video" + i)) {
-
-								document.getElementById("col" + i)
-									.style.display = "none";
-
-							}
-
-						}
-
-						for (let i = 1; i <= 4; i++) {
-
-							new YT.Player("video" + i, {
-								events: {
-									"onStateChange": onPlayerStateChange
-								}
-							});
-
-						}
-
-					} catch (err) {
-
-						alert(err);
+						throw new Error("Couldn't connect to the server");
 
 					}
 
-				});
+					document.getElementById("nextPage").classList.add("hide");
+					document.getElementById("backPage").classList.add("hide");
+					document.getElementById("search_query").value = "";
+					console.log(videoData);
+					for (let i = 1; i <= 4; i++) {
+
+						let frame = document.getElementById("video" + i);
+						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
+							"videoId"] +
+							"?enablejsapi=1&origin=http://localhost:8080";
+
+						let title = document.getElementById("title" + i);
+						title.innerHTML = videoData[i - 1]["snippet"]["title"];
+
+					}
+					for (let i = 5; i <= 24; i++) {
+
+						if (document.getElementById("video" + i)) {
+
+							document.getElementById("col" + i)
+								.style.display = "none";
+
+						}
+
+					}
+
+					for (let i = 1; i <= 4; i++) {
+
+						new YT.Player("video" + i, {
+							events: {
+								"onStateChange": onPlayerStateChange
+							}
+						});
+
+					}
+
+
+				}).catch(e=>alert(e));
 
 		}
 
@@ -384,48 +391,48 @@ document.addEventListener("DOMContentLoaded", function () {
 			requestChannelData(q)
 				.then(function (videoData) {
 
-					try {
+					if (videoData == undefined) {
 
-						document.getElementById("nextPage").classList.add("hide");
-						document.getElementById("backPage").classList.add("hide");
-						console.log(videoData);
-						for (let i = 1; i <= 20; i++) {
-
-							if (document.getElementById("video" + i)) {
-
-								document.getElementById("col" + i)
-									.style.display = "block";
-
-								let frame = document.getElementById("video" + i);
-								frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
-									"videoId"] +
-									"?enablejsapi=1&origin=http://localhost:8080";
-
-								let title = document.getElementById("title" + i);
-								title.innerHTML = videoData[i - 1]["snippet"]["title"];
-
-							}
-
-						}
-						for (let i = 0; i <= 20; i++) {
-
-							new YT.Player("video" + i, {
-								events: {
-									"onStateChange": onPlayerStateChange
-								},
-								host: "https://www.youtube.com",
-
-							});
-
-						}
-
-					} catch (err) {
-
-						alert(err);
+						throw new Error("Couldn't connect to the server");
 
 					}
 
-				});
+
+					document.getElementById("nextPage").classList.add("hide");
+					document.getElementById("backPage").classList.add("hide");
+					console.log(videoData);
+					for (let i = 1; i <= 20; i++) {
+
+						if (document.getElementById("video" + i)) {
+
+							document.getElementById("col" + i)
+								.style.display = "block";
+
+							let frame = document.getElementById("video" + i);
+							frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
+								"videoId"] +
+								"?enablejsapi=1&origin=http://localhost:8080";
+
+							let title = document.getElementById("title" + i);
+							title.innerHTML = videoData[i - 1]["snippet"]["title"];
+
+						}
+
+					}
+					for (let i = 0; i <= 20; i++) {
+
+						new YT.Player("video" + i, {
+							events: {
+								"onStateChange": onPlayerStateChange
+							},
+							host: "https://www.youtube.com",
+
+						});
+
+					}
+
+
+				}).catch(e=>alert(e));
 
 		}
 
@@ -548,6 +555,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		checkEmail(email,title)
 			.then(function (exists) {
 
+				if (exists == undefined) {
+
+					return;
+
+				}
+
 				if (!exists) {
 
 					if (checkPassword(password)) {
@@ -580,7 +593,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 				}
 
-			});
+			}).catch(e=>alert(e));
 
 
 	}
@@ -610,6 +623,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					email.value = "";
 					pword.value = "";
 					title.innerHTML = "Log in";
+					updateOnSignIn();
 					customisePage(result["prefs"],result["fName"]);
 
 				}
@@ -707,11 +721,21 @@ async function checkEmail (input,title) {
 		// check whether email is linked to account on server
 		console.log("email ok");
 		let email = encodeURIComponent(input.value);
-		let free = await fetch("http://localhost:8080/checkAccount?email=" + email);
+		try {
 
-		free = await free.text();
-		free = JSON.parse(free);
-		return free["exists"];
+			let free = await fetch("http://localhost:8080/checkAccount?email=" + email);
+
+			free = await free.text();
+			free = JSON.parse(free);
+			return free["exists"];
+
+		}
+
+		catch(e) {
+
+			alert(e);
+
+		}
 
 	}
 	else{
@@ -750,9 +774,10 @@ function customisePage (selectedChannels,fname) {
 
 	}
 	let accntName = document.getElementById("accntName");
-	if (accntName.innerHTML == " " || fname == " ") {
+	if (accntName.innerHTML == "-" || fname == " " || accntName.innerHTML == " ") {
 
 		document.getElementById("accntName").innerHTML = fname;
+		document.getElementById("accntName").classList.remove("hide");
 
 	}
 
@@ -763,97 +788,97 @@ function customisePage (selectedChannels,fname) {
 // /////////////////////////////
 
 
-function createVideoRow (num) {
+// function createVideoRow (num) {
 
-	let row = document.createElement("div");
-	row.classList.add("row");
-	row.classList.add("cardRow");
-	row.classList.add("align-items-stretch");
-	row.id = "rowForCards" + num + 1;
+// 	let row = document.createElement("div");
+// 	row.classList.add("row");
+// 	row.classList.add("cardRow");
+// 	row.classList.add("align-items-stretch");
+// 	row.id = "rowForCards" + num + 1;
 
-	for (let i = 0; i < 4; i++) {
+// 	for (let i = 0; i < 4; i++) {
 
-		let cardNum = num * 4 + i + 1;
-		let card = createCard(cardNum);
-		row.appendChild(card);
+// 		let cardNum = num * 4 + i + 1;
+// 		let card = createCard(cardNum);
+// 		row.appendChild(card);
 
-	}
+// 	}
 
-	document.getElementById("rows")
-		.appendChild(row);
+// 	document.getElementById("rows")
+// 		.appendChild(row);
 
-	// requestRecent().then(function (videoData) {
+// 	// requestRecent().then(function (videoData) {
 
-	for (let i = 0; i < 4; i++) {
+// 	for (let i = 0; i < 4; i++) {
 
-		let videoNum = num * 4 + i + 1;
-		new YT.Player("video" + videoNum, {
-			events: {
-				"onStateChange": onPlayerStateChange
-			}
-		});
+// 		let videoNum = num * 4 + i + 1;
+// 		new YT.Player("video" + videoNum, {
+// 			events: {
+// 				"onStateChange": onPlayerStateChange
+// 			}
+// 		});
 
-		let frame = document.getElementById("video" + videoNum);
-		frame.src = "https://www.youtube.com/embed/" + recents[videoNum - 1]["id"]["videoId"] +
-			"?enablejsapi=1&origin=http://localhost:8080";
+// 		let frame = document.getElementById("video" + videoNum);
+// 		frame.src = "https://www.youtube.com/embed/" + recents[videoNum - 1]["id"]["videoId"] +
+// 			"?enablejsapi=1&origin=http://localhost:8080";
 
-		let title = document.getElementById("title" + videoNum);
-		title.innerHTML = recents[videoNum - 1]["snippet"]["title"];
+// 		let title = document.getElementById("title" + videoNum);
+// 		title.innerHTML = recents[videoNum - 1]["snippet"]["title"];
 
-	}
+// 	}
 
-	// });
+// 	// });
 
-	document.getElementById("blur")
-		.style.height = ($("#rows")
-			.height() + 19) + "px";
+// 	document.getElementById("blur")
+// 		.style.height = ($("#rows")
+// 			.height() + 19) + "px";
 
-}
+// }
 
-function createCard (videoNum) {
+// function createCard (videoNum) {
 
-	let col = document.createElement("div");
-	col.classList.add("col-lg");
-	col.classList.add("col-sm-6");
-	col.classList.add("colTrans");
-	col.id = "col" + videoNum;
-	let card = document.createElement("div");
-	card.classList.add("card");
+// 	let col = document.createElement("div");
+// 	col.classList.add("col-lg");
+// 	col.classList.add("col-sm-6");
+// 	col.classList.add("colTrans");
+// 	col.id = "col" + videoNum;
+// 	let card = document.createElement("div");
+// 	card.classList.add("card");
 
-	let videoDiv = document.createElement("div");
-	videoDiv.classList.add("embed-responsive");
-	videoDiv.classList.add("embed-responsive-16by9");
+// 	let videoDiv = document.createElement("div");
+// 	videoDiv.classList.add("embed-responsive");
+// 	videoDiv.classList.add("embed-responsive-16by9");
 
-	let video = document.createElement("iframe");
-	video.setAttribute("allowfullscreen", "");
-	// video.setAttribute("src","https://www.youtube.com/embed/z-fVkkAaRfw?enablejsapi=1");
-	video.classList.add("embed-responsive-item");
-	video.id = "video" + videoNum;
+// 	let video = document.createElement("iframe");
+// 	video.setAttribute("allowfullscreen", "");
+// 	// video.setAttribute("src","https://www.youtube.com/embed/z-fVkkAaRfw?enablejsapi=1");
+// 	video.classList.add("embed-responsive-item");
+// 	video.id = "video" + videoNum;
 
-	let cardBody = document.createElement("card-body");
-	cardBody.classList.add("card-body");
+// 	let cardBody = document.createElement("card-body");
+// 	cardBody.classList.add("card-body");
 
-	let title = document.createElement("h6");
-	title.classList.add("card-title");
-	title.appendChild(document.createTextNode("title"));
-	title.id = "title" + videoNum;
+// 	let title = document.createElement("h6");
+// 	title.classList.add("card-title");
+// 	title.appendChild(document.createTextNode("title"));
+// 	title.id = "title" + videoNum;
 
-	let likeBtn = document.createElement("button");
-	likeBtn.appendChild(document.createTextNode("Like Button"));
+// 	let likeBtn = document.createElement("button");
+// 	likeBtn.appendChild(document.createTextNode("Like Button"));
 
-	cardBody.appendChild(title);
-	cardBody.appendChild(likeBtn);
+// 	cardBody.appendChild(title);
+// 	cardBody.appendChild(likeBtn);
 
-	videoDiv.appendChild(video);
+// 	videoDiv.appendChild(video);
 
-	card.appendChild(videoDiv);
-	card.appendChild(cardBody);
+// 	card.appendChild(videoDiv);
+// 	card.appendChild(cardBody);
 
-	col.appendChild(card);
+// 	col.appendChild(card);
 
-	return col;
+// 	return col;
 
-}
+// }
 
 
 function updateOnSignIn () {
