@@ -105,7 +105,6 @@ app.get("/channeldata",function (req,res) {
 		console.log("here",req.query.channel);
 		callChannelData(req.query.channel,res);
 		// res.send("got " + req.query.q + " as a response");
-		// res.send(fs.readFileSync("search.json"));
 		// res.end();
 
 	}
@@ -161,7 +160,7 @@ app.post("/register",function (req,res) {
 		if (er) {
 
 			console.log("Error loading accounts.json: " + er);
-
+			return;
 
 		}
 		let user = {"fName": req.body.fName, "lName": req.body.lName, "eMail": req.body.email,};
@@ -186,6 +185,7 @@ app.post("/register",function (req,res) {
 
 				}
 				user["password"] = hash;
+				user["prefs"] = req.body.prefs;
 				accounts = JSON.parse(accounts);
 				accounts["users"].push(user);
 				fs.writeFile("accounts.json",JSON.stringify(accounts),function (er) {
@@ -195,7 +195,8 @@ app.post("/register",function (req,res) {
 						console.log("error writing to accounts: " + er);
 
 					}
-					res.end("successful");
+
+					res.end();
 
 				});
 
@@ -205,16 +206,13 @@ app.post("/register",function (req,res) {
 
 
 	});
-	console.log(req.body.RegfName);
-	console.log(req.body.RegEmail);
-	console.log("here");
-	res.end();
 
 });
 
-app.post("/checkAccount",function (req,res) {
+app.get("/checkAccount",function (req,res) {
 
-	checkEmail(req.body.email,res);
+	console.log(req.query.email);
+	checkEmail(req.query.email,res);
 
 });
 
@@ -233,17 +231,79 @@ function checkEmail (input,res) {
 
 			if (accounts["users"][i]["eMail"].toLowerCase() == input.toLowerCase()) {
 
-				res.end("true");
+				res.json({"exists":true});
+				res.end();
 				return;
 
 			}
 
 		}
-		res.end("false");
+		res.json({"exists":false});
+		res.end();
 
 	});
 
 }
+
+app.post("/login", function (req,res) {
+
+	let email = req.body.email;
+	let pword = req.body.pword;
+
+	fs.readFile("accounts.json",function (er,accounts) {
+
+		if (er) {
+
+			console.log("error loading accounts.json: " + er);
+			return;
+
+		}
+		accounts = JSON.parse(accounts);
+		for (let i = 0; i < accounts["users"].length; i++) {
+
+			if (accounts["users"][i]["eMail"].toLowerCase() == email.toLowerCase()) {
+
+				bcrypt.compare(pword,accounts["users"][i]["password"], function (er, equal) {
+
+					if (er) {
+
+						throw new Error(er);
+
+					}
+					if (equal) {
+
+						// sign in
+						console.log("sign in");
+						let response = {"fName":accounts["users"][i]["fName"], "prefs": accounts["users"][i]["prefs"], "exists":true, "correctPassword":true};
+						res.json(response);
+
+					}
+					else {
+
+						// can't sign in
+						console.log("password wrong");
+						res.json({"exists":true,"correctPassword":false});
+
+					}
+
+					res.end();
+
+
+				});
+
+
+				return;
+
+			}
+
+		}
+		console.log("account doesn't exist");
+		res.json({"exists":false, "correctPassword":false});
+		res.end();
+
+	});
+
+});
 
 setInterval(intervalSavingRecents, 1000 * 60 * 60 * 6);
 // TEST THE CODE WITH THIS: setInterval(intervalSavingRecents, 1000 * 60);
@@ -535,7 +595,7 @@ function searchListByKeyword (auth, requestData, res, channel) {
 			console.log("pinged Youtube");
 
 
-			if (!testing) {
+			if (testing) {
 
 				if (res === undefined && channel === undefined) {
 

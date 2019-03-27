@@ -1,6 +1,7 @@
 /* global gapi recents*/
 
 let recents = "";
+let channels = ["Disney","Pixar","Marvel","DC","GoT","Netflix", "Prime", "FOX", "Paramount","WB", "Sony", "Lionsgate", "MGM"];
 
 function onSignIn (googleUser) {
 
@@ -414,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	gSignOut.addEventListener("click",signOut);
 
 
-	function register () {
+	async function register () {
 
 		let title = document.getElementById("RegTitle");
 		let fname = document.getElementById("RegfName");
@@ -423,37 +424,95 @@ document.addEventListener("DOMContentLoaded", function () {
 		let password = document.getElementById("RegPassword");
 		let confPwd = document.getElementById("RegConfPWord");
 
+		if (email.value == "" || password.value == "" || confPwd.value == "") {
+
+			title.innerHTML = "Create Account - Some of the required fields are missing:";
+			return;
+
+		}
+
 		if (confPwd.value != password.value) {
 
 			title.innerHTML = "Create Account - The passwords don't match";
 			return;
 
 		}
-		if (checkEmail(email)) {
 
-			if (checkPassword(password)) {
+		checkEmail(email,title)
+			.then(function (exists) {
 
-				console.log("post results");
-				document.forms.register.submit();
+				if (!exists) {
 
-			}
-			else {
+					if (checkPassword(password)) {
 
-				title.innerHTML = "Create Account - The password doesn't meet the requirements";
+						let selectedChannels = $("#channelSelect").val();
+						console.log("post results");
+						$.post("http://localhost:8080/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
+						customisePage(selectedChannels,fname.value);
 
-			}
+					}
+					else {
 
-		}
-		else {
+						title.innerHTML = "Create Account - The password doesn't meet the requirements";
 
-			title.innerHTML = "Create Account - The email is incorrect";
+					}
 
-		}
+				}
+
+				else {
+
+					title.innerHTML = "Create Account - The account already exists";
+					email.value = "";
+
+				}
+
+			});
 
 
 	}
 
 	document.getElementById("registerBtn").addEventListener("click",register);
+
+
+	async function logIn () {
+
+		let email = document.getElementById("email");
+		let pword = document.getElementById("pword");
+		let title = document.getElementById("logInTitle");
+		if (email.value == "" || pword.value == "") {
+
+			return;
+
+		}
+		else {
+
+			$.post("http://localhost:8080/login",{email: email.value, pword:pword.value},function (result) {
+
+				if (result["exists"] && result["correctPassword"]) {
+
+					console.log("logged in");
+					console.log(result);
+					customisePage(result["prefs"],result["fName"]);
+
+				}
+				else if (result["exists"] && !result["correctPassword"]) {
+
+					title.innerHTML = "Log in - The password is incorrect for this account";
+
+				}
+				else if (!result["exists"] && !result["correctPassword"]) {
+
+					title.innerHTML = "Log in - The account doesn't exist";
+
+				}
+
+			});
+
+
+		}
+
+	}
+	document.getElementById("logInBtn").addEventListener("click",logIn);
 
 });
 
@@ -474,21 +533,56 @@ function checkPassword (input) {
 	}
 
 }
-function checkEmail (input) {
+async function checkEmail (input,title) {
 
+	// disabled as the the /" captures " (which shouldnt be in email) when regexing the email
+	// eslint-disable-next-line no-useless-escape
 	let emailExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	if (input.value.match(emailExp)) {
 
 		// check whether email is linked to account on server
 		console.log("email ok");
-		return true;
+		let email = encodeURIComponent(input.value);
+		let free = await fetch("http://localhost:8080/checkAccount?email=" + email);
+
+		free = await free.text();
+		free = JSON.parse(free);
+		return free["exists"];
 
 	}
 	else{
 
-		return false;
+		title.innerHTML = "Create Account - The email is incorrect";
 
 	}
+
+}
+
+function customisePage (selectedChannels,fname) {
+
+	$("#accountModal").modal("hide");
+	if (selectedChannels.length >= 1) {
+
+		for (let i = 0;i < channels.length;i++) {
+
+			if (selectedChannels.includes(channels[i])) {
+
+				//document.getElementById(channels[i]).style.display = "block";
+				document.getElementById(channels[i]).parentElement.classList.remove("hide");
+
+			}
+			else {
+
+				//document.getElementById(channels[i]).style.display = "none";
+				document.getElementById(channels[i]).parentElement.classList.add("hide");
+				//document.getElementById(channels[i]).style.height = "0px";
+
+			}
+
+		}
+
+	}
+	document.getElementById("accntName").innerHTML = fname + " ";
 
 }
 

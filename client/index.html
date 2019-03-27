@@ -30,7 +30,7 @@
 		<nav id="sidebar">
 			<div class="sidebar-header">
 				<h3>Welcome,</h3>
-				<h3 id="accntName"></h3>
+				<h3 id="accntName"> </h3>
 
 
 			</div>
@@ -45,7 +45,7 @@
 					<button class="btn btn-light" style="width:100%" id="Disney">Disney</button>
 				</li>
 				<li style="padding:5px;">
-					<button class="btn btn-light" style="width:100%" id="Pixar">Disney•Pixar</button>
+					<button class="btn btn-light" style="width:100%" id="Pixar">Disney Pixar</button>
 				</li>
 				<li style="padding:5px; ">
 					<button class="btn btn-light" style="width:100%" id="Marvel">Marvel</button>
@@ -443,33 +443,52 @@
 										
 									</div>
 									<div class="modal-body">
-										<form name = "register" action="/register" method="POST" target="_top">
+										<form name = "register" action="./register" method="post" >
 											<div class="form-group">
 												<div class="row" style="margin-bottom: 5px">
 													<div class="col">
-														<input type="text" class="form-control" name="fName" id="RegfName" placeholder="First name" style="display: inline">
+														<input type="text" class="form-control" name="fName" id="RegfName" placeholder="First name" style="display: inline" value="Julian">
 													</div>
 													<div class="col">
-														<input type="text" class="form-control" name="lName" id="ReglName" placeholder="Surname" style="display: inline">
+														<input type="text" class="form-control" name="lName" id="ReglName" placeholder="Surname" style="display: inline" value = "Wyatt">
 													</div>
 												</div>
-												<input type="email" class="form-control" name="email" id="RegEmail" placeholder="Email Address" style="margin-bottom: 5px">
-												<input type="password" class="form-control" name="password" id="RegPassword" placeholder="Password" style="margin-bottom: 5px">
-												<input type="password" class="form-control" id="RegConfPWord" placeholder="Confirm password" style="margin-bottom: 5px">
-												<p>The password must contain at least one lowercase character, at least one uppercase characters and be between 6 to 16 characters in length</p>
-											</div>
+												<input type="email" class="form-control" name="email" id="RegEmail" placeholder="Email Address" style="margin-bottom: 5px" value="Jul@Wya.com">
+
+												<p style="margin-bottom:5px">The password must contain at least one lowercase character, at least one uppercase characters and be between 6 to 16 characters in length</p>
+
+												<input type="password" class="form-control" name="password" id="RegPassword" placeholder="Password" style="margin-bottom: 5px" value="Password1">
+												<input type="password" class="form-control" id="RegConfPWord" placeholder="Confirm password" style="margin-bottom: 5px" value="Password1">
+
+												<p style="margin-bottom: 5px">Please select which channels you like from the list: (use ctrl (or cmd) + click for multiple)</p>
+												
+												<select class="custom-select" name="channel" id="channelSelect" multiple>
+														<option value="Disney">Disney</option>
+														<option value="Pixar">Disney Pixar</option>
+														<option value="Marvel">Marvel</option>
+														<option value="DC">DC</option>
+														<option value="GoT">Game of Thrones</option>
+														<option value="Netflix">Netflix</option>
+														<option value="Prime">Amazon Prime Video</option>
+														<option value="FOX">FOX</option>
+														<option value="Paramount">Paramount</option>
+														<option value="WarnerBros">Warner Brothers</option>
+														<option value="Sony">Sony</option>
+														<option value="Lionsgate">Lionsgate</option>
+														<option value="MGM">MGM</option>
+												</select>
+												</div>
 											
 											
 										</form>
 									</div>
 									<div class="modal-footer">
-										
 										<button type="button" class="btn btn-secondary" id="registerBtn">Register</button>
 									</div>
 								</div>
 								<div class="col col-md-5">
 										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">Log in</h5>
+											<h5 class="modal-title" id="logInTitle">Log in</h5>
 											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												<span aria-hidden="true">&times;</span>
 											</button>
@@ -489,7 +508,7 @@
 												</div>
 
 												<div class="col">
-													<button type="button" class="btn btn-secondary">Log in</button>
+													<button type="button" class="btn btn-secondary" id="logInBtn">Log in</button>
 												</div>
 											</div>
 											
