@@ -1,4 +1,3 @@
-
 let express = require("express");
 let app  = express();
 let fs = require("fs");
@@ -56,6 +55,7 @@ app.get("/",function (req,resp) {
 	resp.sendFile("client/index.html",{root: __dirname });
 	resp.sendFile(__dirname + "/client/style.css");
 	resp.sendFile(__dirname + "/client/index.js");
+	resp.end();
 
 });
 
@@ -67,6 +67,7 @@ app.get("/",function (req,resp) {
 app.get("/favicon.ico", function (req, res) {
 
 	res.sendFile(__dirname + "/client/favicon.ico");
+	res.end();
 
 });
 
@@ -74,13 +75,13 @@ app.get("/favicon.ico", function (req, res) {
 app.get("/placeholder.png", function (req, res) {
 
 	res.sendFile(__dirname + "/client/placeholder.png");
+	res.end();
 
 });
 
 // used to search for specific trailers, the query is provided in the URL
 app.get("/search",function (req,res) {
 
-	console.log(req.query.q);
 	if (req.query.q != undefined) {
 
 		res.statusCode = 200;
@@ -92,7 +93,7 @@ app.get("/search",function (req,res) {
 	}
 	else{
 
-		res.statusCode = 400;
+		res.statusCode = 422;
 		res.end();
 
 	}
@@ -104,7 +105,7 @@ app.get("/channeldata",function (req,res) {
 
 	if (req.query.channel != undefined) {
 
-		res.statusCode = 200;
+
 		fs.readFile(req.query.channel + ".json",function (err,data) {
 
 			if (err) {
@@ -114,6 +115,7 @@ app.get("/channeldata",function (req,res) {
 			}
 			else {
 
+				res.statusCode = 200;
 				data = JSON.parse(data);
 				res.json(data);
 				res.end();
@@ -125,7 +127,7 @@ app.get("/channeldata",function (req,res) {
 	}
 	else{
 
-		res.statusCode = 400;
+		res.statusCode = 422;
 		res.end();
 
 	}
@@ -494,10 +496,11 @@ app.post("/login", function (req,res) {
 // ////////////////////////////////////////////////////
 // External API Code
 
+// this code now in server.js
 
-setInterval(intervalSavingRecents, 1000 * 60 * 45);
+// setInterval(intervalSavingRecents, 1000 * 60 * 45);
 // TEST THE CODE WITH THIS: setInterval(intervalSavingRecents, 1000 * 60);
-setInterval(intervalSavingChannels, 1000 * 60 * 60 * 6);
+// setInterval(intervalSavingChannels, 1000 * 60 * 60 * 6);
 
 
 function intervalSavingRecents () {
@@ -516,12 +519,11 @@ function intervalSavingRecents () {
 		authorize(JSON.parse(content), {"params": {
 			"maxResults": "50",
 			"part": "snippet",
-			"q": "Trailer",
+			"q": "Official Trailer",
 			"type": "video",
-			"publishedAfter":d
-			// "videoDuration": "short",
-			// "relevanceLanguage": "en"
-			// "videoLicense": "creativeCommon"
+			"publishedAfter":d,
+			"videoDuration": "short",
+			"regionCode": "GB"
 		}}, searchListByKeyword);
 
 
@@ -529,7 +531,7 @@ function intervalSavingRecents () {
 
 }
 
-function intervalSavingChannels () {
+let intervalSavingChannels = function intervalSavingChannels () {
 
 	callChannelData("Disney");
 	callChannelData("Marvel");
@@ -539,7 +541,7 @@ function intervalSavingChannels () {
 	callChannelData("WarnerBros");
 	callChannelData("Sony");
 
-}
+};
 
 let SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl","https://www.googleapis.com/auth/youtube"];
 let TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
@@ -581,6 +583,13 @@ function callChannelData (channel,res) {
 
 			}
 			data = JSON.parse(data);
+			if (data["channels"][channel] == undefined) {
+
+				res.statusCode = 400;
+				res.end();
+				return;
+
+			}
 			authorize(JSON.parse(content), {"params": {
 				"maxResults": "24",
 				"part": "snippet",
@@ -628,22 +637,20 @@ function callTrailers (res, q) {
 				"part": "snippet",
 				"q": "Trailer",
 				"type": "video",
-				"publishedAfter":d
-				// "videoDuration": "short",
-				// "relevanceLanguage": "en"
-				// "videoLicense": "creativeCommon"
+				"publishedAfter":d,
+				"videoDuration": "short",
+				"regionCode": "GB"
 			}}, searchListByKeyword,res);
 
 		}else {
 
 			authorize(JSON.parse(content), {"params": {
-				"maxResults": "4",
+				"maxResults": "6",
 				"part": "snippet",
 				"q": q + " Trailer",
 				"type": "video",
-				// "videoDuration": "short",
-				// "relevanceLanguage": "en"
-				// "videoLicense": "creativeCommon"
+				"videoDuration": "short",
+				"regionCode": "GB"
 			}}, searchListByKeyword, res);
 
 		}
@@ -774,11 +781,22 @@ function searchListByKeyword (auth, requestData, res, channel) {
 
 			for (let i = 0; i < response["data"]["items"].length;i++) {
 
+				let x = 0;
 				// videoData[i - 1]["snippet"]["title"]
 				let title = response["data"]["items"][i]["snippet"]["title"].toLowerCase();
 				if (title.includes("reaction") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in")) {
 
-					response["data"]["items"].splice(i,1);
+					if (title.includes("movieclips")) {
+
+						x++;
+
+					}
+					if (x % 2 == 0) {
+
+						// console.log("removed: " + title);
+						response["data"]["items"].splice(i,1);
+
+					}
 
 				}
 
@@ -806,6 +824,7 @@ function searchListByKeyword (auth, requestData, res, channel) {
 						throw new Error(err);
 
 					}
+					console.log("written file");
 
 				});
 
@@ -848,7 +867,4 @@ function searchListByKeyword (auth, requestData, res, channel) {
 
 }
 
-
-// app.listen(process.env.PORT || 8080);
-
-module.exports = app;
+module.exports = {app, intervalSavingRecents, intervalSavingChannels};
