@@ -4,7 +4,7 @@
   "description": "webpage which contains trailers that can be commented on, and customise to account details and search params",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon server.js --ignore '*.json'",
     "pretest": "eslint client/index.js server.js"
   },
