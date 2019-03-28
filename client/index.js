@@ -7,28 +7,44 @@ function onSignIn (googleUser) {
 	let profile = googleUser.getBasicProfile();
 	console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
 	console.log("Name: " + profile.getName());
-	// let accntText = document.getElementById("accntName");
-	// accntText.textContent = profile.getName();
 	console.log("Image URL: " + profile.getImageUrl());
 	let accntImage = document.getElementById("accntImage");
 	accntImage.src = profile.getImageUrl();
 	accntImage.classList.remove("hide");
 	console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
 
+	checkEmail(profile.getEmail())
+		.then(function (exists) {
 
-	getPrefs(profile.getEmail())
-		.then(function (response) {
+			if (exists) {
 
-			if (response == undefined) {
+				getPrefs(profile.getEmail())
+					.then(function (response) {
 
-				return;
+						if (typeof response != Array) {
+
+							console.log("undef");
+							return;
+
+						}
+						document.getElementById("prefEmail").value = profile.getEmail();
+						updateOnSignIn();
+						customisePage(response,profile.getName());
+
+					}).catch(e=>alert(e));
 
 			}
-			document.getElementById("prefEmail").value = profile.getEmail();
-			updateOnSignIn();
-			customisePage(response,profile.getName());
+			else {
 
-		}).catch(e=>alert(e));
+				document.getElementById("logInTitle").innerHTML = "Log in - <br>Please make an account with the same email before using google";
+				let accntText = document.getElementById("accntName");
+				accntText.textContent = profile.getName();
+				accntText.classList.remove("hide");
+
+			}
+
+		});
+
 
 	// send info to server and handle there
 
@@ -218,8 +234,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		try {
 
+			query = encodeURIComponent(query);
 			console.log(query);
-
 			let response = await fetch("http://localhost:8080/search?q=" + query);
 			let body = await response.text();
 			console.log("called search fetch");
@@ -264,6 +280,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 						document.getElementById("col" + i)
 							.style.display = "block";
+						document.getElementById("video" + i)
+							.style.display = "block";
 
 						let frame = document.getElementById("video" + i);
 						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] +
@@ -275,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					}
 					else{
 
-						document.getElementById("col" + i)
+						document.getElementById("video" + i)
 							.style.display = "none";
 
 					}
@@ -310,6 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		$(document)
 			.scrollTop(0);
 		getRecents(2,false);
+
 
 	}
 	function backPage () {
@@ -356,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
 					}
-					for (let i = 5; i <= 24; i++) {
+					for (let i = 5; i <= 20; i++) {
 
 						if (document.getElementById("video" + i)) {
 
@@ -552,7 +571,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		}
 
-		checkEmail(email,title)
+		checkEmail(email.value,title)
 			.then(function (exists) {
 
 				if (exists == undefined) {
@@ -580,7 +599,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					}
 					else {
 
-						title.innerHTML = "Create Account - The password doesn't meet the requirements";
+						title.innerHTML = "Create Account - The password doesn't meet the requirements" || "";
 
 					}
 
@@ -588,7 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 				else {
 
-					title.innerHTML = "Create Account - The account already exists";
+					title.innerHTML = "Create Account - The account already exists" || "";
 					email.value = "";
 
 				}
@@ -716,11 +735,11 @@ async function checkEmail (input,title) {
 	// disabled as the the /" captures " (which shouldnt be in email) when regexing the email
 	// eslint-disable-next-line no-useless-escape
 	let emailExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	if (input.value.match(emailExp)) {
+	if (input.match(emailExp)) {
 
 		// check whether email is linked to account on server
 		console.log("email ok");
-		let email = encodeURIComponent(input.value);
+		let email = encodeURIComponent(input);
 		try {
 
 			let free = await fetch("http://localhost:8080/checkAccount?email=" + email);
@@ -740,7 +759,7 @@ async function checkEmail (input,title) {
 	}
 	else{
 
-		title.innerHTML = "Create Account - The email is incorrect";
+		title.innerHTML = "Create Account - The email is incorrect" || "";
 
 	}
 
