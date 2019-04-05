@@ -4,7 +4,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width+250px, initial-scale=1">
 	<title>Trailers Central</title>
 	<!-- add scripts/ source links here -->
 	<meta name="google-signin-scope" content="profile email">
@@ -24,14 +24,14 @@
 
 </head>
 
-<body id="body">
+<body id="body" class="resetZoom">
 	<div class="wrapper">
 
 		<nav id="sidebar">
 			<div class="sidebar-header">
 
-				<h3>Welcome</h3>
-				<h3 class="hide" id="accntName">-</h3>
+				<h2>Welcome</h2>
+				<h2 class="hide" id="accntName">-</h2>
 				<img class="hide rounded-circle mx-auto d-block" src="placeholder.png" alt="Google Account Image" id = "accntImage" style="height: 40%;width:40%">
 
 			</div>
@@ -40,7 +40,7 @@
 						<button class="btn btn-light navBtn" style="width:100%" id="Home"> Home - Recent Trailers</button>
 					</li>
 				</ul>
-				<h3 style="margin:20px">Channels</h3>
+				<h2 style="margin:20px">Channels</h2>
 				<ul class="list-unstyled components">
 					<li style="padding:5px;">
 						<button class="btn btn-light navBtn" style="width:100%" id="Disney">Disney</button>
@@ -83,7 +83,7 @@
 					</li>
 				</ul>
 
-				<h3 style="margin:20px">Account</h3>
+				<h2 style="margin:20px">Account</h2>
 				<ul class="list-unstyled components">
 
 					<li style="padding: 5px">
@@ -99,13 +99,24 @@
 
 				</ul>
 
+				<ul class="list-unstyled components sidebarSearch">
+
+						<li style="padding:5px">
+							<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query_nav">
+						</li>
+						<li style="padding:5px">
+							<button class="btn btn-light navBtn my-2 my-sm-0" style="width:100%" type="button" style="color:#fafafa" id="searchBtn_nav">Search</button>
+						</li>
+					
+				</ul>
+
 		</nav>
 		<div id="content" style="min-height: 100%">
 			<nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark " id="mainNav">
 
 
 				<!-- place in adjustable size column and row for responsive changes -->
-				<div class="container fluid">
+				<!-- <div class="container fluid">
 					<button type="button" id="sidebarCollapse" class="btn btn-secondary navBtn">
 
 								<ion-icon name="menu"></ion-icon>
@@ -114,15 +125,30 @@
 
 					<h2 style="text-align: center; margin-top:5px">Trailers Central</h2>
 
-				</div>
+				</div> -->
+
+				<button type="button" id="sidebarCollapse" style="float:left" class="btn btn-secondary navBtn">
+
+						<ion-icon name="menu"></ion-icon>
+					   
+					</button>
+				
+
+					<h2 class="ml-auto mainTitle" style="text-align: center; margin-top:5px;" id="mainTitle">Trailers Central</h2>
+						
+		
 				<div class="container fluid">
+						
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+							
 						<div class="nav navbar-nav ml-auto">
 
 							<div class="form-inline">
-								<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query">
-								<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn">Search</button>
+								<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query_sideBar">
+								<button class="btn btn-outline-secondary my-2 my-sm-0" type="button" style="color:#fafafa" id="searchBtn_sideBar">Search</button>
 							</div>
+
 						</div>
 					</div>
 				</div>
@@ -374,11 +400,13 @@
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 							<div class="row align-items-stretch">
-								<div class="col col-md-7"
+								<div class="col col-md-7 col-sm-12 col-xs-12"
 									style="padding-right:20px; border-right: 1px solid rgba(51, 51, 51, 0.3)">
 									<div class="modal-header">
 										<h5 class="modal-title" id="RegTitle">Create Account</h5>
-
+										<button type="button" class="close modalCross" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+										</button>
 									</div>
 									<div class="modal-body">
 										<form name="register" action="./register" method="post">
@@ -425,10 +453,10 @@
 										</form>
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" id="registerBtn">Register</button>
+										<button type="button" class="btn btn-secondary navBtn" id="registerBtn">Register</button>
 									</div>
 								</div>
-								<div class="col col-md-5" id="logInCol">
+								<div class="col-md-5 col-xs-12 col-sm-12" id="logInCol">
 									<div class="modal-header">
 										<h5 class="modal-title" id="logInTitle">Log in</h5>
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -444,15 +472,15 @@
 										</form>
 									</div>
 									<div class="modal-footer">
-										<div class="row">
-											<div class="col" style="float:left">
-												<div class="g-signin2" id="googleSignIn" 
+										<div class="row" style="float:left">
+											<div class="col-lg col-sm-12 col-md-12" style="float:left">
+												<div class="g-signin2" style="padding:5px;" id="googleSignIn" 
 													data-dismiss="modal" data-theme="light"
 													data-border-radius="0.25rem"></div>
 											</div>
 
-											<div class="col">
-												<button type="button" class="btn btn-secondary" id="logInBtn">Log in</button>
+											<div class="col-lg col-sm-12 col-md-12" style="text-align:center;margin:auto;">
+												<button type="button" style="height:100%" class="btn btn-secondary navBtn mx-auto"id="logInBtn">Log in</button>
 											</div>
 										</div>
 
@@ -522,20 +550,20 @@
 				<footer class="footer" id="footer" style="padding:25px; background-color: #6c757d;">
 					<div class="container">
 						<div class="row" style="color: #fafafa">
-							<div class="col">
+							<div class="col-md-6 col-sm-12">
 								<h5> Desc and picture</h5>
 								<p style="color: #fafafa">Welcome to Trailers Central, where you can peacefully view the
 									latest trailers
 									with just the refresh of the page or a quick search.</p>
 							</div>
-							<div class="col">
+							<div class="col-md-3 col-sm-12">
 								<h5> links </h5>
 								<ul class="list-unstyled components">
 									<li>Page Documentation</li>
 									<li>Server Documentation</li>
 								</ul>
 							</div>
-							<div class="col">
+							<div class="col-md-3 col-sm-12">
 								<h5>other links (post peer mark)</h5>
 								<ul class="list-unstyled components">
 									<li>My Github</li>

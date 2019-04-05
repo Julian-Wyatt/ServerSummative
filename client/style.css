@@ -12,7 +12,15 @@ body{
     min-width: 250px;
     max-width: 250px;
 	min-height: 100vh;
-	background: #ce7910;
+
+	/* http://angrytools.com/gradient/ */
+	background: -moz-linear-gradient(270deg, #ce7910 0%, #ce7910 59%, #6c757d 100%); /* ff3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ce7910), color-stop(59%, #ce7910), color-stop(100%, #6c757d)); /* safari4+,chrome */
+	background: -webkit-linear-gradient(270deg, #ce7910 0%, #ce7910 59%, #6c757d 100%); /* safari5.1+,chrome10+ */
+	background: -o-linear-gradient(270deg, #ce7910 0%, #ce7910 59%, #6c757d 100%); /* opera 11.10+ */
+	background: -ms-linear-gradient(270deg, #ce7910 0%, #ce7910 59%, #6c757d 100%); /* ie10+ */
+	background: linear-gradient(180deg, #ce7910 0%, #ce7910 59%, #6c757d 100%); /* w3c */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ce7910', endColorstr='#6c757d',GradientType=0 ); /* ie6-9 */
     color: #fff;
 	transition: all 0.3s;
 	border-color: #343a40;
@@ -64,6 +72,7 @@ body{
 h1,h2,h3{
 	color:  #fafafa;
 }
+
 
 p{
 	padding: 20px;
@@ -128,11 +137,48 @@ ion-icon {
 	position: absolute !important;
 	top: -9999px !important;
 	left: -9999px !important;
- }
+ 
+}
 
+.sidebarSearch{
+	position: absolute ;
+	top: -9999px;
+	left: -9999px;
+}
 
+.zooom{
+	zoom: 50%;
+}
+.resetZoom{
+	zoom:reset;
 
+}
+
+.g-signin2{
+	width: 100%;
+  }
+  
+  .g-signin2 > div{
+	margin: 0 auto;
+  }
+
+@media (min-width:560px){
+
+	.mainTitle{
+		width:104% !important
+	}
+
+}
+
+@media(min-width:768px){
+	.modalCross{
+		position: absolute !important;
+		top: -9999px !important;
+		left: -9999px !important;
+	}
+}
 @media (max-width: 768px) {
+	
 
     #sidebar {
 		/* position:fixed; change when fixing mobile version */
@@ -145,6 +191,7 @@ ion-icon {
 		max-width: 150px;
 		z-index: 450;
 	}
+
 	.cardRow{
 		margin:10px;
 		
@@ -152,6 +199,26 @@ ion-icon {
 	.card{
 		margin-top:10px;
 		
+	}
+
+	#navbarSupportedContent{
+		position: absolute !important;
+		top: -9999px !important;
+		left: -9999px !important;
+	}
+
+	.sidebarSearch{
+		position: static;
+		left:0px;
+		top:0px
+
+	}
+	h3.active, h2.active{
+		font-size: 0.75em !important
+	}
+
+	h2{
+		font-size: 22px
 	}
 
 	

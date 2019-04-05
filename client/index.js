@@ -4,6 +4,7 @@ let channels = ["Disney","Pixar","Marvel","DC","GoT","Netflix", "Prime", "FOX", 
 // eslint-disable-next-line no-unused-vars
 function onSignIn (googleUser) {
 
+
 	let profile = googleUser.getBasicProfile();
 	console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
 	console.log("Name: " + profile.getName());
@@ -36,6 +37,7 @@ function onSignIn (googleUser) {
 			}
 			else {
 
+				document.getElementById("logInTitle").innerHTML = "Log in - <br>Please make an account with the same email before using google";
 				document.getElementById("logInTitle").innerHTML = "Log in - <br>Please make an account with the same email before using google";
 				let accntText = document.getElementById("accntName");
 				accntText.textContent = profile.getName();
@@ -106,12 +108,25 @@ $(document)
 
 		$("#googleSignIn").attr("data-onsuccess","onSignIn");
 
-		$("#search_query")
+		$("#search_query_nav")
 			.keyup(function (event) {
-
+				console.log("key clicked in nav");
 				if (event.keyCode === 13) {
 
-					$("#searchBtn")
+					$("#searchBtn_nav")
+						.click();
+
+				}
+
+			});
+
+
+		$("#search_query_sideBar")
+			.keyup(function (event) {
+				console.log("key clicked in sidebar");
+				if (event.keyCode === 13) {
+
+					$("#searchBtn_nav")
 						.click();
 
 				}
@@ -183,6 +198,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	function collapse () {
 
+		let body = document.getElementById("body");
+		body.classList.toggle("resetZoom");
+		body.classList.toggle("zoom");
 		let sidebar = document.getElementById("sidebar");
 		sidebar.classList.toggle("active");
 		let footer = document.getElementById("footer");
@@ -345,8 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	function search () {
 
-		let q = document.getElementById("search_query")
-			.value;
+		let q = document.getElementById("search_query_sideBar").value || document.getElementById("search_query_nav").value;
 
 		console.log(q);
 		if (q != "") {
@@ -362,7 +379,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					document.getElementById("nextPage").classList.add("hide");
 					document.getElementById("backPage").classList.add("hide");
-					document.getElementById("search_query").value = "";
+					document.getElementById("search_query_sideBar").value = "";
+					document.getElementById("search_query_nav").value = "";
 					console.log(videoData);
 					for (let i = 1; i <= 4; i++) {
 
@@ -457,7 +475,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	document.getElementById("searchBtn")
+	document.getElementById("searchBtn_nav")
+		.addEventListener("click", search);
+	document.getElementById("searchBtn_sideBar")
 		.addEventListener("click", search);
 	document.getElementById("Disney")
 		.addEventListener("click", function () {
