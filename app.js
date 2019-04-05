@@ -86,9 +86,6 @@ app.get("/search",function (req,res) {
 
 		res.statusCode = 200;
 		callTrailers(res,req.query.q);
-		// res.send("got " + req.query.q + " as a response");
-		// res.send(fs.readFileSync("search.json"));
-		// res.end();
 
 	}
 	else{
@@ -106,7 +103,7 @@ app.get("/channeldata",function (req,res) {
 	if (req.query.channel != undefined) {
 
 
-		fs.readFile(req.query.channel + ".json",function (err,data) {
+		fs.readFile("Database/" + req.query.channel + ".json",function (err,data) {
 
 			if (err) {
 
@@ -140,7 +137,7 @@ app.get("/recent",function (req,res) {
 
 	res.statusCode = 200;
 
-	fs.readFile(__dirname + "/recents.json",function (err,data) {
+	fs.readFile("Database/recents.json",function (err,data) {
 
 		if (err) {
 
@@ -187,7 +184,7 @@ app.get("/prefs",function (req,res) {
 
 	}
 
-	fs.readFile("accounts.json",function (er,accounts) {
+	fs.readFile("Database/accounts.json",function (er,accounts) {
 
 		if (er) {
 
@@ -224,7 +221,7 @@ app.post ("/prefs", function (req,res) {
 
 	}
 
-	fs.readFile("accounts.json",function (er,accounts) {
+	fs.readFile("Database/accounts.json",function (er,accounts) {
 
 		if (er) {
 
@@ -251,7 +248,7 @@ app.post ("/prefs", function (req,res) {
 
 
 						accounts["users"][i]["prefs"] = req.body.prefs;
-						fs.writeFile("accounts.json",JSON.stringify(accounts),function (er) {
+						fs.writeFile("Database/accounts.json",JSON.stringify(accounts),function (er) {
 
 							if (er) {
 
@@ -304,7 +301,7 @@ app.post("/register",function (req,res) {
 
 	}
 
-	fs.readFile("accounts.json",function (er,accounts) {
+	fs.readFile("Database/accounts.json",function (er,accounts) {
 
 		if (er) {
 
@@ -349,7 +346,7 @@ app.post("/register",function (req,res) {
 
 				}
 
-				fs.writeFile("accounts.json",JSON.stringify(accounts),function (er) {
+				fs.writeFile("Database/accounts.json",JSON.stringify(accounts),function (er) {
 
 
 					if (er) {
@@ -389,7 +386,7 @@ app.get("/checkAccount",function (req,res) {
 
 function checkEmail (input,res) {
 
-	fs.readFile("accounts.json",function (er,accounts) {
+	fs.readFile("Database/accounts.json",function (er,accounts) {
 
 		if (er) {
 
@@ -434,7 +431,7 @@ app.post("/login", function (req,res) {
 
 	}
 
-	fs.readFile("accounts.json",function (er,accounts) {
+	fs.readFile("Database/accounts.json",function (er,accounts) {
 
 		if (er) {
 
@@ -515,15 +512,15 @@ function intervalSavingRecents () {
 		}
 		// Authorize a client with the loaded credentials, then call the YouTube API.
 		// See full code sample for authorize() function code.
-		let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
+		// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
 		authorize(JSON.parse(content), {"params": {
 			"maxResults": "50",
 			"part": "snippet",
 			"q": "Official Trailer",
 			"type": "video",
-			"publishedAfter":d,
-			"videoDuration": "short",
-			"regionCode": "GB"
+			// "publishedAfter":d,
+			// "videoDuration": "short",
+			// "regionCode": "GB"
 		}}, searchListByKeyword);
 
 
@@ -569,7 +566,7 @@ function callChannelData (channel,res) {
 		// Authorize a client with the loaded credentials, then call the YouTube API.
 		// See full code sample for authorize() function code.
 
-		fs.readFile("channels.json", function processChannelData (err, data) {
+		fs.readFile("Database/channels.json", function processChannelData (err, data) {
 
 			if (err) {
 
@@ -630,16 +627,16 @@ function callTrailers (res, q) {
 		// See full code sample for authorize() function code.
 		if (q === undefined) {
 
-			let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
+			// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
 			// change max results sizes once ive sorted repeats and reaction videos
 			authorize(JSON.parse(content), {"params": {
 				"maxResults": "50",
 				"part": "snippet",
 				"q": "Trailer",
 				"type": "video",
-				"publishedAfter":d,
-				"videoDuration": "short",
-				"regionCode": "GB"
+				// "publishedAfter":d,
+				// "videoDuration": "short",
+				// "regionCode": "GB"
 			}}, searchListByKeyword,res);
 
 		}else {
@@ -649,8 +646,8 @@ function callTrailers (res, q) {
 				"part": "snippet",
 				"q": q + " Trailer",
 				"type": "video",
-				"videoDuration": "short",
-				"regionCode": "GB"
+				// "videoDuration": "short",
+				// "regionCode": "GB"
 			}}, searchListByKeyword, res);
 
 		}
@@ -784,7 +781,7 @@ function searchListByKeyword (auth, requestData, res, channel) {
 				let x = 0;
 				// videoData[i - 1]["snippet"]["title"]
 				let title = response["data"]["items"][i]["snippet"]["title"].toLowerCase();
-				if (title.includes("reaction") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in")) {
+				if (title.includes("reaction") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in") || title.includes("breakdown")) {
 
 					if (title.includes("movieclips")) {
 
@@ -811,7 +808,7 @@ function searchListByKeyword (auth, requestData, res, channel) {
 
 			if (res === undefined && channel === undefined) {
 
-				fs.writeFile("recents.json",JSON.stringify(response["data"]["items"]),function (err) {
+				fs.writeFile("Database/recents.json",JSON.stringify(response["data"]["items"]),function (err) {
 
 					if (err) {
 
@@ -830,7 +827,7 @@ function searchListByKeyword (auth, requestData, res, channel) {
 
 			} else if (res === undefined && channel != undefined) {
 
-				fs.writeFile(channel + ".json",JSON.stringify(response["data"]["items"]),function (err) {
+				fs.writeFile("Database/" + channel + ".json",JSON.stringify(response["data"]["items"]),function (err) {
 
 					if (err) {
 
