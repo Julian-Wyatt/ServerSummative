@@ -194,13 +194,15 @@ ion-icon {
 
     #sidebar {
 		/* position:fixed; change when fixing mobile version */
-		margin-left: -125px;
+		margin-left: -135px;
+		min-width: 135px;
+		max-width: 135px;
 		
     }
     #sidebar.active {
 		margin-left: 0;
-		min-width: 125px;
-		max-width: 125px;
+		min-width: 135px;
+		max-width: 135px;
 		z-index: 450;
 	}
 
@@ -228,6 +230,14 @@ ion-icon {
 	h3.active, h2.active{
 		font-size: 0.75em !important
 	}
+	button, input{
+		font-size: 0.75em !important 
+	}
+	h6{
+		font-size: 0.9em !important 
+	}
+
+
 
 	h2{
 		font-size: 22px
