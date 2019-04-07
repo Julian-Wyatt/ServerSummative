@@ -4,5 +4,5 @@ package-lock.json
 google-utils.js
 .jsbeautifyrc
 .env
-
+.credentials
 
