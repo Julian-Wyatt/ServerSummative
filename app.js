@@ -4,8 +4,11 @@ let fs = require("fs");
 let readline = require("readline");
 const {google} = require("googleapis");
 let bcrypt = require("bcrypt");
-let moment = require("moment");
+// let moment = require("moment");
 // const {OAuth2Client} = require("google-auth-library");
+let jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -173,10 +176,10 @@ app.get("/recent",function (req,res) {
 
 });
 
-// gets prerferences for specific user
+// gets prerferences and name for specific user
 app.get("/prefs",function (req,res) {
 
-	if (req.query.email == undefined) {
+	if (req.query.token == undefined && req.query.email == undefined) {
 
 		res.statusCode = 422;
 		res.end();
@@ -192,28 +195,134 @@ app.get("/prefs",function (req,res) {
 
 		}
 		accounts = JSON.parse(accounts);
-		for (let i = 0; i < accounts["users"].length; i++) {
 
-			if (accounts["users"][i]["eMail"].toLowerCase() == req.query.email.toLowerCase()) {
+		if (req.query.token) {
 
-				res.json(accounts["users"][i]["prefs"]);
+			jwt.verify(req.query.token, process.env.secret, function (err, decoded) {
+
+				if (err) {
+
+					return res.status(500).send({ auth: false, message: "Failed to authenticate token." });
+
+				}
+
+				res.json({"prefs":accounts["users"][decoded["id"] - 1]["prefs"], "name": accounts["users"][decoded["id"] - 1]["fName"]});
 				res.end();
-				return;
 
-			}
+			});
 
 		}
-		res.statusCode = 404;
-		res.end();
+		else {
+
+			for (let i = 0; i < accounts["users"].length; i++) {
+
+				if (accounts["users"][i]["eMail"].toLowerCase() == req.query.email.toLowerCase()) {
+
+					let token = jwt.sign({ id: accounts["users"][i]["id"] }, process.env.secret || "superSecret", {
+						expiresIn: 86400 // expires in 24 hours
+					});
+					res.json({"prefs":accounts["users"][i]["prefs"], "name": accounts["users"][i]["fName"], "token":token});
+					res.end();
+					return;
+
+				}
+
+			}
+			// account doesn't exist
+			res.statusCode = 404;
+			res.end();
+
+		}
+
 
 	});
 
 });
 
 // updates prefs for user if their email and password are correct
+// app.post ("/prefs", function (req,res) {
+
+// 	if (req.body.email == undefined || req.body.pword == undefined || req.body.prefs == undefined) {
+
+// 		res.statusCode = 422;
+// 		res.end();
+// 		return;
+
+// 	}
+
+// 	fs.readFile("Database/accounts.json",function (er,accounts) {
+
+// 		if (er) {
+
+// 			res.statusCode == 500;
+// 			res.end();
+// 			throw new Error(er);
+
+// 		}
+// 		accounts = JSON.parse(accounts);
+// 		for (let i = 0; i < accounts["users"].length; i++) {
+
+// 			if (accounts["users"][i]["eMail"].toLowerCase() == req.body.email.toLowerCase()) {
+
+// 				bcrypt.compare(req.body.pword,accounts["users"][i]["password"],function (er,equal) {
+
+// 					if (er) {
+
+// 						res.statusCode == 500;
+// 						res.end();
+// 						throw new Error(er);
+
+// 					}
+// 					if (equal) {
+
+
+// 						accounts["users"][i]["prefs"] = req.body.prefs;
+// 						fs.writeFile("Database/accounts.json",JSON.stringify(accounts),function (er) {
+
+// 							if (er) {
+
+// 								res.statusCode == 500;
+// 								res.end();
+// 								throw new Error(er);
+
+// 							}
+// 							res.json({"success":true,});
+// 							res.end();
+
+// 						});
+
+// 					}
+// 					else{
+
+// 						res.statusCode = 401;
+// 						res.json({"success":false,"correctPassword":false});
+// 						res.end();
+
+// 					}
+
+
+// 				});
+
+// 				return;
+
+// 			}
+
+
+// 		}
+
+// 		res.statusCode = 400;
+// 		res.json({"success":false,"correctPassword":false,"exists":false});
+// 		res.end();
+
+// 	});
+
+// });
+
+// new post prefs with token business
 app.post ("/prefs", function (req,res) {
 
-	if (req.body.email == undefined || req.body.pword == undefined || req.body.prefs == undefined) {
+
+	if (req.headers["x-access-token"] == undefined || req.body.prefs == undefined) {
 
 		res.statusCode = 422;
 		res.end();
@@ -230,62 +339,67 @@ app.post ("/prefs", function (req,res) {
 			throw new Error(er);
 
 		}
-		accounts = JSON.parse(accounts);
-		for (let i = 0; i < accounts["users"].length; i++) {
 
-			if (accounts["users"][i]["eMail"].toLowerCase() == req.body.email.toLowerCase()) {
+		jwt.verify(req.headers["x-access-token"] , process.env.secret, function (err, decoded) {
 
-				bcrypt.compare(req.body.pword,accounts["users"][i]["password"],function (er,equal) {
-
-					if (er) {
-
-						res.statusCode == 500;
-						res.end();
-						throw new Error(er);
-
-					}
-					if (equal) {
+			if (err) {
 
 
-						accounts["users"][i]["prefs"] = req.body.prefs;
-						fs.writeFile("Database/accounts.json",JSON.stringify(accounts),function (er) {
-
-							if (er) {
-
-								res.statusCode == 500;
-								res.end();
-								throw new Error(er);
-
-							}
-							res.json({"success":true,});
-							res.end();
-
-						});
-
-					}
-					else{
-
-						res.statusCode = 401;
-						res.json({"success":false,"correctPassword":false});
-						res.end();
-
-					}
-
-
-				});
-
-				return;
+				return res.status(500).send({ auth: false, message: "Failed to authenticate token." });
 
 			}
 
+			accounts = JSON.parse(accounts);
+
+			accounts["users"][decoded["id"] - 1]["prefs"] = req.body.prefs;
+			fs.writeFile("Database/accounts.json",JSON.stringify(accounts),function (er) {
+
+				if (er) {
+
+					res.statusCode == 500;
+					res.end();
+					throw new Error(er);
+
+				}
+				res.json({"success":true,});
+				res.end();
+
+			});
+
+
+		});
+
+
+	});
+
+});
+
+app.get("/newToken", function (req,res) {
+
+
+	fs.readFile("Database/accounts.json",function (er,accounts) {
+
+		if (er) {
+
+			res.statusCode == 500;
+			res.end();
+			throw new Error(er);
 
 		}
 
-		res.statusCode = 400;
-		res.json({"success":false,"correctPassword":false,"exists":false});
+		accounts = JSON.parse(accounts);
+
+
+		let token = jwt.sign({ id: accounts["users"].length }, process.env.secret || "superSecret", {
+			expiresIn: 86400 // expires in 24 hours
+		});
+		res.statusCode = 200;
+		res.json({"auth":true, "token": token});
 		res.end();
 
+
 	});
+
 
 });
 
@@ -310,6 +424,7 @@ app.post("/register",function (req,res) {
 			throw new Error(er);
 
 		}
+
 		let user = {"fName": req.body.fName || " ", "lName": req.body.lName || " ", "eMail": req.body.email,};
 
 		bcrypt.genSalt(11, function (er,salt) {
@@ -337,11 +452,13 @@ app.post("/register",function (req,res) {
 				try {
 
 					accounts = JSON.parse(accounts);
+					user["id"] = accounts["users"].length + 1;
 					accounts["users"].push(user);
 
 				}
 				catch (e) {
 
+					user["id"] = 1;
 					accounts = {"users":[user]};
 
 				}
@@ -356,8 +473,6 @@ app.post("/register",function (req,res) {
 						throw new Error(er);
 
 					}
-					res.statusCode = 200;
-					res.end();
 
 				});
 
@@ -400,7 +515,8 @@ function checkEmail (input,res) {
 
 			if (accounts["users"][i]["eMail"].toLowerCase() == input.toLowerCase()) {
 
-				res.statusCode = 409;
+				// did have 409 response code but resulted in errors clientside
+				res.statusCode = 200;
 				res.json({"exists":true});
 				res.end();
 				return;
@@ -454,10 +570,15 @@ app.post("/login", function (req,res) {
 						throw new Error(er);
 
 					}
+
+
 					if (equal) {
 
 						// sign in
-						let response = {"fName":accounts["users"][i]["fName"], "prefs": accounts["users"][i]["prefs"], "exists":true, "correctPassword":true};
+						let token = jwt.sign({ id: accounts["users"][i]["id"] }, process.env.secret || "superSecret", {
+							expiresIn: 86400 // expires in 24 hours
+						});
+						let response = {"fName":accounts["users"][i]["fName"], "prefs": accounts["users"][i]["prefs"], "exists":true, "correctPassword":true, "token": token};
 						res.json(response);
 
 					}
@@ -513,20 +634,38 @@ function intervalSavingRecents () {
 		// Authorize a client with the loaded credentials, then call the YouTube API.
 		// See full code sample for authorize() function code.
 		// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
-		authorize(JSON.parse(content), {"params": {
-			"maxResults": "50",
-			"part": "snippet",
-			"q": "Official Trailer",
-			"type": "video",
-			// "publishedAfter":d,
-			// "videoDuration": "short",
-			// "regionCode": "GB"
-		}}, searchListByKeyword);
+		let d = new Date();
+		if (d.getHours() > 12) {
+
+			authorize(JSON.parse(content), {"params": {
+				"maxResults": "50",
+				"part": "snippet",
+				"q": "Trailer",
+				"type": "video",
+				// "publishedAfter":d,
+				// "videoDuration": "short",
+				// "regionCode": "GB"
+			}}, searchListByKeyword);
+
+		} else {
+
+			authorize(JSON.parse(content), {"params": {
+				"maxResults": "50",
+				"part": "snippet",
+				"q": "Official Trailer",
+				"type": "video",
+				// "publishedAfter":d,
+				// "videoDuration": "short",
+				// "regionCode": "GB"
+			}}, searchListByKeyword);
+
+		}
 
 
 	});
 
 }
+
 
 let intervalSavingChannels = function intervalSavingChannels () {
 
@@ -780,8 +919,10 @@ function searchListByKeyword (auth, requestData, res, channel) {
 
 				let x = 0;
 				// videoData[i - 1]["snippet"]["title"]
+
 				let title = response["data"]["items"][i]["snippet"]["title"].toLowerCase();
-				if (title.includes("reaction") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in") || title.includes("breakdown")) {
+
+				if (title.includes("reaction") || title.includes("total dhamaal") || title.includes("vingadores:  ultimato") || title.includes("madhura raja") || title.includes("kesari") || title.includes("pm narendra modi") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in") || title.includes("breakdown") || title.includes("kalank") || title.includes("de de pyaar de") || title.includes("tashkent files")) {
 
 					if (title.includes("movieclips")) {
 
@@ -864,4 +1005,4 @@ function searchListByKeyword (auth, requestData, res, channel) {
 
 }
 
-module.exports = {app, intervalSavingRecents, intervalSavingChannels};
+module.exports = {app, intervalSavingRecents , intervalSavingChannels};
