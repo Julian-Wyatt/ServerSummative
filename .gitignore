@@ -4,6 +4,6 @@ package-lock.json
 google-utils.js
 .jsbeautifyrc
 Database
-environmentVars.env
+.env
 
 
