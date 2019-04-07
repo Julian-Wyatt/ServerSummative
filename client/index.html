@@ -410,7 +410,7 @@
 										</button>
 									</div>
 									<div class="modal-body">
-										<form name="register" action="./register" method="post">
+										<form name="register" action="./register" method="post" autocomplete="on">
 											<div class="form-group">
 												<div class="row" style="margin-bottom: 5px">
 													<div class="col">
@@ -420,14 +420,14 @@
 															<input type="text" class="form-control" name="lName" id="ReglName" placeholder="Surname" style="display: inline" value = "Wyatt">
 													</div>
 														</div>
-														<input type="email" class="form-control" name="email" id="RegEmail" placeholder="Email Address" style="margin-bottom: 5px" value="Jul@Wya.com">
+														<input type="email" class="form-control" autocomplete="email" name="email" id="RegEmail" placeholder="Email Address" style="margin-bottom: 5px" value="Jul@Wya.com">
 
 														<p style="margin-bottom:5px">The password must contain at least
 															one lowercase character, at least one uppercase characters
 															and be between 6 to 16 characters in length</p>
 
-														<input type="password" class="form-control" name="password" id="RegPassword" placeholder="Password" style="margin-bottom: 5px" value="Password1">
-														<input type="password" class="form-control" id="RegConfPWord" placeholder="Confirm password" style="margin-bottom: 5px" value="Password1">
+														<input type="password" class="form-control" name="password" autocomplete="new-password" id="RegPassword" placeholder="Password" style="margin-bottom: 5px" value="Password1">
+														<input type="password" class="form-control" id="RegConfPWord" autocomplete="new-password" placeholder="Confirm password" style="margin-bottom: 5px" value="Password1">
 
 														<p style="margin-bottom: 5px">Please select which channels you
 															like from the list: (use ctrl (or cmd) + click for multiple)
@@ -465,10 +465,10 @@
 											</button>
 									</div>
 									<div class="modal-body">
-										<form name="log-in">
+										<form name="log-in" autocomplete="on">
 											<div class="form-group">
-												<input type="email" class="form-control" id="email" placeholder="Email Address" style="margin-bottom: 5px">
-												<input type="password" class="form-control" id="pword" placeholder="Password" style="margin-bottom: 5px">
+												<input type="email" class="form-control" id="email" autocomplete="email" placeholder="Email Address" style="margin-bottom: 5px">
+												<input type="password" class="form-control" id="pword" placeholder="Password" autocomplete="current-password" style="margin-bottom: 5px">
 												</div>
 										</form>
 									</div>
