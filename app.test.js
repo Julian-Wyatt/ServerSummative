@@ -3,16 +3,7 @@
 const request = require("supertest");
 const app = require("./app.js").app;
 
-
-// https://github.com/stevenaeola/gitpitch/tree/master/prog/nodejs_testing
-// thanks to Nico Tejera at https://stackoverflow.com/questions/1714786/query-string-encoding-of-a-javascript-object
-// returns something like "access_token=concertina&username=bobthebuilder"
-function serialise (obj) {
-
-	return Object.keys(obj).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`).join("&");
-
-}
-
+let token = null;
 
 describe("Test the main page service", () => {
 
@@ -162,169 +153,8 @@ describe("Test the youtube api interaction", () => {
 
 });
 
-describe("Test the get post interaction for preferences", () => {
-
-	test("GET /prefs fails - no query", () => {
-
-		return request(app)
-			.get("/prefs")
-			.expect(422);
-
-	});
-	test("GET /prefs fails - no account", (done) => {
-
-		return request(app)
-			.get("/prefs?email=google%40gmail.com")
-			.expect(404)
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-	test("GET /prefs succeed - return JSON", (done) => {
-
-		return request(app)
-			.get("/prefs?email=Mock%40account.com")
-			.expect(200)
-			.expect("Content-type",/json/)
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
-	// Mock@account.com email
-	// Mock01 pword
-	test("POST /prefs fails - no query", (done) => {
-
-		return request(app)
-			.post("/prefs")
-			.expect(422)
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-	test("POST /prefs fails - no account for sent params", (done) => {
-
-		const params = {email: "mock@account.ac.uk",
-			pword: "mocK01",
-			prefs: ["Pixar","Marvel","DC","Netflix","FOX"],
-		};
-
-		return request(app)
-			.post("/prefs")
-			.send(serialise(params))
-			.expect(400)
-			.expect({"success":false,"correctPassword":false,"exists":false})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-	test("POST /prefs fails - incorrect password", (done) => {
-
-		const params = {email: "mock@account.com",
-			pword: "mocK01",
-			prefs: ["Pixar","Marvel","DC","Netflix","FOX"],
-		};
-
-		return request(app)
-			.post("/prefs")
-			.send(serialise(params))
-			.expect(401)
-			.expect({"success":false,"correctPassword":false})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-	test("POST /prefs succeeds - correct email and pword", (done) => {
-
-		const params = {email: "mock@account.com",
-			pword: "Mock01",
-			prefs: ["Pixar","Marvel","DC","Netflix","FOX"],
-		};
-
-		return request(app)
-			.post("/prefs")
-			.send(serialise(params))
-			.expect(200)
-			.expect({"success":true,})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
-
-});
-
-
 describe("Test the registration post methods and whether the account is free", () => {
 
-	test("GET /checkAccount fails - no query provided", (done) => {
-
-		return request(app)
-			.get("/checkAccount")
-			.expect(422)
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
-	test("GET /checkAccount succeeds - however account exists", (done) => {
-
-		return request(app)
-			.get("/checkAccount?email=mock%40account.com")
-			.expect(409)
-			.expect({"exists":true})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
-	test("GET /checkAccount succeeds - account is not used", (done) => {
-
-
-		return request(app)
-			.get("/checkAccount?email=mock%40account.ac.uk")
-			.expect(200)
-			.expect({"exists":false})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
 
 	test("POST /register fails - no query", (done) => {
 
@@ -353,7 +183,173 @@ describe("Test the registration post methods and whether the account is free", (
 
 		return request(app)
 			.post("/register")
-			.send(serialise(params))
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send(params)
+			.expect(200)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+	test("GET /checkAccount fails - no query provided", (done) => {
+
+		return request(app)
+			.get("/checkAccount")
+			.expect(422)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+	test("GET /checkAccount succeeds - however account exists", (done) => {
+
+		return request(app)
+			.get("/checkAccount?email=mock%40account.co.uk")
+			.expect(200)
+			.expect({"exists":true})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+	test("GET /checkAccount succeeds - account is not used", (done) => {
+
+
+		return request(app)
+			.get("/checkAccount?email=mock%40account.ac.uk")
+			.expect(200)
+			.expect({"exists":false})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+	// only fails on server error
+	test("GET /newToken succeeds - token received", (done) => {
+
+		return request(app)
+			.get("/newToken")
+			.expect(200)
+			.expect(function (res) {
+
+				if (res.body.auth != true) {
+
+					throw new Error("auth value isn't true");
+
+				}
+				if (!res.body.token) {
+
+					throw new Error("haven't received token");
+
+				} else {
+
+					token = res.body.token;
+
+				}
+
+			})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+
+});
+
+describe("Test the post interaction for preferences", () => {
+
+	test("GET /prefs fails - no query", () => {
+
+		return request(app)
+			.get("/prefs")
+			.expect(422);
+
+	});
+	test("GET /prefs fails - no account", (done) => {
+
+		return request(app)
+			.get("/prefs?email=google%40gmail.com")
+			.expect(404)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("GET /prefs succeed - return JSON", (done) => {
+
+		return request(app)
+			.get("/prefs?email=Mock%40account.co.uk")
+			.expect(200)
+			.expect("Content-type",/json/)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+
+	test("POST /prefs fails - no query", (done) => {
+
+		return request(app)
+			.post("/prefs")
+			.expect(422)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+	test("POST /prefs fails - no token", (done) => {
+
+		return request(app)
+			.post("/prefs")
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send({"prefs": ["Marvel","DC"]})
+			.expect(422)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("POST /prefs succeeds - token and query provided", (done) => {
+
+		return request(app)
+			.post("/prefs")
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send({"prefs": ["Marvel","DC"]})
+			.set("x-access-token", token)
 			.expect(200)
 			.end(function (err) {
 
@@ -393,7 +389,8 @@ describe("Test the /login post method", () => {
 
 		return request(app)
 			.post("/login")
-			.send(serialise(params))
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send(params)
 			.expect(400)
 			.expect({"exists":false, "correctPassword":false})
 			.end(function (err) {
@@ -409,13 +406,14 @@ describe("Test the /login post method", () => {
 
 
 		const params = {
-			email: "mock@account.com",
-			pword: "mocK01",
+			email: "mock@account.co.uk",
+			pword: "mock01",
 		};
 
 		return request(app)
 			.post("/login")
-			.send(serialise(params))
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send(params)
 			.expect(401)
 			.expect({"exists":true, "correctPassword":false})
 			.end(function (err) {
@@ -427,20 +425,47 @@ describe("Test the /login post method", () => {
 
 	});
 
+
 	test("POST /login succeeds - account password is correct and account exists", (done) => {
 
-
 		const params = {
-			email: "mock@account.com",
-			pword: "Mock01",
+			email: "mock@account.co.uk",
+			pword: "mocK01",
 		};
 
 		return request(app)
 			.post("/login")
-			.send(serialise(params))
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send(params)
 			.expect(200)
-			.expect({"fName":"Mock", "prefs": "Pixar,Marvel,DC,Netflix,FOX", "exists":true, "correctPassword":true})
+			.expect(function (res) {
+
+				if (res.body.fName != "Mock") {
+
+					throw new Error("name isn't Mock");
+
+				}
+
+				if (res.body.prefs !=  "Pixar,Marvel,DC,Netflix,FOX") {
+
+					throw new Error("prefs isnt [ 'Pixar', 'Marvel', 'DC', 'Netflix', 'FOX' ]");
+
+				}
+				if (res.body.exists != true) {
+
+					throw new Error("exists isn't true");
+
+				}
+				if (!res.body.token) {
+
+					throw new Error("no token recieved");
+
+				}
+
+
+			})
 			.end(function (err) {
+
 
 				if (err) return done(err);
 				done();
