@@ -407,6 +407,7 @@ app.get("/newToken", function (req,res) {
 // adds the account to accounts.json
 app.post("/register",function (req,res) {
 
+
 	if (req.body.email == undefined || req.body.password == undefined) {
 
 		res.statusCode = 422;
@@ -473,6 +474,9 @@ app.post("/register",function (req,res) {
 						throw new Error(er);
 
 					}
+
+					res.statusCode == 200;
+					res.end();
 
 				});
 
