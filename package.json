@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "node server.js",
-    "pretest": "eslint client/index.js server.js"
+    "start": "nodemon server.js --ignore 'Database/*.json'",
+    "pretest": "eslint client/index.js server.js app.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   "dependencies": {
     "bcrypt": "^3.0.5",
     "boostrap": "^2.0.0",
+    "dotenv": "^7.0.0",
     "eslint": "^5.14.1",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
