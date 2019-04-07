@@ -1,43 +1,47 @@
+
+
 let channels = ["Disney","Pixar","Marvel","DC","GoT","Netflix", "Prime", "FOX", "Paramount","WB", "Sony", "Lionsgate", "MGM"];
 
 // disabled as it is defined in html and in JQuery section below approx line 77
 // eslint-disable-next-line no-unused-vars
 function onSignIn (googleUser) {
 
-
 	let profile = googleUser.getBasicProfile();
-	console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-	console.log("Name: " + profile.getName());
-	console.log("Image URL: " + profile.getImageUrl());
 	let accntImage = document.getElementById("accntImage");
 	accntImage.src = profile.getImageUrl();
 	accntImage.classList.remove("hide");
-	console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+
 
 	checkEmail(profile.getEmail())
 		.then(function (exists) {
 
+
 			if (exists) {
+
 
 				getPrefs(profile.getEmail())
 					.then(function (response) {
 
-						if (typeof response != Array) {
+						response = JSON.parse(response);
 
-							console.log("undef");
+						if (!Array.isArray(response["prefs"])) {
+
+							alert("incorrect respones value");
 							return;
 
 						}
-						document.getElementById("prefEmail").value = profile.getEmail();
+
+						setCookie("Token",response["token"]);
+						// document.getElementById("prefEmail").value = profile.getEmail();
 						updateOnSignIn();
-						customisePage(response,profile.getName());
+						customisePage(response["prefs"],response["name"]);
 
 					}).catch(e=>alert(e));
 
 			}
 			else {
 
-				document.getElementById("logInTitle").innerHTML = "Log in - <br>Please make an account with the same email before using google";
+
 				document.getElementById("logInTitle").innerHTML = "Log in - <br>Please make an account with the same email before using google";
 				let accntText = document.getElementById("accntName");
 				accntText.textContent = profile.getName();
@@ -52,14 +56,98 @@ function onSignIn (googleUser) {
 
 }
 
+
+function regularSignIn () {
+
+
+	if (getCookie("Token") != undefined && getCookie("Token") != "undefined" && getCookie("Token") != "") {
+
+		getPrefs()
+			.then(function (response) {
+
+				response = JSON.parse(response);
+
+				if (!Array.isArray(response["prefs"])) {
+
+					alert("incorrect response value");
+					return;
+
+				}
+				// document.getElementById("prefEmail").value = profile.getEmail();
+				updateOnSignIn();
+				customisePage(response["prefs"],response["name"]);
+
+			}).catch(e=>alert(e));
+
+	}
+
+}
+
+// https://www.w3schools.com/js/js_cookies.asp
+function setCookie (cToken, cTokenValue) {
+
+	let d = new Date();
+	d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+	let expires = "expires=" + d.toUTCString();
+	document.cookie = cToken + "=" + cTokenValue + ";" + expires + ";path=/";
+
+}
+
+function getCookie (cToken) {
+
+	let tokenName = cToken + "=";
+	let ca = document.cookie.split(";");
+	for(let i = 0; i < ca.length; i++) {
+
+		let c = ca[i];
+		while (c.charAt(0) == " ") {
+
+			c = c.substring(1);
+
+		}
+		if (c.indexOf(tokenName) == 0) {
+
+			return c.substring(tokenName.length, c.length);
+
+		}
+
+	}
+	return "";
+
+}
+
+async function getToken (email) {
+
+	let response = await fetch("http://localhost:8080/newToken?email=" + email);
+	let body = await response.text();
+
+	return body;
+
+}
+
+
 async function getPrefs (email) {
 
 	try {
 
-		let response = await fetch("http://localhost:8080/prefs?email=" + email);
-		let body = await response.text();
-		console.log(body);
-		return body;
+		let tempToken = getCookie("Token");
+		if (tempToken == undefined || tempToken == "undefined" || tempToken == "")	{
+
+
+			let response = await fetch("http://localhost:8080/prefs?email=" + email);
+			let body = await response.text();
+
+			return body;
+
+		} else {
+
+
+			let response = await fetch("http://localhost:8080/prefs?token=" + tempToken);
+			let body = await response.text();
+
+			return body;
+
+		}
 
 	}
 	catch(e) {
@@ -76,12 +164,9 @@ function signOut () { // add this with DOM
 	let auth2 = gapi.auth2.getAuthInstance();
 
 	auth2.signOut()
-		.then(function () {
+		.catch(e=>alert(e));
 
-			console.log("User signed out.");
-
-		}).catch(e=>alert(e));
-
+	setCookie("Token","");
 
 	customisePage(channels," ");
 	document.getElementById("accntImage").classList.add("hide");
@@ -110,7 +195,7 @@ $(document)
 
 		$("#search_query_nav")
 			.keyup(function (event) {
-				console.log("key clicked in nav");
+
 				if (event.keyCode === 13) {
 
 					$("#searchBtn_nav")
@@ -123,7 +208,8 @@ $(document)
 
 		$("#search_query_sideBar")
 			.keyup(function (event) {
-				console.log("key clicked in sidebar");
+
+
 				if (event.keyCode === 13) {
 
 					$("#searchBtn_nav")
@@ -157,7 +243,7 @@ function onPlayerStateChange (event) {
 
 	// changeBorderColor(event.data);
 
-	console.log("state change");
+
 	// here do the required css.
 	if (event.data == 1) {
 
@@ -194,6 +280,7 @@ function onPlayerStateChange (event) {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+	regularSignIn();
 	let collapseBtn = document.getElementById("sidebarCollapse");
 
 	function collapse () {
@@ -217,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			let response = await fetch("http://localhost:8080/channeldata?channel=" + channel);
 			let body = await response.text();
-			console.log("called recent fetch");
+
 			let recents = JSON.parse(body);
 			return recents;
 
@@ -235,13 +322,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			let response = await fetch("http://localhost:8080/recent?page=" + page);
 			let body = await response.text();
-			console.log("called recent fetch");
+
 			let recents = JSON.parse(body);
 			return recents;
 
 		} catch (e) {
 
-			console.log("here");
+
 			alert(e);
 
 		}
@@ -253,10 +340,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		try {
 
 			query = encodeURIComponent(query);
-			console.log(query);
+
 			let response = await fetch("http://localhost:8080/search?q=" + query);
 			let body = await response.text();
-			console.log("called search fetch");
+
 			let recents = JSON.parse(body);
 			return recents;
 
@@ -604,17 +691,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					if (checkPassword(password)) {
 
-						let selectedChannels = $("#channelSelect").val();
-						console.log("post results");
+						let selectedChannels = $("#channelSelect").val() || channels;
+
 						$.post("http://localhost:8080/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
 						email.value = "";
 						password.value = "";
 						confPwd.value = "";
 						title.innerHTML = "Create Account";
 						lname.value = "";
+						updateOnSignIn();
 						customisePage(selectedChannels,fname.value);
 						fname.value = "";
+						getToken(email.value).then(function (response) {
 
+							response = JSON.parse(response);
+							setCookie("Token", response["token"]);
+
+						});
 
 					}
 					else {
@@ -656,14 +749,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 				if (result["exists"] && result["correctPassword"]) {
 
-					console.log("logged in");
-					console.log(result);
-					document.getElementById("prefEmail").value = email.value;
+
 					email.value = "";
 					pword.value = "";
 					title.innerHTML = "Log in";
 					updateOnSignIn();
 					customisePage(result["prefs"],result["fName"]);
+					setCookie("Token", result["token"]);
 
 				}
 				else if (result["exists"] && !result["correctPassword"]) {
@@ -687,11 +779,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	async function updatePrefs () {
 
-		let email = document.getElementById("prefEmail");
-		let pword = document.getElementById("prefPword");
+
 		let title = document.getElementById("prefTitle");
-		console.log(email.value);
-		if (email.value == "" || pword.value == "") {
+
+		if (getCookie("Token") == "") {
 
 			return;
 
@@ -700,29 +791,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		else {
 
-			$.post("http://localhost:8080/prefs",{email: email.value, pword:pword.value,prefs:$("#updateChannelSelect").val()},function (result) {
 
-				if (result["success"]) {
+			let newPrefs = $("#updateChannelSelect").val() || channels;
+			$.ajax({
+				url: "http://localhost:8080/prefs",
+				type: "post",
+				// "x-access-token":getCookie("Token"),
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"x-access-token": getCookie("Token")   // If your header name has spaces or any other char not appropriate
+				},
+				data: {
+					prefs: newPrefs
+				},
+				dataType: "json",
+				success: function (result) {
 
-					console.log("logged in");
-					console.log(result);
-					pword.value = "";
-					title.innerHTML = "Log in";
-					customisePage($("#updateChannelSelect").val(),result["fName"]);
+					if (result["success"]) {
+
+						title.innerHTML = "Log in";
+						customisePage(newPrefs,result["fName"]);
+
+					}
+					else{
+
+						alert("unable to update preferences");
+
+					}
+
 
 				}
-				else if (result["exists"] && !result["correctPassword"]) {
-
-					title.innerHTML = "Preferences - The password is incorrect for this account";
-
-				}
-				else if (!result["exists"] && !result["correctPassword"]) {
-
-					title.innerHTML = "Preferences - The account doesn't exist";
-
-				}
-
 			});
+
+			// $.post("http://localhost:8080/prefs",{email: email.value, pword:pword.value,prefs:$("#updateChannelSelect").val()},function (result) {
+
+			// 	if (result["success"]) {
+
+			// 		console.log("logged in");
+			// 		console.log(result);
+			// 		pword.value = "";
+			// 		title.innerHTML = "Log in";
+			// 		customisePage($("#updateChannelSelect").val(),result["fName"]);
+
+			// 	}
+			// 	else if (result["exists"] && !result["correctPassword"]) {
+
+			// 		title.innerHTML = "Preferences - The password is incorrect for this account";
+
+			// 	}
+			// 	else if (!result["exists"] && !result["correctPassword"]) {
+
+			// 		title.innerHTML = "Preferences - The account doesn't exist";
+
+			// 	}
+
+			// });
 
 
 		}
@@ -739,7 +862,6 @@ function checkPassword (input) {
 	let passExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 	if (passExp.test(input.value)) {
 
-		console.log("password ok");
 		return true;
 
 	}
@@ -758,12 +880,11 @@ async function checkEmail (input,title) {
 	if (input.match(emailExp)) {
 
 		// check whether email is linked to account on server
-		console.log("email ok");
+
 		let email = encodeURIComponent(input);
 		try {
 
 			let free = await fetch("http://localhost:8080/checkAccount?email=" + email);
-
 			free = await free.text();
 			free = JSON.parse(free);
 			return free["exists"];
@@ -780,43 +901,6 @@ async function checkEmail (input,title) {
 	else{
 
 		title.innerHTML = "Create Account - The email is incorrect" || "";
-
-	}
-
-}
-
-function customisePage (selectedChannels,fname) {
-
-	$("#accountModal").modal("hide");
-	$("#prefsModal").modal("hide");
-	if (selectedChannels.length >= 1) {
-
-		for (let i = 0;i < channels.length;i++) {
-
-			if (selectedChannels.includes(channels[i])) {
-
-				// document.getElementById(channels[i]).style.display = "block";
-				document.getElementById(channels[i]).parentElement.classList.remove("hide");
-				document.getElementById("pref" + channels[i]).selected = true;
-
-			}
-			else {
-
-				// document.getElementById(channels[i]).style.display = "none";
-				document.getElementById(channels[i]).parentElement.classList.add("hide");
-				document.getElementById("pref" + channels[i]).selected = false;
-				// document.getElementById(channels[i]).style.height = "0px";
-
-			}
-
-		}
-
-	}
-	let accntName = document.getElementById("accntName");
-	if (accntName.innerHTML == "-" || fname == " " || accntName.innerHTML == " ") {
-
-		document.getElementById("accntName").innerHTML = fname;
-		document.getElementById("accntName").classList.remove("hide");
 
 	}
 
@@ -918,6 +1002,46 @@ function customisePage (selectedChannels,fname) {
 // 	return col;
 
 // }
+
+function customisePage (selectedChannels,fname) {
+
+	$("#accountModal").modal("hide");
+	$("#prefsModal").modal("hide");
+
+	if (selectedChannels.length >= 1) {
+
+
+		for (let i = 0;i < channels.length;i++) {
+
+			if (selectedChannels.includes(channels[i])) {
+
+				// document.getElementById(channels[i]).style.display = "block";
+				document.getElementById(channels[i]).parentElement.classList.remove("hide");
+				document.getElementById("pref" + channels[i]).selected = true;
+
+			}
+			else {
+
+				// document.getElementById(channels[i]).style.display = "none";
+				document.getElementById(channels[i]).parentElement.classList.add("hide");
+				document.getElementById("pref" + channels[i]).selected = false;
+				// document.getElementById(channels[i]).style.height = "0px";
+
+			}
+
+		}
+
+	}
+
+	let accntName = document.getElementById("accntName");
+	if (accntName.innerHTML == "-" || fname == " " || accntName.innerHTML == " ") {
+
+		document.getElementById("accntName").innerHTML = fname;
+		document.getElementById("accntName").classList.remove("hide");
+
+	}
+
+}
 
 
 function updateOnSignIn () {
