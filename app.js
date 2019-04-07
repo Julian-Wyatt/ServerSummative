@@ -55,6 +55,8 @@ function getChannelID (title) {
  */
 app.get("/",function (req,resp) {
 
+	console.log("arrived on the page");
+
 	resp.sendFile("client/index.html",{root: __dirname });
 	resp.sendFile(__dirname + "/client/style.css");
 	resp.sendFile(__dirname + "/client/index.js");
@@ -682,10 +684,9 @@ let intervalSavingChannels = function intervalSavingChannels () {
 	callChannelData("Sony");
 
 };
-
+console.log(process.env.TOKEN_PATH);
 let SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl","https://www.googleapis.com/auth/youtube"];
-let TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
-    process.env.USERPROFILE) + "/.credentials/";
+let TOKEN_DIR = (process.env.TOKEN_PATH) + "/.credentials/";
 let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
 
 
