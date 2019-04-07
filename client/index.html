@@ -4,7 +4,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width+250px, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Trailers Central</title>
 	<!-- add scripts/ source links here -->
 	<meta name="google-signin-scope" content="profile email">
@@ -18,7 +18,8 @@
 
 	<link rel="stylesheet" href="style.css">
 
-	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<script src="https://apis.google.com/js/platform.js" async defer ></script>
+
 	<script src="index.js"></script>
 
 
@@ -105,7 +106,7 @@
 							<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search_query_nav">
 						</li>
 						<li style="padding:5px">
-							<button class="btn btn-light navBtn my-2 my-sm-0" style="width:100%" type="button" style="color:#fafafa" id="searchBtn_nav">Search</button>
+							<button class="btn btn-light navBtn my-2 my-sm-0" style="width:100%; color:#fafafa" type="button" id="searchBtn_nav">Search</button>
 						</li>
 					
 				</ul>
@@ -480,7 +481,7 @@
 											</div>
 
 											<div class="col-lg col-sm-12 col-md-12" style="text-align:center;margin:auto;">
-												<button type="button" style="height:100%" class="btn btn-secondary navBtn mx-auto"id="logInBtn">Log in</button>
+												<button type="button" style="height:100%" class="btn btn-secondary navBtn mx-auto" id="logInBtn">Log in</button>
 											</div>
 										</div>
 
@@ -509,10 +510,6 @@
 							<div class="modal-body">
 								<form name="updatePrefs" action="./updatePrefs" method="post">
 									<div class="form-group">
-
-										<input type="email" class="form-control" name="email" id="prefEmail" readonly placeholder="Email Address" style="margin-bottom: 5px" value="Jul@Wya.com">
-
-										<input type="password" class="form-control" name="password" id="prefPword" placeholder="Password" style="margin-bottom: 5px" value="Password1">
 
 										<p style="margin-bottom: 5px">Please select which channels you like from the
 											list: (use ctrl (or cmd) + click for multiple)</p>
