@@ -9,8 +9,6 @@ body{
 }
 
 #sidebar{
-    min-width: 250px;
-    max-width: 250px;
 	min-height: 100vh;
 
 	/* http://angrytools.com/gradient/ */
@@ -29,9 +27,6 @@ body{
 
 }
 
-#sidebar.active{
-    margin-left: -250px;
-}
 
 #sidebar .sidebar-header{
     padding: 20px;
@@ -186,19 +181,26 @@ ion-icon {
 		top: -9999px !important;
 		left: -9999px !important;
 	}
+	#sidebar{
+		min-width: 250px;
+		max-width: 250px;
+	}
+	#sidebar.active{
+		margin-left: -250px;
+	}
 }
 @media (max-width: 768px) {
 	
 
     #sidebar {
 		/* position:fixed; change when fixing mobile version */
-		margin-left: -250px;
+		margin-left: -125px;
 		
     }
     #sidebar.active {
 		margin-left: 0;
-		min-width: 150px;
-		max-width: 150px;
+		min-width: 125px;
+		max-width: 125px;
 		z-index: 450;
 	}
 
