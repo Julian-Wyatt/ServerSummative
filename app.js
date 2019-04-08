@@ -1,7 +1,7 @@
 let express = require("express");
 let app  = express();
 let fs = require("fs");
-let readline = require("readline");
+// let readline = require("readline");
 const {google} = require("googleapis");
 let bcrypt = require("bcrypt");
 // let moment = require("moment");
@@ -684,10 +684,10 @@ let intervalSavingChannels = function intervalSavingChannels () {
 	callChannelData("Sony");
 
 };
-console.log(process.env.TOKEN_PATH);
-let SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl","https://www.googleapis.com/auth/youtube"];
-let TOKEN_DIR = (process.env.TOKEN_PATH) + "/.credentials/";
-let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
+// console.log(process.env.TOKEN_PATH);
+// let SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl","https://www.googleapis.com/auth/youtube"];
+// let TOKEN_DIR = (process.env.TOKEN_PATH) + "/.credentials/";
+// let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
 
 
 // https://issuetracker.google.com/128835104 - won't sort output
@@ -803,82 +803,85 @@ function callTrailers (res, q) {
 
 function authorize (credentials, requestData, callback, res = undefined ,channel = undefined) {
 
-	let clientSecret = credentials.installed.client_secret;
-	let clientId = credentials.installed.client_id;
-	let redirectUrl = credentials.installed.redirect_uris[0];
+	// let clientSecret = credentials.installed.client_secret;
+	// let clientId = credentials.installed.client_id;
+	// let redirectUrl = credentials.installed.redirect_uris[0];
 
-	let oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUrl);
+	// let oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUrl);
+
+	callback(requestData, res, channel);
 
 	// Check if we have previously stored a token.
-	fs.readFile(TOKEN_PATH, function (err, token) {
+	// fs.readFile(TOKEN_PATH, function (err, token) {
 
-		if (err) {
+	// 	if (err) {
 
-			getNewToken(oauth2Client, requestData, callback);
+	// 		getNewToken(oauth2Client, requestData, callback);
 
-		} else {
+	// 	} else {
 
-			oauth2Client.credentials = JSON.parse(token);
-			callback(oauth2Client, requestData, res, channel);
+	// 		oauth2Client.credentials = JSON.parse(token);
+	// 		console.log(oauth2Client);
+	// 		callback(oauth2Client, requestData, res, channel);
 
-		}
+	// 	}
 
-	});
-
-}
-
-
-function getNewToken (oauth2Client, requestData, callback) {
-
-	let authUrl = oauth2Client.generateAuthUrl({
-		access_type: "offline",
-		prompt: "consent",
-		scope: SCOPES
-	});
-	console.log("Authorize this app by visiting this url: ", authUrl);
-	let rl = readline.createInterface({
-		input: process.stdin,
-		output: process.stdout
-	});
-	rl.question("Enter the code from that page here: ", function (code) {
-
-		rl.close();
-		oauth2Client.getToken(code, function (err, token) {
-
-			if (err) {
-
-				throw new Error(err);
-
-			}
-			oauth2Client.credentials = token;
-			storeToken(token);
-			callback(oauth2Client, requestData);
-
-		});
-
-	});
+	// });
 
 }
 
-function storeToken (token) {
 
-	try {
+// function getNewToken (oauth2Client, requestData, callback) {
 
-		fs.mkdirSync(TOKEN_DIR);
+// 	let authUrl = oauth2Client.generateAuthUrl({
+// 		access_type: "offline",
+// 		prompt: "consent",
+// 		scope: SCOPES
+// 	});
+// 	console.log("Authorize this app by visiting this url: ", authUrl);
+// 	let rl = readline.createInterface({
+// 		input: process.stdin,
+// 		output: process.stdout
+// 	});
+// 	rl.question("Enter the code from that page here: ", function (code) {
 
-	} catch (err) {
+// 		rl.close();
+// 		oauth2Client.getToken(code, function (err, token) {
 
-		if (err.code != "EEXIST") {
+// 			if (err) {
 
-			throw err;
+// 				throw new Error(err);
 
-		}
+// 			}
+// 			oauth2Client.credentials = token;
+// 			storeToken(token);
+// 			callback(oauth2Client, requestData);
 
-	}
-	fs.writeFileSync(TOKEN_PATH, JSON.stringify(token));
-	console.log("Token stored to " + TOKEN_PATH);
+// 		});
 
-}
+// 	});
+
+// }
+
+// function storeToken (token) {
+
+// 	try {
+
+// 		fs.mkdirSync(TOKEN_DIR);
+
+// 	} catch (err) {
+
+// 		if (err.code != "EEXIST") {
+
+// 			throw err;
+
+// 		}
+
+// 	}
+// 	fs.writeFileSync(TOKEN_PATH, JSON.stringify(token));
+// 	console.log("Token stored to " + TOKEN_PATH);
+
+// }
 
 
 function removeEmptyParameters (params) {
@@ -896,13 +899,15 @@ function removeEmptyParameters (params) {
 
 }
 
+// https://www.googleapis.com/youtube/v3/search?part=snippet&q=avengers&type=video&key=[-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDtBTJBDMNdSk2P\n3zRMmS9TRY3vg76wG1WyGc7BXXzySOi/IvHl9sM39VPnJJxxBv8NZcC9i/AGs0Rz\nMhfbJUJNzGUd5DG/O3eL2oXVo18VlzvvJG9Pfp5cNe470i/HjO4QDf7olEkHViaI\nxTk0CLm6AtDNaBvz0PPufdJ0bLblkE0x3DbC4j03CR5qylrvFO3L14lhJsycpfns\ny5Lsno99rAoOE3SvSdWdJcCt96JekIhwsbpd519BZH1N4DP9HPc98eXhStFpF4pO\nCGhduvvUB1TuXEPVWTNRFMv+FuQgRl4dmw6sr1xmfpSqaRdGxgPB9b4IgELQTFMQ\niFzsGD0NAgMBAAECggEADZobvTHvUD5AXz5O8QpldeDq+VDVM6QN8e+bNuuXjQv0\nF2v499qGb4Krsvsd4zqkjm9FdVs/hhLpnbbFObVUrcRKFUIQPMo73RHIVm9OuJ16\nOgocPTKmAeKybkpspYYH73HuLAi+fCZMhdLTqpHJnswkkXUlDYPzS796wWWvxVK7\nY1OnAuIwvy5eDa3Xoyib5PttEH5ErlSraqZJQEL66oxSSw3C1xOVKY2VgT7F7feb\nZDjoEyijcmGCUlCzXs+yIuEswh3WJkaN5GR6ZsSuURWj2tAUgyAv++sXNt9hlr1Q\nrzAqdGxuD5/Fi/JSuNMfq7zr67l5WjhlWJ88o3qYgQKBgQD8i2x3qxaXE26wcATR\nQEoVNHmmYV3ms6rDwMNNRKVZVUh0eik5V3lykk6x1ES7K65FKWQ5DHDJwEWQjhN2\n8O7XcVsjTRHFjTggwf1SxtW6lqZyPPn9VrSu7S0ggbGLiP81actB5UwQUBeph5il\niIxSflEPBkiVMnX13MEYZgLkYQKBgQDwQ2VyAS774NJdXjmAoTry5JnZv17n6Uw6\nga5LViQmVIxeAnO8AC7Y/kPTPD2uCkeFp80tujzj2SJqnfgM7GNsm486sopM2vCf\nL/3TRoC2zrRW/RQuLkalMPxaa63OVrBcmm7UKHWTAnhDkv9dcvQpjExsiAKmFPjE\ndWxhZ00YLQKBgQDbjCHZzuSupfgebuPhPfCpipsPJ6pIe31C/HtM2xacGOYKTIE2\nFnPARK0hL5Yo2YqBGcDFT6ll2z8eskT9q+sXZLaEc+W1RlW7NKoTokQAGCPPQG9b\n7Frbj9khX16IHaswNi67tKlxrQ9FFFqB3bmPpby2QRIskle2TBmaKmTtQQKBgQDO\nXtVwCxw0NXP7xsdVeSeNIlYT9pCqWnWje2geRatfURgQV8LZJL8Ym63ebsv8BdBR\nOUS/lkxe2U76jR1W3GS6ERQBswGf6h7sXOiE5PYCD6JPZapD0HPVyDG56OutZECw\nCeZQTUBQObrbMBQwTGD0nxG1102PIkxbUxD4ySYrMQKBgHkYPa2D0sGioc4gD3V8\nPFP0LkLR8uMsbw6iPBjHa/gzxWqg6tIq1eF0Swv4c+TfbdmY1Yj+4U0+krq92u3v\n30t+oz8vGIcj7au/bbrQYzosVffGwipQNjWenjV7a9yMDnYA+cgAWeOXVDEITAK3\nmvUPz78+OVhqKHchP8ybfcID\n-----END PRIVATE KEY-----\n]
 
-function searchListByKeyword (auth, requestData, res, channel) {
+function searchListByKeyword (requestData, res, channel) {
 
 	let service = google.youtube("v3");
 	// var parameters = requestData["params"];
 	let parameters = removeEmptyParameters(requestData["params"]);
-	parameters["auth"] = auth;
+	parameters["key"] = process.env.GOOGLE_API_KEY;
+	console.log(parameters);
 	service.search.list(parameters, function (err, response) {
 
 		try {
