@@ -139,6 +139,14 @@ app.get("/channeldata",function (req,res) {
 // gets recents - typically newest videos from saved in recents.json
 app.get("/recent",function (req,res) {
 
+	if (req.query.page == undefined) {
+
+		res.statusCode = 422;
+		res.end();
+		return;
+
+	}
+
 
 	res.statusCode = 200;
 
@@ -907,7 +915,6 @@ function searchListByKeyword (requestData, res, channel) {
 	// var parameters = requestData["params"];
 	let parameters = removeEmptyParameters(requestData["params"]);
 	parameters["key"] = process.env.GOOGLE_API_KEY;
-	console.log(parameters);
 	service.search.list(parameters, function (err, response) {
 
 		try {
@@ -972,7 +979,7 @@ function searchListByKeyword (requestData, res, channel) {
 						throw new Error(err);
 
 					}
-					console.log("written file");
+					console.log("written recents file");
 
 				});
 
@@ -991,6 +998,7 @@ function searchListByKeyword (requestData, res, channel) {
 						throw new Error(err);
 
 					}
+					console.log("written " + channel + " file");
 
 				});
 
