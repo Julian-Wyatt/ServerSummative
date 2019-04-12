@@ -18,33 +18,21 @@ app.use(express.static("client"));
 // eslint-disable-next-line no-unused-vars
 function getChannelID (title) {
 
-	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
-		if (err) {
-
-			throw new Error(err);
-
-		}
-		// Authorize a client with the loaded credentials, then call the YouTube API.
-		// See full code sample for authorize() function code.
-
-
-		authorize(JSON.parse(content), {"params": {
-			"maxResults": "3",
-			"part": "snippet",
-			"q": title,
-			"type": "channel",
-			"order": "date"
-			// "videoDuration": "short",
-			// "relevanceLanguage": "en"
-			// "videoLicense": "creativeCommon"
-		}}, searchListByKeyword);
+	searchListByKeyword({"params": {
+		"maxResults": "3",
+		"part": "snippet",
+		"q": title,
+		"type": "channel",
+		"order": "date"
+		// "videoDuration": "short",
+		// "relevanceLanguage": "en"
+		// "videoLicense": "creativeCommon"
+	}});
 
 
-		// change max results sizes once ive sorted repeats and reaction videos
+	// change max results sizes once ive sorted repeats and reaction videos
 
-
-	});
 
 }
 
@@ -638,45 +626,36 @@ app.post("/login", function (req,res) {
 function intervalSavingRecents () {
 
 
-	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
+	// Authorize a client with the loaded credentials, then call the YouTube API.
+	// See full code sample for authorize() function code.
+	// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
+	let d = new Date();
+	if (d.getHours() > 12) {
 
-		if (err) {
+		searchListByKeyword({"params": {
+			"maxResults": "50",
+			"part": "snippet",
+			"q": "Trailer",
+			"type": "video",
+			// "publishedAfter":d,
+			// "videoDuration": "short",
+			// "regionCode": "GB"
+		}});
 
-			throw new Error(err);
+	} else {
 
-		}
-		// Authorize a client with the loaded credentials, then call the YouTube API.
-		// See full code sample for authorize() function code.
-		// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
-		let d = new Date();
-		if (d.getHours() > 12) {
+		searchListByKeyword({"params": {
+			"maxResults": "50",
+			"part": "snippet",
+			"q": "Official Trailer",
+			"type": "video",
+			// "publishedAfter":d,
+			// "videoDuration": "short",
+			// "regionCode": "GB"
+		}});
 
-			authorize(JSON.parse(content), {"params": {
-				"maxResults": "50",
-				"part": "snippet",
-				"q": "Trailer",
-				"type": "video",
-				// "publishedAfter":d,
-				// "videoDuration": "short",
-				// "regionCode": "GB"
-			}}, searchListByKeyword);
+	}
 
-		} else {
-
-			authorize(JSON.parse(content), {"params": {
-				"maxResults": "50",
-				"part": "snippet",
-				"q": "Official Trailer",
-				"type": "video",
-				// "publishedAfter":d,
-				// "videoDuration": "short",
-				// "regionCode": "GB"
-			}}, searchListByKeyword);
-
-		}
-
-
-	});
 
 }
 
@@ -702,7 +681,8 @@ let intervalSavingChannels = function intervalSavingChannels () {
 
 function callChannelData (channel,res) {
 
-	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
+
+	fs.readFile("Database/channels.json", function processChannelData (err, data) {
 
 		if (err) {
 
@@ -715,128 +695,135 @@ function callChannelData (channel,res) {
 			throw new Error(err);
 
 		}
-		// Authorize a client with the loaded credentials, then call the YouTube API.
-		// See full code sample for authorize() function code.
+		data = JSON.parse(data);
+		if (data["channels"][channel] == undefined) {
 
-		fs.readFile("Database/channels.json", function processChannelData (err, data) {
+			res.statusCode = 400;
+			res.end();
+			return;
 
-			if (err) {
-
-				if (res != undefined) {
-
-					res.statusCode == 500;
-					res.end();
-
-				}
-				throw new Error(err);
-
-			}
-			data = JSON.parse(data);
-			if (data["channels"][channel] == undefined) {
-
-				res.statusCode = 400;
-				res.end();
-				return;
-
-			}
-			authorize(JSON.parse(content), {"params": {
-				"maxResults": "24",
-				"part": "snippet",
-				"q": "Trailer",
-				"type": "video",
-				"channelId": data["channels"][channel]["channelID"],
-				"order": "date"
-				// "videoDuration": "short",
-				// "relevanceLanguage": "en"
-				// "videoLicense": "creativeCommon"
-			}}, searchListByKeyword,res,channel);
-
-		});
-
-		// change max results sizes once ive sorted repeats and reaction videos
-
+		}
+		searchListByKeyword({"params": {
+			"maxResults": "24",
+			"part": "snippet",
+			"q": "Trailer",
+			"type": "video",
+			"channelId": data["channels"][channel]["channelID"],
+			"order": "date"
+			// "videoDuration": "short",
+			// "relevanceLanguage": "en"
+			// "videoLicense": "creativeCommon"
+		}}, res,channel);
 
 	});
+
 
 }
 
 function callTrailers (res, q) {
 
-	fs.readFile("client_secret.json", function processClientSecrets (err, content) {
+	if (q === undefined) {
 
-		if (err) {
+		// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
+		// change max results sizes once ive sorted repeats and reaction videos
+		searchListByKeyword({"params": {
+			"maxResults": "50",
+			"part": "snippet",
+			"q": "Trailer",
+			"type": "video",
+			// "publishedAfter":d,
+			// "videoDuration": "short",
+			// "regionCode": "GB"
+		}}, res);
 
-			if (res != undefined) {
+	}else {
 
-				res.statusCode == 500;
-				res.end();
+		searchListByKeyword({"params": {
+			"maxResults": "6",
+			"part": "snippet",
+			"q": q + " Trailer",
+			"type": "video",
+			// "videoDuration": "short",
+			// "regionCode": "GB"
+		}}, res);
 
-			}
-			throw new Error(err);
+	}
 
-		}
-		// Authorize a client with the loaded credentials, then call the YouTube API.
-		// See full code sample for authorize() function code.
-		if (q === undefined) {
-
-			// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
-			// change max results sizes once ive sorted repeats and reaction videos
-			authorize(JSON.parse(content), {"params": {
-				"maxResults": "50",
-				"part": "snippet",
-				"q": "Trailer",
-				"type": "video",
-				// "publishedAfter":d,
-				// "videoDuration": "short",
-				// "regionCode": "GB"
-			}}, searchListByKeyword,res);
-
-		}else {
-
-			authorize(JSON.parse(content), {"params": {
-				"maxResults": "6",
-				"part": "snippet",
-				"q": q + " Trailer",
-				"type": "video",
-				// "videoDuration": "short",
-				// "regionCode": "GB"
-			}}, searchListByKeyword, res);
-
-		}
-
-	});
-
-}
-
-
-function authorize (credentials, requestData, callback, res = undefined ,channel = undefined) {
-
-	// let clientSecret = credentials.installed.client_secret;
-	// let clientId = credentials.installed.client_id;
-	// let redirectUrl = credentials.installed.redirect_uris[0];
-
-	// let oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUrl);
-
-	callback(requestData, res, channel);
-
-	// Check if we have previously stored a token.
-	// fs.readFile(TOKEN_PATH, function (err, token) {
+	// fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
 	// 	if (err) {
 
-	// 		getNewToken(oauth2Client, requestData, callback);
+	// 		if (res != undefined) {
 
-	// 	} else {
+	// 			res.statusCode == 500;
+	// 			res.end();
 
-	// 		oauth2Client.credentials = JSON.parse(token);
-	// 		console.log(oauth2Client);
-	// 		callback(oauth2Client, requestData, res, channel);
+	// 		}
+	// 		throw new Error(err);
+
+	// 	}
+	// 	// Authorize a client with the loaded credentials, then call the YouTube API.
+	// 	// See full code sample for authorize() function code.
+	// 	if (q === undefined) {
+
+	// 		// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
+	// 		// change max results sizes once ive sorted repeats and reaction videos
+	// 		authorize(JSON.parse(content), {"params": {
+	// 			"maxResults": "50",
+	// 			"part": "snippet",
+	// 			"q": "Trailer",
+	// 			"type": "video",
+	// 			// "publishedAfter":d,
+	// 			// "videoDuration": "short",
+	// 			// "regionCode": "GB"
+	// 		}}, searchListByKeyword,res);
+
+	// 	}else {
+
+	// 		authorize(JSON.parse(content), {"params": {
+	// 			"maxResults": "6",
+	// 			"part": "snippet",
+	// 			"q": q + " Trailer",
+	// 			"type": "video",
+	// 			// "videoDuration": "short",
+	// 			// "regionCode": "GB"
+	// 		}}, searchListByKeyword, res);
 
 	// 	}
 
 	// });
 
 }
+
+
+// function authorize (credentials, requestData, callback, res = undefined ,channel = undefined) {
+
+// let clientSecret = credentials.installed.client_secret;
+// let clientId = credentials.installed.client_id;
+// let redirectUrl = credentials.installed.redirect_uris[0];
+
+// let oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUrl);
+
+// callback(requestData, res, channel);
+
+// Check if we have previously stored a token.
+// fs.readFile(TOKEN_PATH, function (err, token) {
+
+// 	if (err) {
+
+// 		getNewToken(oauth2Client, requestData, callback);
+
+// 	} else {
+
+// 		oauth2Client.credentials = JSON.parse(token);
+// 		console.log(oauth2Client);
+// 		callback(oauth2Client, requestData, res, channel);
+
+// 	}
+
+// });
+
+// }
 
 
 // function getNewToken (oauth2Client, requestData, callback) {
@@ -1024,3 +1011,5 @@ function searchListByKeyword (requestData, res, channel) {
 }
 
 module.exports = {app, intervalSavingRecents , intervalSavingChannels};
+
+
