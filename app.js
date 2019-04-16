@@ -35,6 +35,12 @@ function getChannelID (title) {
 
 
 }
+app.get("/googlef50573ce84d3ee44.html",function (req,resp) {
+
+	resp.sendFile("client/googlef50573ce84d3ee44.html",{root: __dirname });
+	resp.end();
+
+});
 
 
 /** gets the main html page, css, and the js
