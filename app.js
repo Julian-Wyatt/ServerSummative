@@ -902,7 +902,6 @@ function searchListByKeyword (requestData, res, channel) {
 	// var parameters = requestData["params"];
 	let parameters = removeEmptyParameters(requestData["params"]);
 	parameters["key"] = process.env.GOOGLE_API_KEY;
-	console.log(parameters);
 	service.search.list(parameters, function (err, response) {
 
 		try {
@@ -915,7 +914,7 @@ function searchListByKeyword (requestData, res, channel) {
 					res.end();
 
 				}
-				throw new Error(err);
+				throw new Error(err,response);
 
 			}
 			console.log("pinged Youtube");
