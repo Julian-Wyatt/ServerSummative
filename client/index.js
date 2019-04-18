@@ -119,7 +119,7 @@ function getCookie (cToken) {
 async function getToken (email) {
 
 	// let response = await fetch("http://localhost:8080/newToken?email=" + email);
-	let response = await fetch("trailerscentral.herokuapp.com/newToken?email=" + email);
+	let response = await fetch("https://trailerscentral.herokuapp.com/newToken?email=" + email);
 	let body = await response.text();
 
 	return body;
@@ -136,7 +136,7 @@ async function getPrefs (email) {
 
 
 			// let response = await fetch("http://localhost:8080/prefs?email=" + email);
-			let response = await fetch("trailerscentral.herokuapp.com/prefs?email=" + email);
+			let response = await fetch("https://trailerscentral.herokuapp.com/prefs?email=" + email);
 			let body = await response.text();
 
 			return body;
@@ -145,7 +145,7 @@ async function getPrefs (email) {
 
 
 			// let response = await fetch("http://localhost:8080/prefs?token=" + tempToken);
-			let response = await fetch("trailerscentral.herokuapp.com/prefs?token=" + tempToken);
+			let response = await fetch("https://trailerscentral.herokuapp.com/prefs?token=" + tempToken);
 			let body = await response.text();
 
 			return body;
@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		try {
 
 			// let response = await fetch("http://localhost:8080/channeldata?channel=" + channel);
-			let response = await fetch("trailerscentral.herokuapp.com/channeldata?channel=" + channel);
+			let response = await fetch("https://trailerscentral.herokuapp.com/channeldata?channel=" + channel);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		try {
 
 			// let response = await fetch("http://localhost:8080/recent?page=" + page);
-			let response = await fetch("trailerscentral.herokuapp.com/recent?page=" + page);
+			let response = await fetch("https://trailerscentral.herokuapp.com/recent?page=" + page);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -347,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			query = encodeURIComponent(query);
 
 			// let response = await fetch("http://localhost:8080/search?q=" + query);
-			let response = await fetch("trailerscentral.herokuapp.com/search?q=" + query);
+			let response = await fetch("https://trailerscentral.herokuapp.com/search?q=" + query);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -703,7 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						let selectedChannels = $("#channelSelect").val() || channels;
 
 						// $.post("http://localhost:8080/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
-						$.post("trailerscentral.herokuapp.com/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
+						$.post("https://trailerscentral.herokuapp.com/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
 						email.value = "";
 						password.value = "";
 						confPwd.value = "";
@@ -756,7 +756,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		else {
 
 			// $.post("http://localhost:8080/login",{email: email.value, pword:pword.value},function (result) {
-			$.post("trailerscentral.herokuapp.com/login",{email: email.value, pword:pword.value},function (result) {
+			$.post("https://trailerscentral.herokuapp.com/login",{email: email.value, pword:pword.value},function (result) {
 
 				if (result["exists"] && result["correctPassword"]) {
 
@@ -806,7 +806,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			let newPrefs = $("#updateChannelSelect").val() || channels;
 			$.ajax({
 				// url: "http://localhost:8080/prefs",
-				url: "trailerscentral.herokuapp.com/prefs",
+				url: "https://trailerscentral.herokuapp.com/prefs",
 				type: "post",
 				// "x-access-token":getCookie("Token"),
 				headers: {
@@ -873,7 +873,7 @@ async function checkEmail (input,title) {
 		try {
 
 			// let free = await fetch("http://localhost:8080/checkAccount?email=" + email);
-			let free = await fetch("trailerscentral.herokuapp.com/checkAccount?email=" + email);
+			let free = await fetch("https://trailerscentral.herokuapp.com/checkAccount?email=" + email);
 			free = await free.text();
 			free = JSON.parse(free);
 			return free["exists"];
