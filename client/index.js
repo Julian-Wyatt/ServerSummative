@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		try {
 
 			// let response = await fetch("http://localhost:8080/recent?page=" + page);
-			let response = await fetch("https://trailerscentral.herokuapp.com/recent?page=" + page);
+			let response = await fetch("/recent?page=" + page);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
