@@ -52,34 +52,34 @@ app.get("/",function (req,resp) {
 
 	console.log("arrived on the page");
 
-	resp.sendFile("client/index.html",{root: __dirname });
-	resp.sendFile(__dirname + "/client/style.css");
-	resp.sendFile(__dirname + "/client/index.js");
+	resp.sendFile(__dirname + "client/index.html");
 	resp.sendFile(__dirname + "/client/favicon.ico");
-	resp.sendFile(__dirname + "/client/placeholder.png");
 	resp.end();
 
 });
 
-// // gets the icon for the webpage
-// /**
-//  * @param  {} req
-//  * @param  {} res
-//  */
-// app.get("/favicon.ico", function (req, res) {
 
-// 	res.sendFile(__dirname + "/client/favicon.ico");
-// 	res.end();
+// used to get the placeholder image for videos
+app.get("/placeholder.png", function (req, res) {
 
-// });
+	res.sendFile(__dirname + "/client/placeholder.png");
+	res.end();
 
-// // used to get the placeholder image for videos
-// app.get("/placeholder.png", function (req, res) {
+});
 
-// 	res.sendFile(__dirname + "/client/placeholder.png");
-// 	res.end();
+app.get("/index.js", function (req, res) {
 
-// });
+	res.sendFile(__dirname + "/client/index.js");
+	res.end();
+
+});
+
+app.get("/style.css", function (req, res) {
+
+	res.sendFile(__dirname + "/client/style.css");
+	res.end();
+
+});
 
 // used to search for specific trailers, the query is provided in the URL
 app.get("/search",function (req,res) {
