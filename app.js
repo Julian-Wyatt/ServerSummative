@@ -8,9 +8,10 @@ let bcrypt = require("bcrypt");
 // const {OAuth2Client} = require("google-auth-library");
 let jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const enforce = require("express-sslify");
 dotenv.config();
 
-
+app.use(enforce.HTTPS());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("client"));
 
