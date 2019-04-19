@@ -5,4 +5,5 @@ google-utils.js
 .jsbeautifyrc
 .env
 TrailersCentralAPIkey.json
-
+.crendentials
+client_secret.json
