@@ -445,10 +445,19 @@ describe("Test the /login post method", () => {
 					throw new Error("name isn't Mock");
 
 				}
+				if (res.body.prefs[0] !=  "Marvel") {
 
-				if (res.body.prefs !=  "Pixar,Marvel,DC,Netflix,FOX") {
+					throw new Error("prefs isnt 'Marvel'");
 
-					throw new Error("prefs isnt [ 'Pixar', 'Marvel', 'DC', 'Netflix', 'FOX' ]");
+				}
+				if (res.body.prefs[1] != "DC") {
+
+					throw new Error ("prefs 1 isnt DC");
+
+				}
+				if (res.body.prefs.length != 2) {
+
+					throw new Error ("prefs length is wrong");
 
 				}
 				if (res.body.exists != true) {
