@@ -396,8 +396,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 						let frame = document.getElementById("video" + i);
 						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] +
-						"?enablejsapi=1&origin=https://www.youtube.com";
-						// "?enablejsapi=1";
+						// "?enablejsapi=1&origin=http://localhost:8080";
+						"?enablejsapi=1";
 
 						let title = document.getElementById("title" + i);
 						title.innerHTML = videoData[i - 1]["snippet"]["title"];
@@ -481,8 +481,8 @@ document.addEventListener("DOMContentLoaded", function () {
 						let frame = document.getElementById("video" + i);
 						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
 							"videoId"] +
-							"?enablejsapi=1&origin=https://www.youtube.com";
-						// "?enablejsapi=1";
+							// "?enablejsapi=1&origin=http://localhost:8080";
+							"?enablejsapi=1";
 
 						let title = document.getElementById("title" + i);
 						title.innerHTML = videoData[i - 1]["snippet"]["title"];
@@ -543,8 +543,8 @@ document.addEventListener("DOMContentLoaded", function () {
 							let frame = document.getElementById("video" + i);
 							frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"][
 								"videoId"] +
-								"?enablejsapi=1&origin=https://www.youtube.com";
-							// "?enablejsapi=1";
+								// "?enablejsapi=1&origin=http://localhost:8080";
+								"?enablejsapi=1";
 
 							let title = document.getElementById("title" + i);
 							title.innerHTML = videoData[i - 1]["snippet"]["title"];
