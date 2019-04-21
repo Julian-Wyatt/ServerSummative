@@ -1,23 +1,27 @@
+// global list of all channels available
+let channels = ["Disney", "Pixar", "Marvel", "DC", "GoT", "Netflix", "Prime", "FOX", "Paramount", "WB", "Sony",
+	"Lionsgate", "MGM"];
 
 
-let channels = ["Disney","Pixar","Marvel","DC","GoT","Netflix", "Prime", "FOX", "Paramount","WB", "Sony", "Lionsgate", "MGM"];
-
-// disabled as it is defined in html and in JQuery section below approx line 77
-// eslint-disable-next-line no-unused-vars
-function onSignIn (googleUser) {
+/**
+ * Runs function when user signs into google<br>
+ * This runs the typical sign in process of checking whether the account exists<br>
+ * Then updates the preferences if necessary, and runs the customise page functions<br>
+ * eslint disabled as it is defined in html and in JQuery section below approx line 210
+ * @param  {Object} googleUser the instance of google sign in
+ * @returns {undefined} Nothing is returned when the function runs -> instead the page updates
+ */
+function onSignIn (googleUser) { // eslint-disable-line no-unused-vars
 
 	let profile = googleUser.getBasicProfile();
 	let accntImage = document.getElementById("accntImage");
 	accntImage.src = profile.getImageUrl();
 	accntImage.classList.remove("hide");
 
-
 	checkEmail(profile.getEmail())
 		.then(function (exists) {
 
-
 			if (exists) {
-
 
 				getPrefs(profile.getEmail())
 					.then(function (response) {
@@ -31,18 +35,18 @@ function onSignIn (googleUser) {
 
 						}
 
-						setCookie("Token",response["token"]);
+						setCookie("Token", response["token"]);
 						// document.getElementById("prefEmail").value = profile.getEmail();
 						updateOnSignIn();
-						customisePage(response["prefs"],response["name"]);
+						customisePage(response["prefs"], response["name"]);
 
-					}).catch(e=>alert(e));
+					})
+					.catch(e => alert(e));
 
-			}
-			else {
+			} else {
 
-
-				document.getElementById("logInTitle").innerHTML = "Log in - <br>Please make an account with the same email before using google";
+				document.getElementById("logInTitle")
+					.innerHTML = "Log in - <br>Please make an account with the same email before using google";
 				let accntText = document.getElementById("accntName");
 				accntText.textContent = profile.getName();
 				accntText.classList.remove("hide");
@@ -51,14 +55,15 @@ function onSignIn (googleUser) {
 
 		});
 
-
 	// send info to server and handle there
 
 }
 
-
+/**
+ * Signs user in, should a cookie be valid
+ * @returns {undefined} No return value -> instead page updates
+ */
 function regularSignIn () {
-
 
 	if (getCookie("Token") != undefined && getCookie("Token") != "undefined" && getCookie("Token") != "") {
 
@@ -75,15 +80,22 @@ function regularSignIn () {
 				}
 				// document.getElementById("prefEmail").value = profile.getEmail();
 				updateOnSignIn();
-				customisePage(response["prefs"],response["name"]);
+				customisePage(response["prefs"], response["name"]);
 
-			}).catch(e=>alert(e));
+			})
+			.catch(e => alert(e));
 
 	}
 
 }
 
 // https://www.w3schools.com/js/js_cookies.asp
+/**
+ * Saves a value in a cookie - only used in order to save the access token
+ * @param  {String} cToken The name of the token cookie key
+ * @param  {String} cTokenValue The value of the token cookie
+ * @returns {undefined} No return value
+ */
 function setCookie (cToken, cTokenValue) {
 
 	let d = new Date();
@@ -92,12 +104,16 @@ function setCookie (cToken, cTokenValue) {
 	document.cookie = cToken + "=" + cTokenValue + ";" + expires + ";path=/";
 
 }
-
+/**
+ * Looks up cookie with key cToken
+ * @param  {String} cToken name of cookie key
+ * @returns {String} Either empty string (if it doesnt exist) or the value of the cookie
+ */
 function getCookie (cToken) {
 
 	let tokenName = cToken + "=";
 	let ca = document.cookie.split(";");
-	for(let i = 0; i < ca.length; i++) {
+	for (let i = 0; i < ca.length; i++) {
 
 		let c = ca[i];
 		while (c.charAt(0) == " ") {
@@ -116,24 +132,17 @@ function getCookie (cToken) {
 
 }
 
-async function getToken (email) {
-
-	// let response = await fetch("http://localhost:8080/newToken?email=" + email);
-	let response = await fetch("https://trailerscentral.herokuapp.com/newToken?email=" + email);
-	let body = await response.text();
-
-	return body;
-
-}
-
-
+/**
+ * Gets the user accounts preferences if they have an account or a valid token
+ * @param  {String} email email account for preferences
+ * @returns {Object} response from server -> array of preferences
+ */
 async function getPrefs (email) {
 
 	try {
 
 		let tempToken = getCookie("Token");
-		if (tempToken == undefined || tempToken == "undefined" || tempToken == "")	{
-
+		if (tempToken == undefined || tempToken == "undefined" || tempToken == "") {
 
 			// let response = await fetch("http://localhost:8080/prefs?email=" + email);
 			let response = await fetch("https://trailerscentral.herokuapp.com/prefs?email=" + email);
@@ -143,7 +152,6 @@ async function getPrefs (email) {
 
 		} else {
 
-
 			// let response = await fetch("http://localhost:8080/prefs?token=" + tempToken);
 			let response = await fetch("https://trailerscentral.herokuapp.com/prefs?token=" + tempToken);
 			let body = await response.text();
@@ -152,79 +160,91 @@ async function getPrefs (email) {
 
 		}
 
-	}
-	catch(e) {
+	} catch (e) {
 
 		alert(e);
 
 	}
 
 }
+/**
+ * The regular sign out function which signs the user out of google if possible
+ * @returns {undefined} returns the page back to normal viewing
+ */
+function signOut () {
 
-function signOut () { // add this with DOM
-
-	// same here, ping server, then ping back with sign out
 	let auth2 = gapi.auth2.getAuthInstance();
 
 	auth2.signOut()
-		.catch(e=>alert(e));
+		.catch(e => alert(e));
 
-	setCookie("Token","");
+	setCookie("Token", "");
 
-	customisePage(channels," ");
-	document.getElementById("accntImage").classList.add("hide");
+	customisePage(channels, " ");
+	document.getElementById("accntImage")
+		.classList.add("hide");
 	let signInBtn = document.getElementById("signInBtn");
 	signInBtn.innerHTML = "Sign in";
 	let signOutBtn = document.getElementById("signOutBtn");
 	signOutBtn.classList.add("hide");
-	$("#signInBtn").attr("data-target","#accountModal");
+	$("#signInBtn")
+		.attr("data-target", "#accountModal");
 
 }
 
-$(document)
-	.ready(function () {
+$(document).ready(onJQueryReady);
+/**
+ * JQuery which moves the page to the top on load,<br>
+ * adds the youtube iframe api script,<br>
+ * assigns the topmost function of this script to the data-onsuccess attribute of the html id,<br>
+ * finally links the search buttons such that if you click enter, the search is submitted
+ * @returns {undefined} No return value
+ */
+function onJQueryReady () {
 
-		$(document)
-			.scrollTop(0);
+	$(document)
+		.scrollTop(0);
 
+	let tag = document.createElement("script");
+	tag.id = "iframe-demo";
+	tag.src = "https://www.youtube.com/iframe_api";
+	let firstScriptTag = document.getElementsByTagName("script")[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-		let tag = document.createElement("script");
-		tag.id = "iframe-demo";
-		tag.src = "https://www.youtube.com/iframe_api";
-		let firstScriptTag = document.getElementsByTagName("script")[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	$("#googleSignIn")
+		.attr("data-onsuccess", "onSignIn");
 
-		$("#googleSignIn").attr("data-onsuccess","onSignIn");
+	$("#search_query_nav")
+		.keyup(function (event) {
 
-		$("#search_query_nav")
-			.keyup(function (event) {
+			if (event.keyCode === 13) {
 
-				if (event.keyCode === 13) {
+				$("#searchBtn_nav")
+					.click();
 
-					$("#searchBtn_nav")
-						.click();
+			}
 
-				}
+		});
 
-			});
+	$("#search_query_sideBar")
+		.keyup(function (event) {
 
+			if (event.keyCode === 13) {
 
-		$("#search_query_sideBar")
-			.keyup(function (event) {
+				$("#searchBtn_nav")
+					.click();
 
+			}
 
-				if (event.keyCode === 13) {
+		});
 
-					$("#searchBtn_nav")
-						.click();
-
-				}
-
-			});
-
-	});
+}
 
 window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+/**
+ * Runs this function when the iframe api loads, so I can run a function on state change
+ * @returns {undefined} No return value
+ */
 function onYouTubeIframeAPIReady () {
 
 	for (let i = 0; i <= 20; i++) {
@@ -234,23 +254,22 @@ function onYouTubeIframeAPIReady () {
 				"onStateChange": onPlayerStateChange
 			},
 			host: "https://www.youtube.com",
+			origin: "https://trailerscentral.herokuapp.com"
 
 		});
 
 	}
 
 }
-
-
+/**
+ * When the state of a video changes, this function triggers - changing size of the columns and adding the blur behind the videos on play and reverse on pause
+ * @param  {Object} event event information
+ * @returns {undefined} No return value -> instead updates page
+ */
 function onPlayerStateChange (event) {
 
-	// changeBorderColor(event.data);
-
-
-	// here do the required css.
+	// on play
 	if (event.data == 1) {
-
-		// document.getElementById("rows").classList.add("blur");
 
 		document.getElementById("col" + event.target["a"]["id"].substring(5))
 			.classList.remove("col-lg");
@@ -266,6 +285,7 @@ function onPlayerStateChange (event) {
 
 	} else if (event.data == 2 || event.data == 0) {
 
+		// on pause or stop
 		document.getElementById("col" + event.target["a"]["id"].substring(5))
 			.classList.remove("col-lg-6");
 		document.getElementById("col" + event.target["a"]["id"].substring(5))
@@ -285,7 +305,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	regularSignIn();
 	let collapseBtn = document.getElementById("sidebarCollapse");
-
+	/**
+	 * Collapses the sidebar through changing active classes
+	 * @returns {undefined} No return value
+	 */
 	function collapse () {
 
 		let body = document.getElementById("body");
@@ -299,14 +322,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	collapseBtn.addEventListener("click", collapse);
-	document.getElementById("signOutBtn").addEventListener("click",signOut);
-
+	document.getElementById("signOutBtn")
+		.addEventListener("click", signOut);
+	/**
+	 * Fetches the requested channel's trailers
+	 * @param  {String} channel name of channel
+	 * @returns {Array} the response from the server -> should be array of video information from the channel provided
+	 */
 	async function requestChannelData (channel) {
 
 		try {
 
 			// let response = await fetch("http://localhost:8080/channeldata?channel=" + channel);
-			let response = await fetch("https://trailerscentral.herokuapp.com/channeldata?channel=" + channel);
+			let response = await fetch("https://trailerscentral.herokuapp.com/channeldata?channel=" +
+				channel);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -319,7 +348,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 
 	}
-
+	/**
+	 * Fetches the recent trailers
+	 * @param  {Number} page either 1 or 2 to request which page the user is on from the JSON stored on the server
+	 * @returns {Array} the response from the server -> should be array of recent trailer video information
+	 */
 	async function requestData (page) {
 
 		try {
@@ -333,13 +366,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		} catch (e) {
 
-
 			alert(e);
 
 		}
 
 	}
-
+	/**
+	 * Fetches video information for relating to the trailer for the search query
+	 * @param  {string} query The search query when searching for a trailer
+	 * @returns {Array} the response from the server -> should be array of video information from the search query provided - should be 4-6 in length
+	 */
 	async function requestSearchData (query) {
 
 		try {
@@ -360,8 +396,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 
 	}
-
-	function getRecents (page,initial) {
+	/**
+	 * Uses the requested recent trailer info to update the iframes on screen
+	 * @param  {Number} page -> page number to request from
+	 * @param  {boolean} initial -> Is the page just loading
+	 * @returns {undefined} No return value -> instead updates cards on screen
+	 */
+	function getRecents (page, initial) {
 
 		requestData(page)
 			.then(function (videoData) {
@@ -374,14 +415,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 				if (page == 1) {
 
-					document.getElementById("nextPage").classList.remove("hide");
-					document.getElementById("backPage").classList.add("hide");
+					document.getElementById("nextPage")
+						.classList.remove("hide");
+					document.getElementById("backPage")
+						.classList.add("hide");
 
-				}
-				else if (page == 2) {
+				} else if (page == 2) {
 
-					document.getElementById("nextPage").classList.add("hide");
-					document.getElementById("backPage").classList.remove("hide");
+					document.getElementById("nextPage")
+						.classList.add("hide");
+					document.getElementById("backPage")
+						.classList.remove("hide");
 
 				}
 				console.log(videoData);
@@ -396,14 +440,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 						let frame = document.getElementById("video" + i);
 						frame.src = "https://www.youtube.com/embed/" + videoData[i - 1]["id"]["videoId"] +
-						// "?enablejsapi=1&origin=http://localhost:8080";
-						"?enablejsapi=1";
+							// "?enablejsapi=1&origin=http://localhost:8080";
+							"?enablejsapi=1";
 
 						let title = document.getElementById("title" + i);
 						title.innerHTML = videoData[i - 1]["snippet"]["title"];
 
-					}
-					else{
+					} else {
 
 						document.getElementById("video" + i)
 							.style.display = "none";
@@ -430,34 +473,52 @@ document.addEventListener("DOMContentLoaded", function () {
 			})
 			.catch(e => alert(e));
 
-
 	}
 
-	getRecents(1,true);
-
+	getRecents(1, true); // -> runs on load
+	/**
+	 * Runs get recents, when moving to the next page (page 2)<br>
+	 * Moves user to top of page
+	 * @returns {undefined} No return value -> instead updates page to page 2
+	 */
 	function nextPage () {
 
 		$(document)
 			.scrollTop(0);
-		getRecents(2,false);
-
+		getRecents(2, false);
 
 	}
+
+	/**
+	 * Runs get recents, when moving to the original page (page 1)<br>
+	 * Moves user to top of page
+	 * @returns {undefined} No return value -> instead updates page to page 1
+	 */
 	function backPage () {
 
 		$(document)
 			.scrollTop(0);
-		getRecents(1,false);
+		getRecents(1, false);
 
 	}
 
-
-	document.getElementById("nextPage").addEventListener("click",nextPage);
-	document.getElementById("backPage").addEventListener("click",backPage);
-
+	document.getElementById("nextPage")
+		.addEventListener("click", nextPage);
+	document.getElementById("backPage")
+		.addEventListener("click", backPage);
+	/**
+	 * Ran when the search button is clicked<br>
+	 * Gets the value from either search box<br>
+	 * Runs function to request search query from server<br>
+	 * Updates videos to show search query<br>
+	 * Hides other cards<br>
+	 * @returns {undefined} No return value -> instead updates page to new search items
+	 */
 	function search () {
 
-		let q = document.getElementById("search_query_sideBar").value || document.getElementById("search_query_nav").value;
+		let q = document.getElementById("search_query_sideBar")
+			.value || document.getElementById("search_query_nav")
+			.value;
 
 		console.log(q);
 		if (q != "") {
@@ -471,11 +532,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					}
 
-					document.getElementById("nextPage").classList.add("hide");
-					document.getElementById("backPage").classList.add("hide");
-					document.getElementById("search_query_sideBar").value = "";
-					document.getElementById("search_query_nav").value = "";
-					console.log(videoData);
+					document.getElementById("nextPage")
+						.classList.add("hide");
+					document.getElementById("backPage")
+						.classList.add("hide");
+					document.getElementById("search_query_sideBar")
+						.value = "";
+					document.getElementById("search_query_nav")
+						.value = "";
+					console.log(videoData.length);
 					for (let i = 1; i <= 4; i++) {
 
 						let frame = document.getElementById("video" + i);
@@ -509,13 +574,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					}
 
-
-				}).catch(e=>alert(e));
+				})
+				.catch(e => alert(e));
 
 		}
 
 	}
-
+	/**
+	 * Updates page for requested channel data
+	 * @param  {String} q name of channel to request data for
+	 * @returns {undefined} No return value -> instead updates page to new channel trailers
+	 */
 	async function channel (q) {
 
 		if (q != "") {
@@ -529,9 +598,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					}
 
-
-					document.getElementById("nextPage").classList.add("hide");
-					document.getElementById("backPage").classList.add("hide");
+					document.getElementById("nextPage")
+						.classList.add("hide");
+					document.getElementById("backPage")
+						.classList.add("hide");
 					console.log(videoData);
 					for (let i = 1; i <= 20; i++) {
 
@@ -564,17 +634,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					}
 
-
-				}).catch(e=>alert(e));
+				})
+				.catch(e => alert(e));
 
 		}
 
 	}
 
+	// links search function with search btns
 	document.getElementById("searchBtn_nav")
 		.addEventListener("click", search);
 	document.getElementById("searchBtn_sideBar")
 		.addEventListener("click", search);
+
+
+	// links channel buttons with corresponding channel function -> called with anonymous function
 	document.getElementById("Disney")
 		.addEventListener("click", function () {
 
@@ -656,14 +730,23 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.getElementById("Home")
 		.addEventListener("click", function () {
 
-			getRecents(1);
+			getRecents(1,false);
 
 		});
 
-	// let gSignOut = document.getElementById("gSignOut");
-	// gSignOut.addEventListener("click",signOut);
 
-
+	/**
+	 * Register function - ran on button click<br>
+	 * Takes information from registration form,<br>
+	 * Checks the information - ie for empty input boxes and whether the passwords match etc<br>
+	 * Runs check email - returns a true or false for whether the account exists on the server<br>
+	 * If the account doesn't exist then it checks the users password,<br>
+	 * Posts the information to the server on /register - with the given form data<br>
+	 * $.post is used to post the data to the server without changing the access token in the header<br>
+	 * The page then customises to suit the signed in user<br>
+	 * If the account does exist - this updates in the header to show this and the function returns
+	 * @returns {undefined} No return value -> instead updates page with given customise form data
+	 */
 	async function register () {
 
 		let title = document.getElementById("RegTitle");
@@ -687,7 +770,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		}
 
-		checkEmail(email.value,title)
+		checkEmail(email.value, title)
 			.then(function (exists) {
 
 				if (exists == undefined) {
@@ -700,49 +783,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
 					if (checkPassword(password)) {
 
-						let selectedChannels = $("#channelSelect").val() || channels;
+						let selectedChannels = $("#channelSelect")
+							.val() || channels;
 
 						// $.post("http://localhost:8080/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
-						$.post("https://trailerscentral.herokuapp.com/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
+						$.post("https://trailerscentral.herokuapp.com/register", { fName: fname.value,
+							lName: lname.value, email: email.value, password: password.value,
+							prefs: selectedChannels }),function (resp) {
+
+							resp = JSON.parse(resp);
+							setCookie("Token", resp["token"]);
+
+						};
 						email.value = "";
 						password.value = "";
 						confPwd.value = "";
 						title.innerHTML = "Create Account";
 						lname.value = "";
 						updateOnSignIn();
-						customisePage(selectedChannels,fname.value);
+						customisePage(selectedChannels, fname.value);
 						fname.value = "";
-						getToken(email.value).then(function (response) {
 
-							response = JSON.parse(response);
-							setCookie("Token", response["token"]);
 
-						});
+					} else {
 
-					}
-					else {
-
-						title.innerHTML = "Create Account - The password doesn't meet the requirements" || "";
+						title.innerHTML =
+							"Create Account - The password doesn't meet the requirements" || "";
 
 					}
 
-				}
-
-				else {
+				} else {
 
 					title.innerHTML = "Create Account - The account already exists" || "";
 					email.value = "";
 
 				}
 
-			}).catch(e=>alert(e));
-
+			})
+			.catch(e => alert(e));
 
 	}
 
-	document.getElementById("registerBtn").addEventListener("click",register);
-
-
+	document.getElementById("registerBtn")
+		.addEventListener("click", register);
+	/**
+	 * Gets the form data, does a quick check<br>
+	 * Then posts the data to the server, which provides a JSON as a response,<br>
+	 * result["exists"] is used to see whether the account exists or not (for more custom error messages),<br>
+	 * result["correctPassword"] provides a boolean with such information,<br>
+	 * result["token"] provides the access token to use when making other post requests to the server<br>
+	 * Page then customises appropriately
+	 * @returns {undefined} No return value -> instead updates page with accounts customised data
+	 */
 	async function logIn () {
 
 		let email = document.getElementById("email");
@@ -752,29 +844,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			return;
 
-		}
-		else {
+		} else {
 
 			// $.post("http://localhost:8080/login",{email: email.value, pword:pword.value},function (result) {
-			$.post("https://trailerscentral.herokuapp.com/login",{email: email.value, pword:pword.value},function (result) {
+			$.post("https://trailerscentral.herokuapp.com/login", { email: email.value, pword: pword
+				.value },
+			function (result) {
 
 				if (result["exists"] && result["correctPassword"]) {
-
 
 					email.value = "";
 					pword.value = "";
 					title.innerHTML = "Log in";
 					updateOnSignIn();
-					customisePage(result["prefs"],result["fName"]);
+					customisePage(result["prefs"], result["fName"]);
 					setCookie("Token", result["token"]);
 
-				}
-				else if (result["exists"] && !result["correctPassword"]) {
+				} else if (result["exists"] && !result["correctPassword"]) {
 
 					title.innerHTML = "Log in - The password is incorrect for this account";
 
-				}
-				else if (!result["exists"] && !result["correctPassword"]) {
+				} else if (!result["exists"] && !result["correctPassword"]) {
 
 					title.innerHTML = "Log in - The account doesn't exist";
 
@@ -782,14 +872,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			});
 
-
 		}
 
 	}
-	document.getElementById("logInBtn").addEventListener("click",logIn);
-
+	document.getElementById("logInBtn")
+		.addEventListener("click", logIn);
+	/**
+	 * When the user is signed in - ie has a valid token<br>
+	 * They can update their preferences - this sends their new preferences to my server<br>
+	 * $.ajax is used to post the preferences ($.ajax is used instead of $.post as I need to send my access token in the header of the request)
+	 * @returns {undefined} No return value -> instead updates page with new prefs data
+	 */
 	async function updatePrefs () {
-
 
 		let title = document.getElementById("prefTitle");
 
@@ -797,13 +891,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			return;
 
-		}
+		} else {
 
-
-		else {
-
-
-			let newPrefs = $("#updateChannelSelect").val() || channels;
+			let newPrefs = $("#updateChannelSelect")
+				.val() || channels;
 			$.ajax({
 				// url: "http://localhost:8080/prefs",
 				url: "https://trailerscentral.herokuapp.com/prefs",
@@ -811,40 +902,46 @@ document.addEventListener("DOMContentLoaded", function () {
 				// "x-access-token":getCookie("Token"),
 				headers: {
 					"Content-Type": "application/x-www-form-urlencoded",
-					"x-access-token": getCookie("Token")   // If your header name has spaces or any other char not appropriate
+					"x-access-token": getCookie(
+						"Token") // If your header name has spaces or any other char not appropriate
 				},
 				data: {
 					prefs: newPrefs
 				},
 				dataType: "json",
+				/**
+				 * Customises page with new prefs if successful - if unsuccessful - it alerts the user
+				 * @param  {Object} result JSON response from server
+				 * @returns {undefined} No return value -> instead updates page with new prefs data
+				 */
 				success: function (result) {
 
 					if (result["success"]) {
 
 						title.innerHTML = "Log in";
-						customisePage(newPrefs,result["fName"]);
+						customisePage(newPrefs, result["fName"]);
 
-					}
-					else{
+					} else {
 
 						alert("unable to update preferences");
 
 					}
 
-
 				}
 			});
-
 
 		}
 
 	}
-	document.getElementById("updatePrefsBtn").addEventListener("click",updatePrefs);
-
+	document.getElementById("updatePrefsBtn")
+		.addEventListener("click", updatePrefs);
 
 });
-
-
+/**
+ * Takes inputed password and checks its string for whether it contains 6-20 letters, and must contain at least one letter, capital letter, and number
+ * @param  {String} input string password in password box
+ * @returns {boolean} boolean for whether password is ok or not
+ */
 function checkPassword (input) {
 
 	let passExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -852,15 +949,22 @@ function checkPassword (input) {
 
 		return true;
 
-	}
-	else {
+	} else {
 
 		return false;
 
 	}
 
 }
-async function checkEmail (input,title) {
+/**
+ * Takes inputed email and checks whether it is a well-formed email with regex<br>
+ * If so the email is sent to the server with a fetch method, to check whether the account already exists in the server -> sends back JSON with true or false aspect<br>
+ * Otherwise the title is updated with to inform the user of what has gone wrong
+ * @param  {Object} input the inputbox of the email
+ * @param  {Object} title the header html box
+ * @returns {Object} JSON of whether the account exists
+ */
+async function checkEmail (input, title) {
 
 	// disabled as the the /" captures " (which shouldnt be in email) when regexing the email
 	// eslint-disable-next-line no-useless-escape
@@ -878,16 +982,13 @@ async function checkEmail (input,title) {
 			free = JSON.parse(free);
 			return free["exists"];
 
-		}
-
-		catch(e) {
+		} catch (e) {
 
 			alert(e);
 
 		}
 
-	}
-	else{
+	} else {
 
 		title.innerHTML = "Create Account - The email is incorrect" || "";
 
@@ -895,10 +996,8 @@ async function checkEmail (input,title) {
 
 }
 
-
+// ///////////////////////////// -> did have this script to dynamically update the page on scroll but decided to remove it for memory reasons
 // /////////////////////////////
-// /////////////////////////////
-
 
 // function createVideoRow (num) {
 
@@ -991,29 +1090,38 @@ async function checkEmail (input,title) {
 // 	return col;
 
 // }
+/**
+ * Updates page to only include liked channels, and adds name after welcome title in the sidebar
+ * @param  {Array} selectedChannels array of channels the user likes
+ * @param  {String} fname Name of user
+ * @returns {undefined} No return value -> instead updates page with given new data
+ */
+function customisePage (selectedChannels, fname) {
 
-function customisePage (selectedChannels,fname) {
-
-	$("#accountModal").modal("hide");
-	$("#prefsModal").modal("hide");
+	$("#accountModal")
+		.modal("hide");
+	$("#prefsModal")
+		.modal("hide");
 
 	if (selectedChannels.length >= 1) {
 
-
-		for (let i = 0;i < channels.length;i++) {
+		for (let i = 0; i < channels.length; i++) {
 
 			if (selectedChannels.includes(channels[i])) {
 
 				// document.getElementById(channels[i]).style.display = "block";
-				document.getElementById(channels[i]).parentElement.classList.remove("hide");
-				document.getElementById("pref" + channels[i]).selected = true;
+				document.getElementById(channels[i])
+					.parentElement.classList.remove("hide");
+				document.getElementById("pref" + channels[i])
+					.selected = true;
 
-			}
-			else {
+			} else {
 
 				// document.getElementById(channels[i]).style.display = "none";
-				document.getElementById(channels[i]).parentElement.classList.add("hide");
-				document.getElementById("pref" + channels[i]).selected = false;
+				document.getElementById(channels[i])
+					.parentElement.classList.add("hide");
+				document.getElementById("pref" + channels[i])
+					.selected = false;
 				// document.getElementById(channels[i]).style.height = "0px";
 
 			}
@@ -1025,21 +1133,27 @@ function customisePage (selectedChannels,fname) {
 	let accntName = document.getElementById("accntName");
 	if (accntName.innerHTML == "-" || fname == " " || accntName.innerHTML == " ") {
 
-		document.getElementById("accntName").innerHTML = fname;
-		document.getElementById("accntName").classList.remove("hide");
+		document.getElementById("accntName")
+			.innerHTML = fname;
+		document.getElementById("accntName")
+			.classList.remove("hide");
 
 	}
 
 }
-
-
+/**
+ * When user signs in - this function runs<br>
+ * Updates the sign in button and what it does<br>
+ * Unhides the sign out btn
+ * @returns {undefined} No return value -> instead updates sign in button's data and links
+ */
 function updateOnSignIn () {
 
 	let signInBtn = document.getElementById("signInBtn");
 	signInBtn.innerHTML = "Preferences";
 	let signOutBtn = document.getElementById("signOutBtn");
 	signOutBtn.classList.remove("hide");
-	$("#signInBtn").attr("data-target","#prefsModal");
-
+	$("#signInBtn")
+		.attr("data-target", "#prefsModal");
 
 }
