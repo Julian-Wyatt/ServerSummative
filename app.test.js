@@ -1,11 +1,12 @@
 "use strict";
 
 const request = require("supertest");
-const app = require("./app.js").app;
+const appJS = require("./app.js");
 
+const app = appJS.app;
 let token = null;
 
-describe("Test the main page service", () => {
+describe("Test the main page service in client folder", () => {
 
 	test("GET / succeeds", () => {
 
@@ -22,6 +23,13 @@ describe("Test the main page service", () => {
 			.expect("Content-type", /html/);
 
 	});
+	test("GET / returns favicon", () => {
+
+		return request(app)
+			.get("/favicon.ico")
+			.expect("Content-type", /ico/);
+
+	});
 
 	test("GET / includes Trailers Central", () => {
 
@@ -30,14 +38,7 @@ describe("Test the main page service", () => {
 			.expect(/Trailers Central/);
 
 	});
-	test("GET /favicon.ico succeeds and returns image ", () => {
 
-		return request(app)
-			.get("/favicon.ico")
-			.expect(200)
-			.expect("Content-type",/image/);
-
-	});
 	test("GET /placeholder.png succeeds and returns png ", () => {
 
 		return request(app)
@@ -47,6 +48,31 @@ describe("Test the main page service", () => {
 
 	});
 
+
+	test("GET /googlef50573ce84d3ee44.html succeeds and returns html", () => {
+
+		return request(app)
+			.get("/googlef50573ce84d3ee44.html")
+			.expect(200)
+			.expect("Content-type",/html/);
+
+	});
+	test("GET /index.js succeeds and returns javascript", () => {
+
+		return request(app)
+			.get("/index.js")
+			.expect(200)
+			.expect("Content-type",/javascript/);
+
+	});
+	test("GET /style.css succeeds and returns css", () => {
+
+		return request(app)
+			.get("/style.css")
+			.expect(200)
+			.expect("Content-type",/css/);
+
+	});
 
 });
 
@@ -80,10 +106,33 @@ describe("Test the youtube api interaction", () => {
 			.expect(422);
 
 	});
-	test("GET /recent succeeds and returns JSON", (done) => {
+	test("GET /recent succeeds and returns page 1 JSON", (done) => {
 
 		return request(app)
 			.get("/recent?page=1")
+			.expect(200)
+			.expect("Content-type",/json/)
+			.expect(function (res) {
+
+				if (res.body.length != 20) {
+
+					throw new Error ("page 1 doesn't have a length of 20");
+
+				}
+
+			})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("GET /recent succeeds and returns page 2 JSON", (done) => {
+
+		return request(app)
+			.get("/recent?page=2")
 			.expect(200)
 			.expect("Content-type",/json/)
 			.end(function (err) {
@@ -145,6 +194,27 @@ describe("Test the youtube api interaction", () => {
 
 	});
 
+	jest.useFakeTimers();
+	test("Test recent interval code", (done) => {
+
+		const saveRecents = appJS.intervalRecents;
+		saveRecents();
+		jest.advanceTimersByTime(1000 * 60 * 46);
+		expect(setInterval).toHaveBeenCalledTimes(2);
+		clearTimeout(saveRecents);
+		done();
+
+	});
+	test("Test channel interval code", (done) => {
+
+		const saveChannels = appJS.intervalChannels;
+		saveChannels();
+		jest.advanceTimersByTime(1000 * 60 * 46);
+		expect(setInterval).toHaveBeenCalledTimes(1);
+		clearTimeout(saveChannels);
+		done();
+
+	});
 
 	// need to add timing tests fo setinterval functions///////
 
@@ -186,6 +256,25 @@ describe("Test the registration post methods and whether the account is free", (
 			.set("Content-Type", "application/x-www-form-urlencoded")
 			.send(params)
 			.expect(200)
+			.expect("Content-type",/json/)
+			.expect(function (res) {
+
+				if (res.body.auth != true) {
+
+					throw new Error("auth value isn't true");
+
+				}
+				if (!res.body.token) {
+
+					throw new Error("haven't received token");
+
+				} else {
+
+					token = res.body.token;
+
+				}
+
+			})
 			.end(function (err) {
 
 				if (err) return done(err);
@@ -240,39 +329,6 @@ describe("Test the registration post methods and whether the account is free", (
 
 	});
 
-	// only fails on server error
-	test("GET /newToken succeeds - token received", (done) => {
-
-		return request(app)
-			.get("/newToken")
-			.expect(200)
-			.expect(function (res) {
-
-				if (res.body.auth != true) {
-
-					throw new Error("auth value isn't true");
-
-				}
-				if (!res.body.token) {
-
-					throw new Error("haven't received token");
-
-				} else {
-
-					token = res.body.token;
-
-				}
-
-			})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
 
 });
 
@@ -298,12 +354,117 @@ describe("Test the post interaction for preferences", () => {
 			});
 
 	});
-	test("GET /prefs succeed - return JSON", (done) => {
+	test("GET /prefs succeeds using email - return JSON", (done) => {
 
 		return request(app)
 			.get("/prefs?email=Mock%40account.co.uk")
 			.expect(200)
 			.expect("Content-type",/json/)
+			.expect(function (res) {
+
+				if (res.body.prefs[0] !=  "Pixar") {
+
+					console.log(res.body.prefs);
+					throw new Error("prefs isnt 'Pixar'");
+
+				}
+				if (res.body.prefs[1] != "Marvel") {
+
+					throw new Error ("prefs 1 isnt 'Marvel'");
+
+				}
+				if (res.body.prefs[2] !=  "DC") {
+
+					console.log(res.body.prefs);
+					throw new Error("prefs isnt 'DC'");
+
+				}
+				if (res.body.prefs[3] != "Netflix") {
+
+					throw new Error ("prefs 1 isnt 'Netflix'");
+
+				}
+				if (res.body.prefs[4] !=  "FOX") {
+
+					console.log(res.body.prefs);
+					throw new Error("prefs isnt 'FOX'");
+
+				}
+				if (res.body.prefs.length != 5) {
+
+					throw new Error ("prefs length is wrong");
+
+				}
+
+			})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("GET /prefs fails using token - returns JSON", (done) => {
+
+		return request(app)
+			.get("/prefs")
+			.set("x-access-token", "34")
+			.expect(500)
+			.expect("Content-type",/json/)
+			.expect({ "auth": false, "message": "Failed to authenticate token." })
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("GET /prefs succeeds using token - returns JSON", (done) => {
+
+		return request(app)
+			.get("/prefs")
+			.set("x-access-token", token)
+			.expect(200)
+			.expect("Content-type",/json/)
+			.expect(function (res) {
+
+				if (res.body.prefs[0] !=  "Pixar") {
+
+					console.log(res.body.prefs);
+					throw new Error("prefs isnt 'Pixar'");
+
+				}
+				if (res.body.prefs[1] != "Marvel") {
+
+					throw new Error ("prefs 1 isnt 'Marvel'");
+
+				}
+				if (res.body.prefs[2] !=  "DC") {
+
+					console.log(res.body.prefs);
+					throw new Error("prefs isnt 'DC'");
+
+				}
+				if (res.body.prefs[3] != "Netflix") {
+
+					throw new Error ("prefs 1 isnt 'Netflix'");
+
+				}
+				if (res.body.prefs[4] !=  "FOX") {
+
+					console.log(res.body.prefs);
+					throw new Error("prefs isnt 'FOX'");
+
+				}
+				if (res.body.prefs.length != 5) {
+
+					throw new Error ("prefs length is wrong");
+
+				}
+
+			})
 			.end(function (err) {
 
 				if (err) return done(err);
@@ -343,6 +504,22 @@ describe("Test the post interaction for preferences", () => {
 			});
 
 	});
+	test("POST /prefs fails - invalid token", (done) => {
+
+		return request(app)
+			.post("/prefs")
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send({"prefs": ["Marvel","DC"]})
+			.set("x-access-token","34")
+			.expect(500)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
 	test("POST /prefs succeeds - token and query provided", (done) => {
 
 		return request(app)
@@ -351,6 +528,7 @@ describe("Test the post interaction for preferences", () => {
 			.send({"prefs": ["Marvel","DC"]})
 			.set("x-access-token", token)
 			.expect(200)
+			.expect({"success":true})
 			.end(function (err) {
 
 				if (err) return done(err);
@@ -445,8 +623,10 @@ describe("Test the /login post method", () => {
 					throw new Error("name isn't Mock");
 
 				}
+
 				if (res.body.prefs[0] !=  "Marvel") {
 
+					console.log(res.body.prefs);
 					throw new Error("prefs isnt 'Marvel'");
 
 				}
@@ -482,6 +662,179 @@ describe("Test the /login post method", () => {
 			});
 
 	});
+
+});
+
+describe("Test the /login post method", () => {
+
+	test("POST /login fails - no query", (done) => {
+
+		return request(app)
+			.post("/login")
+			.expect(422)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("POST /login fails - account does not exist", (done) => {
+
+
+		const params = {
+			email: "mock@account.ac.uk",
+			pword: "mocK01",
+		};
+
+		return request(app)
+			.post("/login")
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send(params)
+			.expect(400)
+			.expect({"exists":false, "correctPassword":false})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+	test("POST /login fails - account password is incorrect", (done) => {
+
+
+		const params = {
+			email: "mock@account.co.uk",
+			pword: "mock01",
+		};
+
+		return request(app)
+			.post("/login")
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send(params)
+			.expect(401)
+			.expect({"exists":true, "correctPassword":false})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+
+	test("POST /login succeeds - account password is correct and account exists", (done) => {
+
+		const params = {
+			email: "mock@account.co.uk",
+			pword: "mocK01",
+		};
+
+		return request(app)
+			.post("/login")
+			.set("Content-Type", "application/x-www-form-urlencoded")
+			.send(params)
+			.expect(200)
+			.expect(function (res) {
+
+				if (res.body.fName != "Mock") {
+
+					throw new Error("name isn't Mock");
+
+				}
+
+				if (res.body.prefs[0] !=  "Marvel") {
+
+					console.log(res.body.prefs);
+					throw new Error("prefs isnt 'Marvel'");
+
+				}
+				if (res.body.prefs[1] != "DC") {
+
+					throw new Error ("prefs 1 isnt DC");
+
+				}
+				if (res.body.prefs.length != 2) {
+
+					throw new Error ("prefs length is wrong");
+
+				}
+				if (res.body.exists != true) {
+
+					throw new Error("exists isn't true");
+
+				}
+				if (!res.body.token) {
+
+					throw new Error("no token recieved");
+
+				}
+
+
+			})
+			.end(function (err) {
+
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+});
+
+
+describe("Test the /delete post method", () => {
+
+	test("POST /delete fails - no token", (done) => {
+
+		return request(app)
+			.post("/delete")
+			.expect(422)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("POST /delete fails - invalid token", (done) => {
+
+		return request(app)
+			.post("/delete")
+			.set("x-access-token", "34")
+			.expect(500)
+			.expect({"auth": false, "message": "Failed to authenticate token." })
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("POST /delete suceeds", (done) => {
+
+		return request(app)
+			.post("/delete")
+			.set("x-access-token", token)
+			.expect(200)
+			.expect({"success":true})
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
 
 });
 
