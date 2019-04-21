@@ -41,7 +41,21 @@
 		"no-multiple-empty-lines":"error",
 		"spaced-comment":"error",
 		"no-var":"error",
-		"vars-on-top":"error"
+		"vars-on-top":"error",
+		"valid-jsdoc": [1, {
+			"prefer": {
+				"return": "returns"
+			}
+		}],
+		"require-jsdoc": ["error", {
+			"require": {
+				"FunctionDeclaration": true,
+				"MethodDefinition": false,
+				"ClassDeclaration": false,
+				"ArrowFunctionExpression": true,
+				"FunctionExpression": true
+			}
+		}]
 	},
 	"globals": {
 		"YT":"readonly",
