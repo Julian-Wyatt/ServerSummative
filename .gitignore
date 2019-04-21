@@ -7,3 +7,5 @@ google-utils.js
 TrailersCentralAPIkey.json
 .crendentials
 client_secret.json
+coverage
+out
