@@ -153,7 +153,7 @@ async function getPrefs (email) {
 		} else {
 
 			// let response = await fetch("http://localhost:8080/prefs?token=" + tempToken);
-			let response = await fetch("https://trailerscentral.herokuapp.com/prefs?token=" + tempToken);
+			let response = await fetch("https://trailerscentral.herokuapp.com/prefs",{method:"GET",headers:{"x-access-token":tempToken}});
 			let body = await response.text();
 
 			return body;
@@ -935,6 +935,73 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	document.getElementById("updatePrefsBtn")
 		.addEventListener("click", updatePrefs);
+
+	document.getElementById("deleteAccountBtn").addEventListener(function () {
+
+		document.getElementById("deleteAccountYesConfBtn").classList.remove("hide");
+		document.getElementById("deleteAccountNoConfBtn").classList.remove("hide");
+
+	});
+
+
+	/**
+	 * Account is deleted if the user is sure, if not the confirmations are hidden
+	 * @param  {Boolean} sure Boolean value for whether the user is sure to delete their account
+	 * @returns {undefined} No return value -> instead updates page on deletion
+	 */
+	function deleteConf (sure) {
+
+		if (sure) {
+
+			// post delete
+			$.ajax({
+				// url: "http://localhost:8080/delete",
+				url: "https://trailerscentral.herokuapp.com/delete",
+				type: "post",
+				headers: {
+					"x-access-token": getCookie(
+						"Token") // If your header name has spaces or any other char not appropriate
+				},
+				/**
+				 * Customises page with all prefs if successful - if unsuccessful - it alerts the user and page remains the same
+				 * @param  {Object} result JSON response from server
+				 * @returns {undefined} No return value -> instead updates page with new prefs data
+				 */
+				success: function (result) {
+
+					if (result["success"]) {
+
+						signOut();
+
+					} else {
+
+						alert("unable to delete account");
+
+					}
+
+				}
+			});
+
+		}
+		else {
+
+			document.getElementById("deleteAccountNoConfBtn").classList.add("hide");
+			document.getElementById("deleteAccountYesConfBtn").classList.add("hide");
+
+		}
+
+	}
+
+	document.getElementById("deleteAccountYesConfBtn").addEventListener(function () {
+
+		deleteConf(true);
+
+	});
+	document.getElementById("deleteAccountNoConfBtn").addEventListener(function () {
+
+		deleteConf(false);
+
+	});
 
 });
 /**
