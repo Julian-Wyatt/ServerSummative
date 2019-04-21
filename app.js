@@ -8,16 +8,27 @@ let bcrypt = require("bcrypt");
 // const {OAuth2Client} = require("google-auth-library");
 let jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const enforce = require("express-sslify");
-dotenv.config();
 
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// --------------------------------IMPORTANT------------------------------------------------------------------------------------------------
+// used to force https connection when accessing my server ->
+// needs to be annotated out when mocking or running locally!!!!!
+// const enforce = require("express-sslify");
+// app.use(enforce.HTTPS({ trustProtoHeader: true }));
+
+
+dotenv.config();
+// When looking for googlef50573ce84d3ee44.html returns the html file for it
+// used for google search validation
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("client"));
 
-// used only really in testing to find the ID of channels for prefs section in accounts.json and saved in channels.json
-// eslint-disable-next-line no-unused-vars
-function getChannelID (title) {
+/**
+ * makes request to youtube in order to look up channel IDs when creating the channels.JSON file -> <br>
+ * therefore used in development and testing so eslint is disabled
+ * @param  {String} title the title for the channel to look up
+ * @returns {Array} Request should return 3 channels based on the title provided -> this is used to add to channels.json to provide future channel based look-ups
+ */
+function getChannelID (title) { // eslint-disable-line no-unused-vars
 
 
 	searchListByKeyword({"params": {
@@ -31,58 +42,29 @@ function getChannelID (title) {
 		// "videoLicense": "creativeCommon"
 	}});
 
-
-	// change max results sizes once ive sorted repeats and reaction videos
-
-
 }
-app.get("/googlef50573ce84d3ee44.html",function (req,resp) {
 
-	resp.sendFile("client/googlef50573ce84d3ee44.html",{root: __dirname });
-	resp.end();
+app.get("/search",getSearch);
+app.get("/channeldata",getChannelData);
+app.get("/recent", getRecent);
+app.get("/prefs", getPrefs);
+app.post ("/prefs", postPrefs);
+app.post("/register",postRegister);
+app.get("/checkAccount",getCheckAccount);
+app.post("/login", postLogin);
+app.post("/delete", postDeleteAccount);
 
-});
 
-
-/** gets the main html page, css, and the js
- * @param  {} req
- * @param  {} resp
+/**
+ * Gets the trailers for the given search query (req.query.q) <br>
+ * if no query provided then the response is ended with a 422 error code -> Unprocessable Entity <br>
+ * if a query is provided it runs the callTrailers function
+ * @param  {Object} req request JSON
+ * @param {String} req.query.q The search query
+ * @param  {Object} res response JSON
+ * @returns {Array} JSON response which includes array of trailers relating to the search query -> should have response code of 200
  */
-app.get("/",function (req,resp) {
-
-	console.log("arrived on the page");
-
-	resp.sendFile(__dirname + "client/index.html");
-	resp.sendFile(__dirname + "/client/favicon.ico");
-	resp.end();
-
-});
-
-
-// used to get the placeholder image for videos
-app.get("/placeholder.png", function (req, res) {
-
-	res.sendFile(__dirname + "/client/placeholder.png");
-	res.end();
-
-});
-
-app.get("/index.js", function (req, res) {
-
-	res.sendFile(__dirname + "/client/index.js");
-	res.end();
-
-});
-
-app.get("/style.css", function (req, res) {
-
-	res.sendFile(__dirname + "/client/style.css");
-	res.end();
-
-});
-
-// used to search for specific trailers, the query is provided in the URL
-app.get("/search",function (req,res) {
+function getSearch (req,res) {
 
 	if (req.query.q != undefined) {
 
@@ -97,10 +79,20 @@ app.get("/search",function (req,res) {
 
 	}
 
-});
+}
 
-// gets the channel data, ie all trailers from specfic channel
-app.get("/channeldata",function (req,res) {
+
+/**
+ * Gets the channel data for the given channel <br>
+ * This looks up whether the JSON exists in the local JSON files, if not it will run callChannelData to request it from Youtube<br>
+ * If the file exists it will send the file's data as a JSON back as a response <br>
+ * If no channel is provided the 422 error code is provided
+ * @param  {Object} req request JSON
+ * @param  {String} req.query.channel The channel the user wishes to get trailers for
+ * @param  {Object} res response JSON
+ * @returns {Array} channel trailers for the channel specified
+ */
+function getChannelData (req,res) {
 
 	if (req.query.channel != undefined) {
 
@@ -131,10 +123,18 @@ app.get("/channeldata",function (req,res) {
 
 	}
 
-});
+}
 
-// gets recents - typically newest videos from saved in recents.json
-app.get("/recent",function (req,res) {
+/**
+ * Function used to get recent trailers. <br>
+ * The page query is required and will send back trailers relating to which page <br>
+ * ie page 1 is first 20 and page 2 is the rest of the file
+ * @param  {Object} req request JSON
+ * @param  {Number/String} req.query.page The page number to request
+ * @param  {Object} res response JSON
+ * @returns  {Array} An Array containing recent trailer data from Youtube, saved in a local file called recents.json
+ */
+function getRecent (req,res) {
 
 	if (req.query.page == undefined) {
 
@@ -171,22 +171,27 @@ app.get("/recent",function (req,res) {
 
 
 		}
-		else {
-
-			res.statusCode = 422;
-
-		}
 		res.end();
 
 	});
 
 
-});
+}
 
-// gets prerferences and name for specific user
-app.get("/prefs",function (req,res) {
 
-	if (req.query.token == undefined && req.query.email == undefined) {
+/**
+ * Used to get the preferences of a specific user<br>
+ * User is defined by either the req.query.token or req.query.email<br>
+ * I use JSONWebToken to verify the token here -> which hashes the users id into the token<br>
+ * In this instance it unhashes the id out of the token
+ * @param  {Object} req request JSON
+ * @param  {String} req.headers["x-access-token"] The token through which the getPrefs method can be made
+ * @param  {Object} res response JSON
+ * @returns {Object} JSON back as a response which contains: the users prefs and their name
+ */
+function getPrefs (req,res) {
+
+	if (req.headers["x-access-token"] == undefined && req.query.email == undefined) {
 
 		res.statusCode = 422;
 		res.end();
@@ -203,9 +208,9 @@ app.get("/prefs",function (req,res) {
 		}
 		accounts = JSON.parse(accounts);
 
-		if (req.query.token) {
+		if (req.headers["x-access-token"]) {
 
-			jwt.verify(req.query.token, process.env.secret, function (err, decoded) {
+			jwt.verify(req.headers["x-access-token"], process.env.secret, function (err, decoded) {
 
 				if (err) {
 
@@ -244,8 +249,9 @@ app.get("/prefs",function (req,res) {
 
 	});
 
-});
+}
 
+// -> old prefs post
 // updates prefs for user if their email and password are correct
 // app.post ("/prefs", function (req,res) {
 
@@ -325,8 +331,18 @@ app.get("/prefs",function (req,res) {
 
 // });
 
-// new post prefs with token business
-app.post ("/prefs", function (req,res) {
+
+/**
+ * Checks whether the token is embedded in the header, and whether there is some new prefs array which needs updating<br>
+ * It verifies the token with the secret defined in the environment variables file<br>
+ * Then writes to the users prefs attribute with their new prefs
+ * @param  {Object} req request JSON
+ * @param  {String} req.body.prefs The new preferences the user wants to update
+ * @param  {String} req.headers["x-access-token"] The token through which the getPrefs method can be made
+ * @param  {Object} res response JSON
+ * @returns {Object} JSON back as a response which contains: the users prefs and their name
+ */
+function postPrefs (req,res) {
 
 
 	if (req.headers["x-access-token"] == undefined || req.body.prefs == undefined) {
@@ -379,40 +395,23 @@ app.post ("/prefs", function (req,res) {
 
 	});
 
-});
-
-app.get("/newToken", function (req,res) {
+}
 
 
-	fs.readFile("Database/accounts.json",function (er,accounts) {
-
-		if (er) {
-
-			res.statusCode == 500;
-			res.end();
-			throw new Error(er);
-
-		}
-
-		accounts = JSON.parse(accounts);
-
-
-		let token = jwt.sign({ id: accounts["users"].length }, process.env.secret || "superSecret", {
-			expiresIn: 86400 // expires in 24 hours
-		});
-		res.statusCode = 200;
-		res.json({"auth":true, "token": token});
-		res.end();
-
-
-	});
-
-
-});
-
-
-// adds the account to accounts.json
-app.post("/register",function (req,res) {
+/**
+ * Adds the account to account.json<br>
+ * The account details are sent in req.body -> with required attributes of email and password<br>
+ * I then encrypt the password with industry standard bcrypt hashing
+ * @param  {Object} req request JSON
+ * @param  {String} req.body.email Email for the new account
+ * @param  {String} req.body.password Password for the new account
+ * @param  {String} req.body.fName fName for the new account
+ * @param  {String} req.body.lName lName for the new account
+ * @param  {Array} req.body.prefs prefs for the new account
+ * @param  {Object} res response JSON
+ * @returns {Object} JSON back as a response which contains: the token the new user must use
+ */
+function postRegister (req,res) {
 
 
 	if (req.body.email == undefined || req.body.password == undefined) {
@@ -481,8 +480,11 @@ app.post("/register",function (req,res) {
 						throw new Error(er);
 
 					}
-
-					res.statusCode == 200;
+					let token = jwt.sign({ id: user["id"] }, process.env.secret || "superSecret", {
+						expiresIn: 86400 // expires in 24 hours
+					});
+					res.statusCode = 200;
+					res.json({"auth":true, "token": token});
 					res.end();
 
 				});
@@ -494,10 +496,18 @@ app.post("/register",function (req,res) {
 
 	});
 
-});
+}
 
-// checks if the account exists
-app.get("/checkAccount",function (req,res) {
+
+/**
+ * Checks whether the required email query is there<br>
+ * Then checks whether the account exists by searching through accounts.JSON
+ * @param  {Object} req request JSON
+ * @param  {String} req.query.email the requested email query
+ * @param  {Object} res response JSON
+ * @returns {Object} JSON with exists with a boolean value of true or false for whether the account is there or not
+ */
+function getCheckAccount (req,res) {
 
 	if (req.query.email == undefined) {
 
@@ -506,12 +516,6 @@ app.get("/checkAccount",function (req,res) {
 		return;
 
 	}
-	checkEmail(req.query.email,res);
-
-});
-
-function checkEmail (input,res) {
-
 	fs.readFile("Database/accounts.json",function (er,accounts) {
 
 		if (er) {
@@ -524,7 +528,7 @@ function checkEmail (input,res) {
 		accounts = JSON.parse(accounts);
 		for (let i = 0; i < accounts["users"].length; i++) {
 
-			if (accounts["users"][i]["eMail"].toLowerCase() == input.toLowerCase()) {
+			if (accounts["users"][i]["eMail"].toLowerCase() == req.query.email.toLowerCase()) {
 
 				// did have 409 response code but resulted in errors clientside
 				res.statusCode = 200;
@@ -543,8 +547,18 @@ function checkEmail (input,res) {
 
 }
 
-// logs in depending on whether the username and password is correct
-app.post("/login", function (req,res) {
+
+/**
+ * Logs in depending on whether the username and password is correct<br>
+ * The email and password body attributes are required<br>
+ * It then searches for the user with the same email account then runs the bcrypt compare function to check whether the sent password and the stored passwords match
+ * @param  {Object} req request JSON
+ * @param  {String} req.body.email Email for the login request
+ * @param  {String} req.body.pword password for the login request
+ * @param  {Object} res response JSON
+ * @returns {Object} JSON back as a response which contains: name and prefs of user, a new token, whether the password is correct and whether the account exists
+ */
+function postLogin (req,res) {
 
 
 	let email = req.body.email;
@@ -619,7 +633,68 @@ app.post("/login", function (req,res) {
 
 	});
 
-});
+}
+
+/**
+ * When posting to this URL, no body is required but the token is required in the header.<br>
+ * The function will then remove the account linked to the id in the token from the server.
+ * @param  {Object} req request JSON
+ * @param  {String} req.headers["x-access-token"] The token through which the getPrefs method can be made
+ * @param  {Object} res response JSON
+ * @returns {Object} basic success JSON to see whether the process is successful
+ */
+function postDeleteAccount (req,res) {
+
+	if (req.headers["x-access-token"] == undefined) {
+
+		res.statusCode = 422;
+		res.end();
+		return;
+
+	}
+	fs.readFile("Database/accounts.json",function (er,accounts) {
+
+		if (er) {
+
+			res.statusCode == 500;
+			res.end();
+			throw new Error(er);
+
+		}
+
+		jwt.verify(req.headers["x-access-token"] , process.env.secret, function (err, decoded) {
+
+			if (err) {
+
+
+				return res.status(500).send({ auth: false, message: "Failed to authenticate token." });
+
+			}
+
+			accounts = JSON.parse(accounts);
+
+			accounts["users"].splice(decoded["id"] - 1,1);
+			fs.writeFile("Database/accounts.json",JSON.stringify(accounts),function (er) {
+
+				if (er) {
+
+					res.statusCode == 500;
+					res.end();
+					throw new Error(er);
+
+				}
+				res.json({"success":true,});
+				res.end();
+
+			});
+
+
+		});
+
+
+	});
+
+}
 
 
 // ////////////////////////////////////////////////////
@@ -631,12 +706,16 @@ app.post("/login", function (req,res) {
 // TEST THE CODE WITH THIS: setInterval(intervalSavingRecents, 1000 * 60);
 // setInterval(intervalSavingChannels, 1000 * 60 * 60 * 6);
 
-
+/**
+ * Runs with the interval function at the bottom of this file locally<br>
+ * If it is in the morning it requests "Trailers" from Youtube<br>
+ * If it is in the afternoon it requests "Official Trailers" from Youtube<br>
+ * The two requests give slightly different responses<br>
+ * The responses are saved in recent.JSON -> Seen below
+ * @returns {Array} The JSON responses from YT are saved in recent.JSON in a later function
+ */
 function intervalSavingRecents () {
 
-
-	// Authorize a client with the loaded credentials, then call the YouTube API.
-	// See full code sample for authorize() function code.
 	// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
 	let d = new Date();
 	if (d.getHours() < 12) {
@@ -664,11 +743,17 @@ function intervalSavingRecents () {
 		}});
 
 	}
+	intervalRecents();
 
 
 }
 
-
+/**
+ * Runs with the interval function at the bottom of this file locally<br>
+ * Runs for all popular channels as these will have the most requests<br>
+ * This helps limit the number of requests to YT and therefore the total quota for the day<br>
+ * @returns {Array} The JSON responses from YT are stored in files named after the channel they relate to
+ */
 let intervalSavingChannels = function intervalSavingChannels () {
 
 	callChannelData("Disney");
@@ -679,15 +764,20 @@ let intervalSavingChannels = function intervalSavingChannels () {
 	callChannelData("WarnerBros");
 	callChannelData("Sony");
 
+	intervalChannels();
+
 };
-// console.log(process.env.TOKEN_PATH);
-// let SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl","https://www.googleapis.com/auth/youtube"];
-// let TOKEN_DIR = (process.env.TOKEN_PATH) + "/.credentials/";
-// let TOKEN_PATH = TOKEN_DIR + "google-apis-nodejs-quickstart.json";
 
+// https://issuetracker.google.com/128835104 - won't sort output -> ***FIXED***
 
-// https://issuetracker.google.com/128835104 - won't sort output
-
+/**
+ * Checks whether there is a file for the requested channel,<br>
+ * If there is it sends the data for it<br>
+ * If there is not then it requests Youtube for the information, which is sent back through the res object
+ * @param  {String} channel requested channel
+ * @param  {Object} res response JSON
+ * @returns {Arrray} The JSON responses from YT are stored in files named after the channel they relate to
+ */
 function callChannelData (channel,res) {
 
 
@@ -728,22 +818,18 @@ function callChannelData (channel,res) {
 
 
 }
-
+/**
+ * If there is a search query -> then search YT for it <br>
+ * If not return
+ * @param  {Object} res response JSON
+ * @param  {String} q search query
+ * @returns {Array} Sends the requested data back to the client through res
+ */
 function callTrailers (res, q) {
 
 	if (q === undefined) {
 
-		// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
-		// change max results sizes once ive sorted repeats and reaction videos
-		searchListByKeyword({"params": {
-			"maxResults": "50",
-			"part": "snippet",
-			"q": "Trailer",
-			"type": "video",
-			// "publishedAfter":d,
-			// "videoDuration": "short",
-			// "regionCode": "GB"
-		}}, res);
+		return;
 
 	}else {
 
@@ -758,6 +844,7 @@ function callTrailers (res, q) {
 
 	}
 
+	// old server side code which used client secret for auth
 	// fs.readFile("client_secret.json", function processClientSecrets (err, content) {
 
 	// 	if (err) {
@@ -887,7 +974,13 @@ function callTrailers (res, q) {
 
 // }
 
-
+/**
+ * Youtube's function to remove parameters that arent in use so we dont get<br>
+ * ?snippet=<br>
+ * for the snippet section, instead the snippet query wouldnt exist
+ * @param  {Object} params the current params to send to youtube
+ * @returns {Object} The new params with empty values removed
+ */
 function removeEmptyParameters (params) {
 
 	for (let p in params) {
@@ -903,8 +996,16 @@ function removeEmptyParameters (params) {
 
 }
 
-// https://www.googleapis.com/youtube/v3/search?part=snippet&q=avengers&type=video&key=[-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDtBTJBDMNdSk2P\n3zRMmS9TRY3vg76wG1WyGc7BXXzySOi/IvHl9sM39VPnJJxxBv8NZcC9i/AGs0Rz\nMhfbJUJNzGUd5DG/O3eL2oXVo18VlzvvJG9Pfp5cNe470i/HjO4QDf7olEkHViaI\nxTk0CLm6AtDNaBvz0PPufdJ0bLblkE0x3DbC4j03CR5qylrvFO3L14lhJsycpfns\ny5Lsno99rAoOE3SvSdWdJcCt96JekIhwsbpd519BZH1N4DP9HPc98eXhStFpF4pO\nCGhduvvUB1TuXEPVWTNRFMv+FuQgRl4dmw6sr1xmfpSqaRdGxgPB9b4IgELQTFMQ\niFzsGD0NAgMBAAECggEADZobvTHvUD5AXz5O8QpldeDq+VDVM6QN8e+bNuuXjQv0\nF2v499qGb4Krsvsd4zqkjm9FdVs/hhLpnbbFObVUrcRKFUIQPMo73RHIVm9OuJ16\nOgocPTKmAeKybkpspYYH73HuLAi+fCZMhdLTqpHJnswkkXUlDYPzS796wWWvxVK7\nY1OnAuIwvy5eDa3Xoyib5PttEH5ErlSraqZJQEL66oxSSw3C1xOVKY2VgT7F7feb\nZDjoEyijcmGCUlCzXs+yIuEswh3WJkaN5GR6ZsSuURWj2tAUgyAv++sXNt9hlr1Q\nrzAqdGxuD5/Fi/JSuNMfq7zr67l5WjhlWJ88o3qYgQKBgQD8i2x3qxaXE26wcATR\nQEoVNHmmYV3ms6rDwMNNRKVZVUh0eik5V3lykk6x1ES7K65FKWQ5DHDJwEWQjhN2\n8O7XcVsjTRHFjTggwf1SxtW6lqZyPPn9VrSu7S0ggbGLiP81actB5UwQUBeph5il\niIxSflEPBkiVMnX13MEYZgLkYQKBgQDwQ2VyAS774NJdXjmAoTry5JnZv17n6Uw6\nga5LViQmVIxeAnO8AC7Y/kPTPD2uCkeFp80tujzj2SJqnfgM7GNsm486sopM2vCf\nL/3TRoC2zrRW/RQuLkalMPxaa63OVrBcmm7UKHWTAnhDkv9dcvQpjExsiAKmFPjE\ndWxhZ00YLQKBgQDbjCHZzuSupfgebuPhPfCpipsPJ6pIe31C/HtM2xacGOYKTIE2\nFnPARK0hL5Yo2YqBGcDFT6ll2z8eskT9q+sXZLaEc+W1RlW7NKoTokQAGCPPQG9b\n7Frbj9khX16IHaswNi67tKlxrQ9FFFqB3bmPpby2QRIskle2TBmaKmTtQQKBgQDO\nXtVwCxw0NXP7xsdVeSeNIlYT9pCqWnWje2geRatfURgQV8LZJL8Ym63ebsv8BdBR\nOUS/lkxe2U76jR1W3GS6ERQBswGf6h7sXOiE5PYCD6JPZapD0HPVyDG56OutZECw\nCeZQTUBQObrbMBQwTGD0nxG1102PIkxbUxD4ySYrMQKBgHkYPa2D0sGioc4gD3V8\nPFP0LkLR8uMsbw6iPBjHa/gzxWqg6tIq1eF0Swv4c+TfbdmY1Yj+4U0+krq92u3v\n30t+oz8vGIcj7au/bbrQYzosVffGwipQNjWenjV7a9yMDnYA+cgAWeOXVDEITAK3\nmvUPz78+OVhqKHchP8ybfcID\n-----END PRIVATE KEY-----\n]
-
+/**
+ * Function which makes request to youtube api<br>
+ * Handles response appropriately<br>
+ * Either sends the response back to client -> if res exists<br>
+ * Or saves in a predefined JSON file
+ * @param  {Object} requestData - the params and filters that I am searching by
+ * @param  {Object} res response JSON
+ * @param  {String} channel - channel name if necessary
+ * @returns {Object} Using the response received from Google, either Saves the data or sends the data back to the client
+ */
 function searchListByKeyword (requestData, res, channel) {
 
 	let service = google.youtube("v3");
@@ -920,6 +1021,7 @@ function searchListByKeyword (requestData, res, channel) {
 				if (res != undefined) {
 
 					res.statusCode == 500;
+					res.send(err);
 					res.end();
 
 				}
@@ -935,7 +1037,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 				let title = response["data"]["items"][i]["snippet"]["title"].toLowerCase();
 
-				if (title.includes("reaction") || title.includes("total dhamaal") || title.includes("dil diyan gallan") || title.includes("vingadores:  ultimato") || title.includes("madhura raja") || title.includes("kesari") || title.includes("pm narendra modi") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in") || title.includes("breakdown") || title.includes("kalank") || title.includes("de de pyaar de") || title.includes("tashkent files")) {
+				if (title.includes("reaction") || title.includes("ayogya") || title.includes("total dhamaal") || title.includes("dil diyan gallan") || title.includes("vingadores:  ultimato") || title.includes("madhura raja") || title.includes("kesari") || title.includes("pm narendra modi") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in") || title.includes("breakdown") || title.includes("kalank") || title.includes("de de pyaar de") || title.includes("tashkent files")) {
 
 					if (title.includes("movieclips")) {
 
@@ -988,6 +1090,7 @@ function searchListByKeyword (requestData, res, channel) {
 						if (res != undefined) {
 
 							res.statusCode == 500;
+							res.send(err);
 							res.end();
 
 						}
@@ -1007,6 +1110,7 @@ function searchListByKeyword (requestData, res, channel) {
 			if (res != undefined) {
 
 				res.statusCode == 500;
+				res.send(err);
 				res.end();
 
 			}
@@ -1019,6 +1123,30 @@ function searchListByKeyword (requestData, res, channel) {
 
 }
 
-module.exports = {app, intervalSavingRecents , intervalSavingChannels};
+/**
+ * Calls the intervalSavingRecentsFunction every 45 mins<br>
+ * This calls the Youtube API and stores the result JSON in recents.json<br>
+ * @returns {undefined} no return value as function repeats -> however requested data is saved in recent.json
+ */
+function intervalRecents () {
+
+	setTimeout(intervalSavingRecents, 1000 * 60 * 45);
+
+}
+/**
+ * interval recents function<br>
+ * saves new channels every 6 hrs<br>
+ * @returns {undefined} no return value as function repeats -> however the requested data is saved in JSONs
+ */
+function intervalChannels () {
+
+	// setInterval(intervalSavingRecents, 1000 * 4);
+	// setInterval(intervalSavingChannels, 1000 * 4);
+
+	setTimeout(intervalSavingChannels, 1000 * 60 * 60 * 6);
+
+}
+
+module.exports = {app, intervalRecents , intervalChannels};
 
 
