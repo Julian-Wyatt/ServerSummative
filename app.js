@@ -1037,7 +1037,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 				let title = response["data"]["items"][i]["snippet"]["title"].toLowerCase();
 
-				if (title.includes("reaction") || title.includes("ayogya") || title.includes("total dhamaal") || title.includes("dil diyan gallan") || title.includes("vingadores:  ultimato") || title.includes("madhura raja") || title.includes("kesari") || title.includes("pm narendra modi") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in") || title.includes("breakdown") || title.includes("kalank") || title.includes("de de pyaar de") || title.includes("tashkent files")) {
+				if (title.includes("reaction") || title.includes("ayogya") || title.includes("marudhar express") || title.includes("bharat") || title.includes("baarish") || title.includes("total dhamaal") || title.includes("dil diyan gallan") || title.includes("vingadores:  ultimato") || title.includes("madhura raja") || title.includes("kesari") || title.includes("pm narendra modi") || title.includes("movieclips") || title.includes("honest") || title.includes("everything you missed in") || title.includes("breakdown") || title.includes("kalank") || title.includes("de de pyaar de") || title.includes("tashkent files")) {
 
 					if (title.includes("movieclips")) {
 
