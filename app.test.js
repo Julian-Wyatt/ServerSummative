@@ -257,7 +257,7 @@ describe("Test the registration post methods and whether the account is free", (
 			.post("/register")
 			.set("Content-Type", "application/x-www-form-urlencoded")
 			.send(params)
-			.expect(200)
+			.expect(201)
 			.expect("Content-type",/json/)
 			.expect(function (res) {
 
@@ -529,7 +529,7 @@ describe("Test the post interaction for preferences", () => {
 			.set("Content-Type", "application/x-www-form-urlencoded")
 			.send({"prefs": ["Marvel","DC"]})
 			.set("x-access-token", token)
-			.expect(200)
+			.expect(201)
 			.expect({"success":true})
 			.end(function (err) {
 
@@ -571,7 +571,7 @@ describe("Test the /login post method", () => {
 			.post("/login")
 			.set("Content-Type", "application/x-www-form-urlencoded")
 			.send(params)
-			.expect(400)
+			.expect(200)
 			.expect({"exists":false, "correctPassword":false})
 			.end(function (err) {
 
@@ -588,29 +588,6 @@ describe("Test the /login post method", () => {
 		const params = {
 			email: "mock@account.co.uk",
 			pword: "mock01",
-		};
-
-		return request(app)
-			.post("/login")
-			.set("Content-Type", "application/x-www-form-urlencoded")
-			.send(params)
-			.expect(401)
-			.expect({"exists":true, "correctPassword":false})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
-
-	test("POST /login succeeds - account password is correct and account exists", (done) => {
-
-		const params = {
-			email: "mock@account.co.uk",
-			pword: "mocK01",
 		};
 
 		return request(app)
@@ -618,106 +595,6 @@ describe("Test the /login post method", () => {
 			.set("Content-Type", "application/x-www-form-urlencoded")
 			.send(params)
 			.expect(200)
-			.expect(function (res) {
-
-				if (res.body.fName != "Mock") {
-
-					throw new Error("name isn't Mock");
-
-				}
-
-				if (res.body.prefs[0] !=  "Marvel") {
-
-					console.log(res.body.prefs);
-					throw new Error("prefs isnt 'Marvel'");
-
-				}
-				if (res.body.prefs[1] != "DC") {
-
-					throw new Error ("prefs 1 isnt DC");
-
-				}
-				if (res.body.prefs.length != 2) {
-
-					throw new Error ("prefs length is wrong");
-
-				}
-				if (res.body.exists != true) {
-
-					throw new Error("exists isn't true");
-
-				}
-				if (!res.body.token) {
-
-					throw new Error("no token recieved");
-
-				}
-
-
-			})
-			.end(function (err) {
-
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
-});
-
-describe("Test the /login post method", () => {
-
-	test("POST /login fails - no query", (done) => {
-
-		return request(app)
-			.post("/login")
-			.expect(422)
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-	test("POST /login fails - account does not exist", (done) => {
-
-
-		const params = {
-			email: "mock@account.ac.uk",
-			pword: "mocK01",
-		};
-
-		return request(app)
-			.post("/login")
-			.set("Content-Type", "application/x-www-form-urlencoded")
-			.send(params)
-			.expect(400)
-			.expect({"exists":false, "correctPassword":false})
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
-
-	test("POST /login fails - account password is incorrect", (done) => {
-
-
-		const params = {
-			email: "mock@account.co.uk",
-			pword: "mock01",
-		};
-
-		return request(app)
-			.post("/login")
-			.set("Content-Type", "application/x-www-form-urlencoded")
-			.send(params)
-			.expect(401)
 			.expect({"exists":true, "correctPassword":false})
 			.end(function (err) {
 

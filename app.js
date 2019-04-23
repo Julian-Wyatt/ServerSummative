@@ -241,7 +241,7 @@ function getPrefs (req,res) {
 
 			}
 			// account doesn't exist
-			res.statusCode = 200;
+			res.statusCode = 404;
 			res.end();
 
 		}
@@ -605,7 +605,7 @@ function postLogin (req,res) {
 							expiresIn: 86400 // expires in 24 hours
 						});
 						let response = {"fName":accounts["users"][i]["fName"], "prefs": accounts["users"][i]["prefs"], "exists":true, "correctPassword":true, "token": token};
-						res.statusCode = 201;
+						res.statusCode = 200;
 						res.json(response);
 
 					}
@@ -1134,6 +1134,7 @@ function searchListByKeyword (requestData, res, channel) {
 function intervalRecents () {
 
 	setTimeout(intervalSavingRecents, 1000 * 60 * 45);
+	// setTimeout(intervalSavingRecents, 1000 * 3);
 
 }
 /**
@@ -1143,12 +1144,12 @@ function intervalRecents () {
  */
 function intervalChannels () {
 
-	// setInterval(intervalSavingRecents, 1000 * 4);
-	// setInterval(intervalSavingChannels, 1000 * 4);
-
 	setTimeout(intervalSavingChannels, 1000 * 60 * 60 * 6);
 
+	// setTimeout(intervalSavingChannels, 1000 * 4);
+
 }
+
 
 module.exports = {app, intervalRecents , intervalChannels};
 
