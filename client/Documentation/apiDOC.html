@@ -25,7 +25,10 @@
 
 			<header>
 
-				<h4>Note: All response formats for GET/ POST requests are of type JSON</h4>
+				<h4>Note: All response formats for GET/ POST requests are of type JSON<br>
+					Also, all missing required parameters give a 422 response code, all requests should give a 200 on successful request, 
+					all updated and changed requests will give 201, all bad requests give 4--, and all server failures give 500 codes
+				</h4>
 
 
 			</header>
@@ -1939,7 +1942,9 @@ $.ajax({
 	</div>
 
 	<nav>
-		<h2 ><a href="../index.html" style="color:#4d4e53">Back to Trailers Central</a></h2><h3>Trailers Central API Documentation</h3>
+		<h2 ><a href="../index.html" style="color:#4d4e53">Back to Trailers Central</a></h2>
+		<h3><a href="./clientDOC.html" style="color:#4D4E53">Client-side Documentation</a></h3>
+		<h3>Trailers Central API Documentation</h3>
 		<ul>
 			<li><a href="apiDOC.html#callChannelData">callChannelData</a></li>
 			<li><a href="apiDOC.html#callTrailers">callTrailers</a></li>

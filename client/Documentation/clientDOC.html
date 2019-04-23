@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>JSDoc: Global</title>
+
+	<script src="scripts/prettify/prettify.js"> </script>
+	<script src="scripts/prettify/lang-css.js"> </script>
+	<!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+	<link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+	<div id="main">
+
+		<h1 class="page-title">Client-side Reference</h1>
+
+
+		<section>
+
+			<header>
+
+				<h2></h2>
+
+
+			</header>
+
+			<article>
+				<div class="container-overview">
+
+
+					<dl class="details">
+
+
+					</dl>
+
+
+				</div>
+
+
+				<h3 class="subsection-title">Methods</h3>
+
+
+				<h4 class="name" id="checkEmail"><span class="type-signature">(async) </span>checkEmail<span class="signature">(input, title)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+
+				<div class="description">
+					Takes inputed email and checks whether it is a well-formed email with regex<br>
+If so the email is sent to the server with a fetch method, to check whether the account already exists in the server -> sends back JSON with true or false aspect<br>
+Otherwise the title is updated with to inform the user of what has gone wrong
+</div>
+
+
+					<h5>Parameters:</h5>
+
+
+					<table class="params">
+						<thead>
+							<tr>
+
+								<th>Name</th>
+
+
+								<th>Type</th>
+
+
+								<th class="last">Description</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+
+							<tr>
+
+								<td class="name"><code>input</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">Object</span>
+
+
+								</td>
+
+
+								<td class="description last">the inputbox of the email</td>
+							</tr>
+
+
+							<tr>
+
+								<td class="name"><code>title</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">Object</span>
+
+
+								</td>
+
+
+								<td class="description last">the header html box</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+
+					<dl class="details">
+
+
+						<dt class="tag-source">Source:</dt>
+						<dd class="tag-source">
+							<ul class="dummy">
+								<li>
+									<a href="index.js.html">index.js</a>, <a href="index.js.html#line1032">line 1032</a>
+								</li>
+							</ul>
+						</dd>
+
+
+					</dl>
+
+
+					<h5>Returns:</h5>
+
+
+					<div class="param-desc">
+						JSON of whether the account exists
+					</div>
+
+
+					<dl>
+						<dt>
+        Type
+    </dt>
+						<dd>
+
+							<span class="param-type">Object</span>
+
+
+						</dd>
+					</dl>
+
+
+					<h4 class="name" id="checkPassword"><span class="type-signature"></span>checkPassword<span class="signature">(input)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+
+					<div class="description">
+						Takes inputed password and checks its string for whether it contains 6-20 letters, and must
+						contain at least one letter, capital letter, and number
+					</div>
+
+
+					<h5>Parameters:</h5>
+
+
+					<table class="params">
+						<thead>
+							<tr>
+
+								<th>Name</th>
+
+
+								<th>Type</th>
+
+
+								<th class="last">Description</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+
+							<tr>
+
+								<td class="name"><code>input</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">String</span>
+
+
+								</td>
+
+
+								<td class="description last">string password in password box</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+
+					<dl class="details">
+
+
+						<dt class="tag-source">Source:</dt>
+						<dd class="tag-source">
+							<ul class="dummy">
+								<li>
+									<a href="index.js.html">index.js</a>, <a href="index.js.html#line1010">line 1010</a>
+								</li>
+							</ul>
+						</dd>
+
+
+					</dl>
+
+
+					<h5>Returns:</h5>
+
+
+					<div class="param-desc">
+						boolean for whether password is ok or not
+					</div>
+
+
+					<dl>
+						<dt>
+        Type
+    </dt>
+						<dd>
+
+							<span class="param-type">boolean</span>
+
+
+						</dd>
+					</dl>
+
+
+					<h4 class="name" id="customisePage"><span class="type-signature"></span>customisePage<span class="signature">(selectedChannels, fname)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+					<div class="description">
+						Updates page to only include liked channels, and adds name after welcome title in the sidebar
+					</div>
+
+
+					<h5>Parameters:</h5>
+
+
+					<table class="params">
+						<thead>
+							<tr>
+
+								<th>Name</th>
+
+
+								<th>Type</th>
+
+
+								<th class="last">Description</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+
+							<tr>
+
+								<td class="name"><code>selectedChannels</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">Array</span>
+
+
+								</td>
+
+
+								<td class="description last">array of channels the user likes</td>
+							</tr>
+
+
+							<tr>
+
+								<td class="name"><code>fname</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">String</span>
+
+
+								</td>
+
+
+								<td class="description last">Name of user</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+
+					<dl class="details">
+
+
+						<dt class="tag-source">Source:</dt>
+						<dd class="tag-source">
+							<ul class="dummy">
+								<li>
+									<a href="index.js.html">index.js</a>, <a href="index.js.html#line1164">line 1164</a>
+								</li>
+							</ul>
+						</dd>
+
+
+					</dl>
+
+
+					<h5>Returns:</h5>
+
+
+					<div class="param-desc">
+						No return value -> instead updates page with given new data
+					</div>
+
+
+					<dl>
+						<dt>
+        Type
+    </dt>
+						<dd>
+
+							<span class="param-type">undefined</span>
+
+
+						</dd>
+					</dl>
+
+
+					<h4 class="name" id="getCookie"><span class="type-signature"></span>getCookie<span class="signature">(cToken)</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+
+					<div class="description">
+						Looks up cookie with key cToken
+					</div>
+
+
+					<h5>Parameters:</h5>
+
+
+					<table class="params">
+						<thead>
+							<tr>
+
+								<th>Name</th>
+
+
+								<th>Type</th>
+
+
+								<th class="last">Description</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+
+							<tr>
+
+								<td class="name"><code>cToken</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">String</span>
+
+
+								</td>
+
+
+								<td class="description last">name of cookie key</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+
+					<dl class="details">
+
+
+						<dt class="tag-source">Source:</dt>
+						<dd class="tag-source">
+							<ul class="dummy">
+								<li>
+									<a href="index.js.html">index.js</a>, <a href="index.js.html#line112">line 112</a>
+								</li>
+							</ul>
+						</dd>
+
+
+					</dl>
+
+
+					<h5>Returns:</h5>
+
+
+					<div class="param-desc">
+						Either empty string (if it doesnt exist) or the value of the cookie
+					</div>
+
+
+					<dl>
+						<dt>
+        Type
+    </dt>
+						<dd>
+
+							<span class="param-type">String</span>
+
+
+						</dd>
+					</dl>
+
+
+					<h4 class="name" id="getPrefs"><span class="type-signature">(async) </span>getPrefs<span class="signature">(email)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+
+					<div class="description">
+						Gets the user accounts preferences if they have an account or a valid token
+					</div>
+
+
+					<h5>Parameters:</h5>
+
+
+					<table class="params">
+						<thead>
+							<tr>
+
+								<th>Name</th>
+
+
+								<th>Type</th>
+
+
+								<th class="last">Description</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+
+							<tr>
+
+								<td class="name"><code>email</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">String</span>
+
+
+								</td>
+
+
+								<td class="description last">email account for preferences</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+
+					<dl class="details">
+
+
+						<dt class="tag-source">Source:</dt>
+						<dd class="tag-source">
+							<ul class="dummy">
+								<li>
+									<a href="index.js.html">index.js</a>, <a href="index.js.html#line140">line 140</a>
+								</li>
+							</ul>
+						</dd>
+
+
+					</dl>
+
+
+					<h5>Returns:</h5>
+
+
+					<div class="param-desc">
+						response from server -> array of preferences
+					</div>
+
+
+					<dl>
+						<dt>
+        Type
+    </dt>
+						<dd>
+
+							<span class="param-type">Object</span>
+
+
+						</dd>
+					</dl>
+
+
+					<h4 class="name" id="onJQueryReady"><span class="type-signature"></span>onJQueryReady<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+					<div class="description">
+						JQuery which moves the page to the top on load,<br>
+adds the youtube iframe api script,<br>
+assigns the topmost function of this script to the data-onsuccess attribute of the html id,<br>
+finally links the search buttons such that if you click enter, the search is submitted
+</div>
+
+
+						<dl class="details">
+
+
+							<dt class="tag-source">Source:</dt>
+							<dd class="tag-source">
+								<ul class="dummy">
+									<li>
+										<a href="index.js.html">index.js</a>,
+										<a href="index.js.html#line203">line 203</a>
+									</li>
+								</ul>
+							</dd>
+
+
+						</dl>
+
+
+						<h5>Returns:</h5>
+
+
+						<div class="param-desc">
+							No return value
+						</div>
+
+
+						<dl>
+							<dt>
+        Type
+    </dt>
+							<dd>
+
+								<span class="param-type">undefined</span>
+
+
+							</dd>
+						</dl>
+
+
+						<h4 class="name" id="onPlayerStateChange"><span class="type-signature"></span>onPlayerStateChange<span class="signature">(event)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+						<div class="description">
+							When the state of a video changes, this function triggers - changing size of the columns and
+							adding the blur behind the videos on play and reverse on pause
+						</div>
+
+
+						<h5>Parameters:</h5>
+
+
+						<table class="params">
+							<thead>
+								<tr>
+
+									<th>Name</th>
+
+
+									<th>Type</th>
+
+
+									<th class="last">Description</th>
+								</tr>
+							</thead>
+
+							<tbody>
+
+
+								<tr>
+
+									<td class="name"><code>event</code></td>
+
+
+									<td class="type">
+
+
+										<span class="param-type">Object</span>
+
+
+									</td>
+
+
+									<td class="description last">event information</td>
+								</tr>
+
+
+							</tbody>
+						</table>
+
+
+						<dl class="details">
+
+
+							<dt class="tag-source">Source:</dt>
+							<dd class="tag-source">
+								<ul class="dummy">
+									<li>
+										<a href="index.js.html">index.js</a>,
+										<a href="index.js.html#line269">line 269</a>
+									</li>
+								</ul>
+							</dd>
+
+
+						</dl>
+
+
+						<h5>Returns:</h5>
+
+
+						<div class="param-desc">
+							No return value -> instead updates page
+						</div>
+
+
+						<dl>
+							<dt>
+        Type
+    </dt>
+							<dd>
+
+								<span class="param-type">undefined</span>
+
+
+							</dd>
+						</dl>
+
+
+						<h4 class="name" id="onSignIn"><span class="type-signature"></span>onSignIn<span class="signature">(googleUser)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+						<div class="description">
+							Runs function when user signs into google<br>
+This runs the typical sign in process of checking whether the account exists<br>
+Then updates the preferences if necessary, and runs the customise page functions<br>
+eslint disabled as it is defined in html and in JQuery section below approx line 210
+</div>
+
+
+							<h5>Parameters:</h5>
+
+
+							<table class="params">
+								<thead>
+									<tr>
+
+										<th>Name</th>
+
+
+										<th>Type</th>
+
+
+										<th class="last">Description</th>
+									</tr>
+								</thead>
+
+								<tbody>
+
+
+									<tr>
+
+										<td class="name"><code>googleUser</code></td>
+
+
+										<td class="type">
+
+
+											<span class="param-type">Object</span>
+
+
+										</td>
+
+
+										<td class="description last">the instance of google sign in</td>
+									</tr>
+
+
+								</tbody>
+							</table>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="index.js.html">index.js</a>,
+											<a href="index.js.html#line14">line 14</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Returns:</h5>
+
+
+							<div class="param-desc">
+								Nothing is returned when the function runs -> instead the page updates
+							</div>
+
+
+							<dl>
+								<dt>
+        Type
+    </dt>
+								<dd>
+
+									<span class="param-type">undefined</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="onYouTubeIframeAPIReady"><span class="type-signature"></span>onYouTubeIframeAPIReady<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+							<div class="description">
+								Runs this function when the iframe api loads, so I can run a function on state change
+							</div>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="index.js.html">index.js</a>,
+											<a href="index.js.html#line248">line 248</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Returns:</h5>
+
+
+							<div class="param-desc">
+								No return value
+							</div>
+
+
+							<dl>
+								<dt>
+        Type
+    </dt>
+								<dd>
+
+									<span class="param-type">undefined</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="regularSignIn"><span class="type-signature"></span>regularSignIn<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+							<div class="description">
+								Signs user in, should a cookie be valid
+							</div>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="index.js.html">index.js</a>,
+											<a href="index.js.html#line66">line 66</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Returns:</h5>
+
+
+							<div class="param-desc">
+								No return value -> instead page updates
+							</div>
+
+
+							<dl>
+								<dt>
+        Type
+    </dt>
+								<dd>
+
+									<span class="param-type">undefined</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="setCookie"><span class="type-signature"></span>setCookie<span class="signature">(cToken, cTokenValue)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+							<div class="description">
+								Saves a value in a cookie - only used in order to save the access token
+							</div>
+
+
+							<h5>Parameters:</h5>
+
+
+							<table class="params">
+								<thead>
+									<tr>
+
+										<th>Name</th>
+
+
+										<th>Type</th>
+
+
+										<th class="last">Description</th>
+									</tr>
+								</thead>
+
+								<tbody>
+
+
+									<tr>
+
+										<td class="name"><code>cToken</code></td>
+
+
+										<td class="type">
+
+
+											<span class="param-type">String</span>
+
+
+										</td>
+
+
+										<td class="description last">The name of the token cookie key</td>
+									</tr>
+
+
+									<tr>
+
+										<td class="name"><code>cTokenValue</code></td>
+
+
+										<td class="type">
+
+
+											<span class="param-type">String</span>
+
+
+										</td>
+
+
+										<td class="description last">The value of the token cookie</td>
+									</tr>
+
+
+								</tbody>
+							</table>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="index.js.html">index.js</a>,
+											<a href="index.js.html#line99">line 99</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Returns:</h5>
+
+
+							<div class="param-desc">
+								No return value
+							</div>
+
+
+							<dl>
+								<dt>
+        Type
+    </dt>
+								<dd>
+
+									<span class="param-type">undefined</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="signOut"><span class="type-signature"></span>signOut<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+							<div class="description">
+								The regular sign out function which signs the user out of google if possible
+							</div>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="index.js.html">index.js</a>,
+											<a href="index.js.html#line174">line 174</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Returns:</h5>
+
+
+							<div class="param-desc">
+								returns the page back to normal viewing
+							</div>
+
+
+							<dl>
+								<dt>
+        Type
+    </dt>
+								<dd>
+
+									<span class="param-type">undefined</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="success"><span class="type-signature"></span>success<span class="signature">(result)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+							<div class="description">
+								Customises page with new prefs if successful - if unsuccessful - it alerts the user
+							</div>
+
+
+							<h5>Parameters:</h5>
+
+
+							<table class="params">
+								<thead>
+									<tr>
+
+										<th>Name</th>
+
+
+										<th>Type</th>
+
+
+										<th class="last">Description</th>
+									</tr>
+								</thead>
+
+								<tbody>
+
+
+									<tr>
+
+										<td class="name"><code>result</code></td>
+
+
+										<td class="type">
+
+
+											<span class="param-type">Object</span>
+
+
+										</td>
+
+
+										<td class="description last">JSON response from server</td>
+									</tr>
+
+
+								</tbody>
+							</table>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="index.js.html">index.js</a>,
+											<a href="index.js.html#line918">line 918</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Returns:</h5>
+
+
+							<div class="param-desc">
+								No return value -> instead updates page with new prefs data
+							</div>
+
+
+							<dl>
+								<dt>
+        Type
+    </dt>
+								<dd>
+
+									<span class="param-type">undefined</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="success"><span class="type-signature"></span>success<span class="signature">(result)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+							<div class="description">
+								Customises page with all prefs if successful - if unsuccessful - it alerts the user and
+								page remains the same
+							</div>
+
+
+							<h5>Parameters:</h5>
+
+
+							<table class="params">
+								<thead>
+									<tr>
+
+										<th>Name</th>
+
+
+										<th>Type</th>
+
+
+										<th class="last">Description</th>
+									</tr>
+								</thead>
+
+								<tbody>
+
+
+									<tr>
+
+										<td class="name"><code>result</code></td>
+
+
+										<td class="type">
+
+
+											<span class="param-type">Object</span>
+
+
+										</td>
+
+
+										<td class="description last">JSON response from server</td>
+									</tr>
+
+
+								</tbody>
+							</table>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="index.js.html">index.js</a>,
+											<a href="index.js.html#line969">line 969</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Returns:</h5>
+
+
+							<div class="param-desc">
+								No return value -> instead updates page with new prefs data
+							</div>
+
+
+							<dl>
+								<dt>
+        Type
+    </dt>
+								<dd>
+
+									<span class="param-type">undefined</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="updateOnSignIn"><span class="type-signature"></span>updateOnSignIn<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+							<div class="description">
+								When user signs in - this function runs<br>
+Updates the sign in button and what it does<br>
+Unhides the sign out btn
+</div>
+
+
+								<dl class="details">
+
+
+									<dt class="tag-source">Source:</dt>
+									<dd class="tag-source">
+										<ul class="dummy">
+											<li>
+												<a href="index.js.html">index.js</a>,
+												<a href="index.js.html#line1215">line 1215</a>
+											</li>
+										</ul>
+									</dd>
+
+
+								</dl>
+
+
+								<h5>Returns:</h5>
+
+
+								<div class="param-desc">
+									No return value -> instead updates sign in button's data and links
+								</div>
+
+
+								<dl>
+									<dt>
+        Type
+    </dt>
+									<dd>
+
+										<span class="param-type">undefined</span>
+
+
+									</dd>
+								</dl>
+
+
+			</article>
+
+		</section>
+
+
+	</div>
+
+	<nav>
+		<h2><a href="../index.html" style="color:#4D4E53">Back to Trailers Central</a></h2>
+		<h3><a href="./apiDOC.html" style="color:#4D4E53">Trailers Central API Documentation</a></h3>
+		<h3>Client-side Documentation</h3>
+		
+		<ul>
+			<li><a href="clientDOC.html#checkEmail">checkEmail</a></li>
+			<li><a href="clientDOC.html#checkPassword">checkPassword</a></li>
+			<li><a href="clientDOC.html#customisePage">customisePage</a></li>
+			<li><a href="clientDOC.html#getCookie">getCookie</a></li>
+			<li><a href="clientDOC.html#getPrefs">getPrefs</a></li>
+			<li><a href="clientDOC.html#onJQueryReady">onJQueryReady</a></li>
+			<li><a href="clientDOC.html#onPlayerStateChange">onPlayerStateChange</a></li>
+			<li><a href="clientDOC.html#onSignIn">onSignIn</a></li>
+			<li><a href="clientDOC.html#onYouTubeIframeAPIReady">onYouTubeIframeAPIReady</a></li>
+			<li><a href="clientDOC.html#regularSignIn">regularSignIn</a></li>
+			<li><a href="clientDOC.html#setCookie">setCookie</a></li>
+			<li><a href="clientDOC.html#signOut">signOut</a></li>
+			<li><a href="clientDOC.html#success">success</a></li>
+			<li><a href="clientDOC.html#updateOnSignIn">updateOnSignIn</a></li>
+		</ul>
+	</nav>
+
+	<br class="clear">
+
+	<footer>
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 23 2019 16:43:56
+		GMT+0100 (British Summer Time)
+	</footer>
+
+	<script>
+		prettyPrint();
+
+	</script>
+	<script src="scripts/linenumber.js"> </script>
+</body>
+
+</html>

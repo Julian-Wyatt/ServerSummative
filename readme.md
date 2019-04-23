@@ -38,12 +38,14 @@ However for submission most of the footer will contain placeholder text for anon
 I decided to use the youtube iframe api. This allows me to use event listeners for actions such as playing and stopping videos. Therefore I decided that on play would result in changing the bootstrap card size in the column, while also blurring the background in the process. The background only has a faint blur during this and moves down from the top (this is also quite fragile as it is an experimental feature in MDN CSS and they're only available in edge and safari browsers). There are also blurs when trailers move behind the top navbar.  
 
 #Client side code: 
-See full client side code documentation provided on the website
+See full client side code documentation provided on the website:
+
 
 #Known Bugs
 
 
 ##Server-side Documentation
+https://trailerscentral.herokuapp.com/Documentation/apiDOC.html
 
 ##Licensing Links:
 
