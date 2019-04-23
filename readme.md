@@ -5,22 +5,12 @@
 ### Description:
 Webpage which contains trailers that can be liked, and customise to account details and search params
 
-https://icons8.com/icons/set/film - favicon.ico link
-
-Turn adblockers off
-
-Bugs: https://stackoverflow.com/questions/7443578/youtube-iframe-api-how-do-i-control-a-iframe-player-thats-already-in-the-html
-
-Licensing: https://pixabay.com/service/terms/ -> https://pixabay.com/users/wingtilldie-3058071/ -> placeholder.png
-https://www.youtube.com/static?gl=GB&template=terms -> 5.1.A & 5.1.C
-
-Change frame border html attribute on iframes
 
 ## Client-side Documentation
 
 #General instructions and descriptions:
 
-Documentation for website hosted on https://trailerscentral.herokuapp.com:
+Documentation for website hosted on https://trailerscentral.herokuapp.com/Documentation:
 When the page loads you have the main trailers section which is the middle part, along with the sidebar and main navbar.
 By default the website will show the recent trailers, which is sent to the client side by a fetch request for a JSON file. 
 The client side pocesses the recieved JSON and adds the links to the iframes, which automatically update the thumbnails. 
@@ -37,18 +27,29 @@ However for submission most of the footer will contain placeholder text for anon
 #Little extra detail:
 I decided to use the youtube iframe api. This allows me to use event listeners for actions such as playing and stopping videos. Therefore I decided that on play would result in changing the bootstrap card size in the column, while also blurring the background in the process. The background only has a faint blur during this and moves down from the top (this is also quite fragile as it is an experimental feature in MDN CSS and they're only available in edge and safari browsers). There are also blurs when trailers move behind the top navbar.  
 
-#Client side code: 
+#Client-side code: 
 See full client side code documentation provided on the website:
+https://trailerscentral.herokuapp.com/Documentation/clientDOC.html
 
 
 #Known Bugs
+Ad-blockers must be turned off due to further erroring in the console
+The YT Iframe API gives errors in the console such as: 
+Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('https://www.youtube.com') does not match the recipient window's origin ('https://trailerscentral.herokuapp.com').
+A link to fix this is: https://stackoverflow.com/questions/7443578/youtube-iframe-api-how-do-i-control-a-iframe-player-thats-already-in-the-html
 
 
 ##Server-side Documentation
+
+#Server-side code
+See full Server side code documentation provided on the website:
 https://trailerscentral.herokuapp.com/Documentation/apiDOC.html
 
 ##Licensing Links:
 
+Placeholder.png -> https://pixabay.com/service/terms/ -> https://pixabay.com/users/wingtilldie-3058071/
+Youtube's Terms of Service: https://www.youtube.com/static?gl=GB&template=terms -> Relevent sections are: 5.1.A & 5.1.C
+Favicon.ico's link: https://icons8.com/icons/set/film
 
 
 
