@@ -1154,7 +1154,7 @@ function intervalRecents () {
  */
 function intervalChannels () {
 
-	setTimeout(intervalSavingChannels, 1000 * 60 * 60 * 6);
+	setTimeout(intervalSavingChannels, 1000 * 60 * 60 * 8);
 
 	// setTimeout(intervalSavingChannels, 1000 * 4);
 
