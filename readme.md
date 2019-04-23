@@ -1,14 +1,13 @@
 # Server Summative:
 
-## initial commit
+### Website and API Description:
+The Webpage will contain trailers and the user will be able to customise account details and search parameters when searching for specific trailers.
+The API will make all the requests to YT, as well as serving the client side data, and customisation.
 
-### Description:
-Webpage which contains trailers that can be liked, and customise to account details and search params
 
+# Client-side Documentation
 
-## Client-side Documentation
-
-# General instructions and descriptions:
+## General instructions and descriptions:
 
 Documentation for website hosted on https://trailerscentral.herokuapp.com/Documentation:
 
@@ -35,19 +34,19 @@ The footer along the bottom of the page is there for general info, ie a little a
 
 However for submission most of the footer will contain placeholder text for anonymity purposes.
 
-# Little extra detail:
+## Little extra detail:
 I decided to use the youtube iframe api. This allows me to use event listeners for actions such as playing and stopping videos. 
 Therefore I decided that on play would result in changing the bootstrap card size in the column, while also blurring the background in the process. 
 The background only has a faint blur during this and moves down from the top (this is also quite fragile as it is an experimental feature in MDN CSS and they're only available in edge and safari browsers). 
 There are also blurs when trailers move behind the top navbar.  
 
-# Client-side code: 
+## Client-side code: 
 See full client side code documentation provided on the website:
 
 https://trailerscentral.herokuapp.com/Documentation/clientDOC.html
 
 
-## Server-side Documentation
+# Server-side Documentation
 
 For the full server-side code documentation see the link below; this will just be a summary.
 
@@ -90,12 +89,12 @@ postLogin, which will log the user in to the website, using their email and pass
 
 postDeleteAccount, which will delete the account linked to the token which is sent in the header.
 
-# Server-side code
+## Server-side code
 See full Server side code documentation provided on the website:
 
 https://trailerscentral.herokuapp.com/Documentation/apiDOC.html
 
-## Licensing Links:
+# Licensing Links:
 
 Placeholder.png -> https://pixabay.com/service/terms/ -> https://pixabay.com/users/wingtilldie-3058071/
 
