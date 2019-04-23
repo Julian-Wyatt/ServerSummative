@@ -145,7 +145,7 @@ async function getPrefs (email) {
 		if (tempToken == undefined || tempToken == "undefined" || tempToken == "") {
 
 			// let response = await fetch("http://localhost:8080/prefs?email=" + email);
-			let response = await fetch("https://trailerscentral.herokuapp.com/prefs?email=" + email);
+			let response = await fetch("./prefs?email=" + email);
 			let body = await response.text();
 
 			return body;
@@ -153,7 +153,7 @@ async function getPrefs (email) {
 		} else {
 
 			// let response = await fetch("http://localhost:8080/prefs?token=" + tempToken);
-			let response = await fetch("https://trailerscentral.herokuapp.com/prefs",{method:"GET",headers:{"x-access-token":tempToken}});
+			let response = await fetch("./prefs",{method:"GET",headers:{"x-access-token":tempToken}});
 			let body = await response.text();
 
 			return body;
@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		try {
 
 			// let response = await fetch("http://localhost:8080/channeldata?channel=" + channel);
-			let response = await fetch("https://trailerscentral.herokuapp.com/channeldata?channel=" + channel);
+			let response = await fetch("./channeldata?channel=" + channel);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -357,7 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		try {
 
 			// let response = await fetch("http://localhost:8080/recent?page=" + page);
-			let response = await fetch("https://trailerscentral.herokuapp.com/recent?page=" + page);
+			let response = await fetch("./recent?page=" + page);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			query = encodeURIComponent(query);
 
 			// let response = await fetch("http://localhost:8080/search?q=" + query);
-			let response = await fetch("https://trailerscentral.herokuapp.com/search?q=" + query);
+			let response = await fetch("./search?q=" + query);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -786,7 +786,7 @@ document.addEventListener("DOMContentLoaded", function () {
 							.val() || channels;
 
 						// $.post("http://localhost:8080/register",{fName: fname.value,lName: lname.value,email: email.value, password:password.value, prefs:selectedChannels});
-						$.post("https://trailerscentral.herokuapp.com/register", { fName: fname.value,
+						$.post("./register", { fName: fname.value,
 							lName: lname.value, email: email.value, password: password.value,
 							prefs: selectedChannels }),function (resp) {
 
@@ -847,7 +847,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		} else {
 
 			// $.post("http://localhost:8080/login",{email: email.value, pword:pword.value},function (result) {
-			$.post("https://trailerscentral.herokuapp.com/login", { email: email.value, pword: pword
+			$.post("./login", { email: email.value, pword: pword
 				.value },
 			function (result) {
 
@@ -898,7 +898,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				.val() || channels;
 			$.ajax({
 				// url: "http://localhost:8080/prefs",
-				url: "https://trailerscentral.herokuapp.com/prefs",
+				url: "./prefs",
 				type: "post",
 				// "x-access-token":getCookie("Token"),
 				headers: {
@@ -956,7 +956,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			// post delete
 			$.ajax({
 				// url: "http://localhost:8080/delete",
-				url: "https://trailerscentral.herokuapp.com/deleteaccount",
+				url: "./deleteaccount",
 				type: "post",
 				headers: {
 					"x-access-token": getCookie("Token") // If your header name has spaces or any other char not appropriate
@@ -1042,7 +1042,7 @@ async function checkEmail (input, title) {
 		try {
 
 			// let free = await fetch("http://localhost:8080/checkAccount?email=" + email);
-			let free = await fetch("https://trailerscentral.herokuapp.com/checkAccount?email=" + email);
+			let free = await fetch("./checkAccount?email=" + email);
 			free = await free.text();
 			free = JSON.parse(free);
 			return free["exists"];
