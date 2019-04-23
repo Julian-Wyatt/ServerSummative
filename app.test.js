@@ -113,7 +113,7 @@ describe("Test the youtube api interaction", () => {
 
 				}
 
-			})
+			});
 
 	});
 	test("GET /recent succeeds and returns page 1 JSON", (done) => {
