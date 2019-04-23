@@ -851,6 +851,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				.value },
 			function (result) {
 
+				console.log(result);
 				if (result["exists"] && result["correctPassword"]) {
 
 					email.value = "";

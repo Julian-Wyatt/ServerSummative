@@ -627,7 +627,7 @@ function postLogin (req,res) {
 
 		}
 
-		res.statusCode = 400;
+		res.statusCode = 404;
 		res.json({"exists":false, "correctPassword":false});
 		res.end();
 
