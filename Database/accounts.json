@@ -1,1 +1,2 @@
-{"users":[{"fName":"Julian","lName":"Wyatt","eMail":"Julian_wyatt@hotmail.com","password":"$2b$11$O50wNir2puHg4lPl5WvML.GPnXNr8mBPser1JTDccgiGFAaMBcwT2","prefs":["Marvel"],"id":1}]}
+{ "users": [{ "fName": "Julian", "lName": "Wyatt", "eMail": "Julian_wyatt@hotmail.com", "password": "$2b$11$O50wNir2puHg4lPl5WvML.GPnXNr8mBPser1JTDccgiGFAaMBcwT2", "prefs": [
+			"Marvel"], "id": 1 }] }
