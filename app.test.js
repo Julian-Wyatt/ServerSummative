@@ -99,11 +99,21 @@ describe("Test the youtube api interaction", () => {
 			});
 
 	});
-	test("GET /recent fails", () => {
+	test("GET /recent succeeds without page query", () => {
 
 		return request(app)
 			.get("/recent")
-			.expect(422);
+			.expect(200)
+			.expect("Content-type",/json/)
+			.expect(function (res) {
+
+				if (res.body.length != 20) {
+
+					throw new Error ("page 1 doesn't have a length of 20");
+
+				}
+
+			})
 
 	});
 	test("GET /recent succeeds and returns page 1 JSON", (done) => {
@@ -193,6 +203,37 @@ describe("Test the youtube api interaction", () => {
 
 
 	});
+
+	test("GET /channelID succeeds and returns JSON from YT", (done) => {
+
+		return request(app)
+			.get("/channelID?title=Marvel")
+			.expect(200)
+			.expect("Content-type",/json/)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+
+	test("GET /channeldata fails from bad request", (done) => {
+
+		return request(app)
+			.get("/channeldata")
+			.expect(422)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+
+	});
+
 
 	// Couldn't get the timeing functions to test properly
 
