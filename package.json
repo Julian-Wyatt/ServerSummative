@@ -4,7 +4,7 @@
   "description": "webpage which contains trailers that can be commented on, and customise to account details and search params",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "node server.js",
     "pretest": "eslint client/index.js server.js app.js"
   },
