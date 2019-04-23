@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>JSDoc: App.js API Reference</title>
+
+	<script src="scripts/prettify/prettify.js"> </script>
+	<script src="scripts/prettify/lang-css.js"> </script>
+	<!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+	<link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+	<div id="main">
+
+		<h1 class="page-title">Trailer Central API Reference</h1>
+
+
+		<section>
+
+			<header>
+
+				<h4>Note: All response formats for GET/ POST requests are of type JSON</h4>
+
+
+			</header>
+
+			<article>
+				<div class="container-overview">
+
+
+					<dl class="details">
+
+
+					</dl>
+
+
+				</div>
+
+
+				<h3 class="subsection-title">Methods</h3>
+
+
+				<h4 class="name" id="callChannelData"><span class="type-signature"></span>callChannelData<span class="signature">(channel, res)</span><span class="type-signature"> &rarr; {Arrray}</span></h4>
+
+
+				<div class="description">
+					Checks whether there is a file for the requested channel,<br>
+					If there is it sends the data for it<br>
+					If there is not then it requests Youtube for the information, which is sent back through the res object
+				</div>
+
+
+					<h5>Parameters:</h5>
+
+
+					<table class="params">
+						<thead>
+							<tr>
+
+								<th>Name</th>
+
+
+								<th>Type</th>
+
+
+								<th class="last">Description</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+
+							<tr>
+
+								<td class="name"><code>channel</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">String</span>
+
+
+								</td>
+
+
+								<td class="description last">requested channel</td>
+							</tr>
+
+
+							<tr>
+
+								<td class="name"><code>res</code></td>
+
+
+								<td class="type">
+
+
+									<span class="param-type">Object</span>
+
+
+								</td>
+
+
+								<td class="description last">response JSON</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+
+					<dl class="details">
+
+
+						<dt class="tag-source">Source:</dt>
+						<dd class="tag-source">
+							<ul class="dummy">
+								<li>
+									<a href="app.js.html">app.js</a>, <a href="app.js.html#line799">line 799</a>
+								</li>
+							</ul>
+						</dd>
+
+
+					</dl>
+
+
+					<h5>Returns:</h5>
+
+
+					<div class="param-desc">
+						The JSON responses from YT are stored in files named after the channel they relate to or sent
+						back throught the res object (if it isn't undefined)
+					</div>
+
+
+					<dl>
+						<dt>
+        					Type
+    					</dt>
+						<dd>
+
+							<span class="param-type">Arrray</span>
+
+
+						</dd>
+					</dl>
+
+
+					<h4 class="name" id="callTrailers"><span class="type-signature"></span>callTrailers<span class="signature">(res, q)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+
+					<div class="description">
+						If there is a search query -> then search YT for it <br>
+						If not return
+					</div>
+
+
+						<h5>Parameters:</h5>
+
+
+						<table class="params">
+							<thead>
+								<tr>
+
+									<th>Name</th>
+
+
+									<th>Type</th>
+
+
+									<th class="last">Description</th>
+								</tr>
+							</thead>
+
+							<tbody>
+
+
+								<tr>
+
+									<td class="name"><code>res</code></td>
+
+
+									<td class="type">
+
+
+										<span class="param-type">Object</span>
+
+
+									</td>
+
+
+									<td class="description last">response JSON</td>
+								</tr>
+
+
+								<tr>
+
+									<td class="name"><code>q</code></td>
+
+
+									<td class="type">
+
+
+										<span class="param-type">String</span>
+
+
+									</td>
+
+
+									<td class="description last">search query</td>
+								</tr>
+
+
+							</tbody>
+						</table>
+
+
+						<dl class="details">
+
+
+							<dt class="tag-source">Source:</dt>
+							<dd class="tag-source">
+								<ul class="dummy">
+									<li>
+										<a href="app.js.html">app.js</a>, <a href="app.js.html#line846">line 846</a>
+									</li>
+								</ul>
+							</dd>
+
+
+						</dl>
+
+
+						<h5>Returns:</h5>
+
+
+						<div class="param-desc">
+							Sends the requested data back to the client through res
+						</div>
+
+
+						<dl>
+							<dt>
+        						Type
+    						</dt>
+							<dd>
+
+								<span class="param-type">Array</span>
+
+
+							</dd>
+						</dl>
+
+
+						<h4 class="name" id="getChannelData"><span class="type-signature"></span>GET /channeldata</h4>
+
+
+						<div class="description">
+							Gets the channel data for the given channel <br>
+							This looks up whether the JSON exists in the local JSON files, if not it will run callChannelData to request it from Youtube<br>
+							If the file exists it will send the file's data as a JSON back as a response <br>
+							If no channel is provided the 422 error code is provided
+						</div>
+
+							<h5>Resource URL:</h5>
+
+							<code>
+							https://trailerscentral.herokuapp.com/channeldata
+							</code>
+
+
+							<h5>Parameters:</h5>
+
+
+							<table class="params">
+								<thead>
+									<tr>
+
+										<th>Name</th>
+
+
+										<th>Required</th>
+
+
+										<th class="last">Description</th>
+									</tr>
+								</thead>
+
+								<tbody>
+
+
+									<tr>
+
+										<td class="name"><code>channel</code></td>
+
+
+										<td class="type">
+
+
+											<span class="param-type">required</span>
+
+
+										</td>
+
+
+										<td class="description last">The channel the user wishes to get trailers for
+
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+
+
+							<dl class="details">
+
+
+								<dt class="tag-source">Source:</dt>
+								<dd class="tag-source">
+									<ul class="dummy">
+										<li>
+											<a href="app.js.html">app.js</a>, <a href="app.js.html#line109">line 109</a>
+										</li>
+									</ul>
+								</dd>
+
+
+							</dl>
+
+
+							<h5>Example Request:</h5>
+							<code>https://trailerscentral.herokuapp.com/channeldata?channel=marvel</code>
+							<h5>Example Response:</h5>
+							<pre class="prettyprint">
+								<code>
+[
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/A9WCMpjRwxA1yTFMLDVGFP_9pCk\"", "id": { "kind": "youtube#video", "videoId": "361ITvGLq48" }, "snippet": { "publishedAt": "2019-04-20T15:00:01.000Z", "channelId": "UCvC4D8onUfXzvjTOM-dBfEA", "title": "WAR OF THE REALMS #2 Trailer | Marvel Comics", "description": "WAR OF THE REALMS #2 available now! ▻ Subscribe to Marvel: http://bit.ly/WeO3YJ Follow Marvel on Twitter:   https://twitter.com/marvel Like Marvel on ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/361ITvGLq48/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/361ITvGLq48/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/361ITvGLq48/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Marvel Entertainment", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/mGYEDttq82zkgAeUgMmoLmIE81o\"", "id": { "kind": "youtube#video", "videoId": "v0bClKEy1HA" }, "snippet": { "publishedAt": "2019-04-18T16:00:05.000Z", "channelId": "UCvC4D8onUfXzvjTOM-dBfEA", "title": "Marvel Studios’ Avengers: Endgame | “Found” TV Spot", "description": "We have a chance to take it all back.” Marvel Studios' Avengers: Endgame is in theaters April 26. Get your tickets now: www.Fandango.com/AvengersEndgame ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/v0bClKEy1HA/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/v0bClKEy1HA/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/v0bClKEy1HA/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Marvel Entertainment", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/87_1F1IXtnAp2KpU7BuWU7nwwnI\"", "id": { "kind": "youtube#video", "videoId": "S_32rARQ5yw" }, "snippet": { "publishedAt": "2019-04-17T16:00:07.000Z", "channelId": "UCvC4D8onUfXzvjTOM-dBfEA", "title": "Marvel Studios’ Avengers: Endgame | “Awesome” TV Spot", "description": "On April 26, summer begins with the endgame. Get your tickets to Marvel Studios' Avengers: Endgame now: www.Fandango.com/AvengersEndgame ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/S_32rARQ5yw/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/S_32rARQ5yw/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/S_32rARQ5yw/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Marvel Entertainment", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/rLf_-g1OJACUwg7ZLfvKd6SHmJc\"", "id": { "kind": "youtube#video", "videoId": "0jNvJU52LvU" }, "snippet": { "publishedAt": "2019-04-16T14:00:01.000Z", "channelId": "UCvC4D8onUfXzvjTOM-dBfEA", "title": "Marvel Studios’ Avengers: Endgame | “To the End”", "description": "Before we're done, we still have one promise to keep.” Marvel Studios' #AvengersEndgame is in theaters in 10 days. Get your tickets now: www.", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/0jNvJU52LvU/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/0jNvJU52LvU/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/0jNvJU52LvU/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Marvel Entertainment", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/otO-7nn8-_ESG7jY1aXcU9IHVUw\"", "id": { "kind": "youtube#video", "videoId": "81UOofW82FY" }, "snippet": { "publishedAt": "2019-04-11T15:00:00.000Z", "channelId": "UCvC4D8onUfXzvjTOM-dBfEA", "title": "Marvel Studios&#39; Avengers: Endgame | &quot;Mission&quot; Spot", "description": "\"You know your teams. You know your missions.\" Marvel Studios' Avengers: Endgame is in theaters April 26. Get tickets now: www.", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/81UOofW82FY/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/81UOofW82FY/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/81UOofW82FY/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Marvel Entertainment", "liveBroadcastContent": "none" } },
+...]
+								</code>
+							</pre>
+							<dl>
+								<dt>
+									Type
+								</dt>
+								<dd>
+
+									<span class="param-type">Arrray</span>
+
+
+								</dd>
+							</dl>
+
+
+							<h4 class="name" id="getChannelID"><span class="type-signature"></span>GET /channelID</h4>
+
+
+							<div class="description">
+								Makes request to youtube in order to look up channel IDs when creating the channels.JSON
+								file -> <br>
+								Therefore used in development
+							</div>
+								<h5>Resource URL:</h5>
+								<code>https://trailerscentral.herokuapp.com/channelID</code>
+
+								<h5>Parameters:</h5>
+
+
+								<table class="params">
+									<thead>
+										<tr>
+
+											<th>Name</th>
+
+
+											<th>Required</th>
+
+
+											<th class="last">Description</th>
+										</tr>
+									</thead>
+
+									<tbody>
+
+
+										<tr>
+
+											<td class="name"><code>title</code></td>
+
+
+											<td class="type">
+
+
+												<span class="param-type">required</span>
+
+
+											</td>
+
+
+											<td class="description last">The title for the channel to look up</td>
+										</tr>
+
+									</tbody>
+								</table>
+
+
+								<dl class="details">
+
+
+									<dt class="tag-source">Source:</dt>
+									<dd class="tag-source">
+										<ul class="dummy">
+											<li>
+												<a href="app.js.html">app.js</a>,
+												<a href="app.js.html#line33">line 33</a>
+											</li>
+										</ul>
+									</dd>
+
+
+								</dl>
+
+								<h5>Example Request:</h5>
+								<code>https://trailerscentral.herokuapp.com/channelid?title=Disney</code>
+								<h5>Example Response:</h5>
+								<pre class="prettyprint">
+									<code>
+{
+"kind": "youtube#searchListResponse",
+"etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/QL1a_v0S0DCaKqhos15NFnXclC4\"",
+"nextPageToken": "CAMQAA",
+"regionCode": "GB",
+"pageInfo": {
+	"totalResults": 1000000,
+	"resultsPerPage": 3
+},
+"items": [
+	{
+	"kind": "youtube#searchResult",
+	"etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/bldorRAlSH0rmtPT3Q8d9DPNrO4\"",
+	"id": {
+	"kind": "youtube#channel",
+	"channelId": "UCuaFvcY4MhZY3U43mMt1dYQ"
+	},
+	"snippet": {
+	"publishedAt": "2008-11-18T20:34:44.000Z",
+	"channelId": "UCuaFvcY4MhZY3U43mMt1dYQ",
+	"title": "Walt Disney Studios",
+	"description": "Watch all of the latest trailers, clips, and videos from upcoming Disney movies!",
+	"thumbnails": {
+	"default": {
+		"url": "https://yt3.ggpht.com/-tFEqAImMiYY/AAAAAAAAAAI/AAAAAAAAAAA/bBNCkTJlFeQ/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	},
+	"medium": {
+		"url": "https://yt3.ggpht.com/-tFEqAImMiYY/AAAAAAAAAAI/AAAAAAAAAAA/bBNCkTJlFeQ/s240-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	},
+	"high": {
+		"url": "https://yt3.ggpht.com/-tFEqAImMiYY/AAAAAAAAAAI/AAAAAAAAAAA/bBNCkTJlFeQ/s800-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	}
+	},
+	"channelTitle": "Walt Disney Studios",
+	"liveBroadcastContent": "upcoming"
+	}
+	},
+	{
+	"kind": "youtube#searchResult",
+	"etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/TMDXskcXbYn7j2X7D4wqFLApzEg\"",
+	"id": {
+	"kind": "youtube#channel",
+	"channelId": "UC_5niPa-d35gg88HaS7RrIw"
+	},
+	"snippet": {
+	"publishedAt": "2012-02-11T12:07:58.000Z",
+	"channelId": "UC_5niPa-d35gg88HaS7RrIw",
+	"title": "Disney",
+	"description": "Welcome to the official Disney network on YouTube. Enjoy great entertainment including episodes, trailers, and YouTube favorites.",
+	"thumbnails": {
+	"default": {
+		"url": "https://yt3.ggpht.com/-ZVEhwx6o6rM/AAAAAAAAAAI/AAAAAAAAAAA/W9G_NyKUEbk/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	},
+	"medium": {
+		"url": "https://yt3.ggpht.com/-ZVEhwx6o6rM/AAAAAAAAAAI/AAAAAAAAAAA/W9G_NyKUEbk/s240-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	},
+	"high": {
+		"url": "https://yt3.ggpht.com/-ZVEhwx6o6rM/AAAAAAAAAAI/AAAAAAAAAAA/W9G_NyKUEbk/s800-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	}
+	},
+	"channelTitle": "Disney",
+	"liveBroadcastContent": "upcoming"
+	}
+	},
+	{
+	"kind": "youtube#searchResult",
+	"etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/UckVuC6oIqRSE-olUis3LCKVLHY\"",
+	"id": {
+	"kind": "youtube#channel",
+	"channelId": "UCMm8XFMnB2wODJqYt6d6OJQ"
+	},
+	"snippet": {
+	"publishedAt": "2007-12-03T11:28:44.000Z",
+	"channelId": "UCMm8XFMnB2wODJqYt6d6OJQ",
+	"title": "Disney España",
+	"description": "Bienvenidos al canal oficial de Disney España en Youtube. Aquí podrás disfrutar de los últimos tráilers, adelantos exclusivos, clips y mucho más contenido en ...",
+	"thumbnails": {
+	"default": {
+		"url": "https://yt3.ggpht.com/-w5Q4gWdB_40/AAAAAAAAAAI/AAAAAAAAAAA/I1BHP9sWuSM/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	},
+	"medium": {
+		"url": "https://yt3.ggpht.com/-w5Q4gWdB_40/AAAAAAAAAAI/AAAAAAAAAAA/I1BHP9sWuSM/s240-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	},
+	"high": {
+		"url": "https://yt3.ggpht.com/-w5Q4gWdB_40/AAAAAAAAAAI/AAAAAAAAAAA/I1BHP9sWuSM/s800-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	}
+	},
+	"channelTitle": "Disney España",
+	"liveBroadcastContent": "none"
+	}
+	}
+]
+}
+									</code>
+								</pre>
+
+								<dl>
+									<dt>
+										Type
+									</dt>
+									<dd>
+
+										<span class="param-type">Object</span>
+
+
+									</dd>
+								</dl>
+
+
+								<h4 class="name" id="getCheckAccount"><span class="type-signature"></span>GET /checkAccount</h4>
+
+
+								<div class="description">
+									Checks whether the required email query is there<br>
+									Then checks whether the account exists by searching through accounts.JSON
+								</div>
+
+									<h5>Resource URL:</h5>
+									<code>https://trailerscentral.herokuapp.com/checkAccount</code>
+
+									<h5>Parameters:</h5>
+
+
+									<table class="params">
+										<thead>
+											<tr>
+
+												<th>Name</th>
+
+
+												<th>Required</th>
+
+
+												<th class="last">Description</th>
+											</tr>
+										</thead>
+
+										<tbody>
+
+
+											<tr>
+
+												<td class="name"><code>email</code></td>
+
+
+												<td class="type">
+
+
+													<span class="param-type">required</span>
+
+
+												</td>
+
+
+												<td class="description last">The email to look up</td>
+											</tr>
+
+										</tbody>
+									</table>
+
+
+									<dl class="details">
+
+
+										<dt class="tag-source">Source:</dt>
+										<dd class="tag-source">
+											<ul class="dummy">
+												<li>
+													<a href="app.js.html">app.js</a>,
+													<a href="app.js.html#line526">line 526</a>
+												</li>
+											</ul>
+										</dd>
+
+
+									</dl>
+
+
+									<h5>Example Request:</h5>
+									<code>https://trailerscentral.herokuapp.com/checkaccount?email=mock%40account.co.uk</code>
+									<h5>Example Response:</h5>
+									<pre class="prettyprint">
+										<code>
+	{"exists":false}										
+										</code>
+									</pre>
+
+
+									<dl>
+										<dt>
+											Type
+										</dt>
+										<dd>
+
+											<span class="param-type">Object</span>
+
+
+										</dd>
+									</dl>
+
+
+									<h4 class="name" id="getPrefs"><span class="type-signature"></span>GET /prefs</h4>
+
+
+									<div class="description">
+										Used to get the preferences of a specific user<br>
+										User is defined by either the req.query.token or req.query.email<br>
+										I use JSONWebToken to verify the token here -> which hashes the users id into the token<br>
+										In this instance it unhashes the id out of the token<br>
+										If the email user is used a new token is provided
+									</div>
+
+										<h5>Resource URL:</h5>
+										<code>https://trailerscentral.herokuapp.com/prefs</code>
+
+
+										<h5>Parameters:</h5>
+
+
+										<table class="params">
+											<thead>
+												<tr>
+
+													<th>Name</th>
+
+
+													<th>Required</th>
+
+
+													<th class="last">Description</th>
+												</tr>
+											</thead>
+
+											<tbody>
+
+
+												<tr>
+
+													<td class="name"><code>email</code></td>
+
+
+													<td class="type">
+
+
+														<span class="param-type">Partial requirement (either parameter but not both)</span>
+
+
+													</td>
+
+
+													<td class="description last">The email for the account to get the
+														preferences for</td>
+												</tr>
+
+
+												<tr>
+
+													<td class="name">
+														<code>x-access-token (embedded in the header of the request)</code>
+													</td>
+
+
+													<td class="type">
+
+
+														<span class="param-type">Partial requirement (either parameter but not both)</span>
+
+
+													</td>
+
+
+													<td class="description last">The token through which the getPrefs
+														method can be made, which belongs to the account linked to the
+														requested preferences</td>
+												</tr>
+
+
+											</tbody>
+										</table>
+
+
+										<dl class="details">
+
+
+											<dt class="tag-source">Source:</dt>
+											<dd class="tag-source">
+												<ul class="dummy">
+													<li>
+														<a href="app.js.html">app.js</a>,
+														<a href="app.js.html#line207">line 207</a>
+													</li>
+												</ul>
+											</dd>
+
+
+										</dl>
+
+
+										<h5>Example Request:</h5>
+										<code>fetch("https://trailerscentral.herokuapp.com/prefs",{method:"GET",headers:{"x-access-token":REQUEST_TOKEN}})</code>
+										OR
+										<code>https://trailerscentral.herokuapp.com/prefs?email=mock%40account.co.uk</code>
+										<h5>Example Response:</h5>
+										<pre class="prettyprint">
+											<code>
+	{"prefs":["Marvel","Disney","FOX","DC"],"name":"NAME","token":REQUEST_TOKEN}										
+											</code>
+										</pre>
+
+
+										<dl>
+											<dt>
+												Type
+											</dt>
+											<dd>
+
+												<span class="param-type">Object</span>
+
+
+											</dd>
+										</dl>
+
+
+										<h4 class="name" id="getRecent"><span class="type-signature"></span>GET /recent</h4>
+
+
+										<div class="description">
+											Function used to get recent trailers. <br>
+											The page query is required and will send back trailers relating to which page <br>
+											ie page 1 is first 20 and page 2 is the rest of the file
+										</div>
+
+											<h5>Resource URL:</h5>
+											<code>https://trailerscentral.herokuapp.com/recent</code>
+
+											<h5>Parameters:</h5>
+
+
+											<table class="params">
+												<thead>
+													<tr>
+
+														<th>Name</th>
+
+
+														<th>Required</th>
+
+
+														<th class="last">Description</th>
+													</tr>
+												</thead>
+
+												<tbody>
+
+
+													<tr>
+
+														<td class="name"><code>page</code></td>
+
+
+														<td class="type">
+
+
+															<span class="param-type">optional (Discrete values of 1 or 2 -> when parameter is not used 1 is defaulted)</span>
+
+
+														</td>
+
+
+														<td class="description last">The page number to request</td>
+													</tr>
+
+												</tbody>
+											</table>
+
+
+											<dl class="details">
+
+
+												<dt class="tag-source">Source:</dt>
+												<dd class="tag-source">
+													<ul class="dummy">
+														<li>
+															<a href="app.js.html">app.js</a>,
+															<a href="app.js.html#line151">line 151</a>
+														</li>
+													</ul>
+												</dd>
+
+
+											</dl>
+
+											<h5>Example Request:</h5>
+											<code>https://trailerscentral.herokuapp.com/recent?page=1</code>
+											<h5>Example Response:</h5>
+											<pre class="prettyprint">
+												<code>
+[
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/B8Nvfc8rPNry38-hrRhi9TqRM3o\"", "id": { "kind": "youtube#video", "videoId": "qeau7UWjEms" }, "snippet": { "publishedAt": "2019-04-18T12:15:42.000Z", "channelId": "UCi8e0iOVk1fEOogdfu4YgfA", "title": "Hobbs &amp; Shaw Trailer #1 (2019) | Movieclips Trailers", "description": "Check out the official Hobbs & Shaw Trailer starring Dwayne Johnson! Let us know what you think in the comments below. ▻ Sign up for a Fandango FanAlert ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/qeau7UWjEms/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/qeau7UWjEms/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/qeau7UWjEms/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Movieclips Trailers", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/ru88vfv2RcriN8kTFgH8vhmnkhY\"", "id": { "kind": "youtube#video", "videoId": "ubDmUVoXdLI" }, "snippet": { "publishedAt": "2019-04-17T14:19:04.000Z", "channelId": "UCi8e0iOVk1fEOogdfu4YgfA", "title": "Dark Phoenix Final Trailer (2019) | Movieclips Trailers", "description": "Check out the official X-Men: Dark Phoenix Trailer starring Jennifer Lawrence! Let us know what you think in the comments below. ▻ Sign up for a Fandango ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/ubDmUVoXdLI/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/ubDmUVoXdLI/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/ubDmUVoXdLI/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Movieclips Trailers", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/nPHQ4J7hIbdKSViwAi02Mlc04iI\"", "id": { "kind": "youtube#video", "videoId": "xRc3WviXk2M" }, "snippet": { "publishedAt": "2019-04-03T13:23:20.000Z", "channelId": "UCi8e0iOVk1fEOogdfu4YgfA", "title": "Joker Teaser Trailer #1 (2019) | Movieclips Trailers", "description": "Check out the official Joker Teaser starring Joaquin Phoenix! Let us know what you think in the comments below. ▻ Sign up for a Fandango FanAlert for Joker: ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/xRc3WviXk2M/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/xRc3WviXk2M/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/xRc3WviXk2M/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Movieclips Trailers", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/RrTJV0dzt1gcChqiAuTmBQ9kdGs\"", "id": { "kind": "youtube#video", "videoId": "CIfm9NQzgU0" }, "snippet": { "publishedAt": "2019-04-16T14:22:22.000Z", "channelId": "UCJkvlOQedZfOijDDVXHYcXA", "title": "Avengers: Endgame (2019) - To The End Official Trailer", "description": "We're in the endgame now. Marvel's Avengers: Endgame arrives in theaters April 26.", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/CIfm9NQzgU0/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/CIfm9NQzgU0/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/CIfm9NQzgU0/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "GameSpot Universe Trailers", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/ut_HGoeHnkbVnIupTnHIbY2JyW8\"", "id": { "kind": "youtube#video", "videoId": "sZywiKpuG1g" }, "snippet": { "publishedAt": "2019-04-10T20:39:09.000Z", "channelId": "UCzcRQ3vRNr6fJ1A9rqFn7QA", "title": "THE PROFESSOR Official Trailer (2019) Johnny Depp Movie HD", "description": "THE PROFESSOR Official Trailer (2019) Johnny Depp, Zoey Deutch Comedy Movie HD © 2019 - Saban Films Comedy, Kids, Family and Animated Film, ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/sZywiKpuG1g/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/sZywiKpuG1g/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/sZywiKpuG1g/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "ONE Media", "liveBroadcastContent": "none" } },
+...]
+												</code>
+											</pre>
+
+											<dl>
+												<dt>
+													Type
+												</dt>
+												<dd>
+
+													<span class="param-type">Array</span>
+
+
+												</dd>
+											</dl>
+
+
+											<h4 class="name" id="getSearch"><span class="type-signature"></span>GET /search</h4>
+
+
+											<div class="description">
+												Gets the trailers for the given search query (req.query.q) <br>
+												If no query provided then the response is ended with a 422 error code -> Unprocessable Entity <br>
+												If a query is provided it runs the callTrailers function
+											</div>
+												<h5>Resource URL:</h5>
+												<code>https://trailerscentral.herokuapp.com/search</code>
+
+												<h5>Parameters:</h5>
+
+
+												<table class="params">
+													<thead>
+														<tr>
+
+															<th>Name</th>
+
+
+															<th>Required</th>
+
+
+															<th class="last">Description</th>
+														</tr>
+													</thead>
+
+													<tbody>
+
+
+														<tr>
+
+															<td class="name"><code>q</code></td>
+
+
+															<td class="type">
+
+
+																<span class="param-type">required</span>
+
+
+															</td>
+
+
+															<td class="description last">The trailer search query
+
+														</tr>
+													</tbody>
+												</table>
+
+
+												<dl class="details">
+
+
+													<dt class="tag-source">Source:</dt>
+													<dd class="tag-source">
+														<ul class="dummy">
+															<li>
+																<a href="app.js.html">app.js</a>,
+																<a href="app.js.html#line81">line 81</a>
+															</li>
+														</ul>
+													</dd>
+
+
+												</dl>
+												<h5>Example Request:</h5>
+												<code>https://trailerscentral.herokuapp.com/search?q=captain%20marvel</code>
+												<h5>Example Response:</h5>
+												<pre class="prettyprint">
+													<code>
+[
+{"kind":"youtube#searchResult","etag":"\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/IiaNgLY-ClI3hFzvXN5FT09lGVA\"","id":{"kind":"youtube#video","videoId":"0LHxvxdRnYc"},"snippet":{"publishedAt":"2018-12-04T02:43:35.000Z","channelId":"UCvC4D8onUfXzvjTOM-dBfEA","title":"Marvel Studios&#39; Captain Marvel - Trailer 2","description":"Learn More at https://www.marvel.com/movies/captain-marvel ▻ Subscribe to Marvel: http://bit.ly/WeO3YJ Follow Marvel on Twitter:   https://twitter.com/marvel ...","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/0LHxvxdRnYc/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/0LHxvxdRnYc/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/0LHxvxdRnYc/hqdefault.jpg","width":480,"height":360}},"channelTitle":"Marvel Entertainment","liveBroadcastContent":"none"}},
+{"kind":"youtube#searchResult","etag":"\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/jXxoMXWHpcCzJrofL-2dcr71Ijk\"","id":{"kind":"youtube#video","videoId":"Z1BCujX3pw8"},"snippet":{"publishedAt":"2018-09-18T12:38:13.000Z","channelId":"UCvC4D8onUfXzvjTOM-dBfEA","title":"Marvel Studios&#39; Captain Marvel - Official Trailer","description":"Higher. Further. Faster. Watch the trailer for Marvel Studios' Captain Marvel, in theaters March 8, 2019. ▻ Subscribe to Marvel: http://bit.ly/WeO3YJ More info on ...","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/Z1BCujX3pw8/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/Z1BCujX3pw8/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/Z1BCujX3pw8/hqdefault.jpg","width":480,"height":360}},"channelTitle":"Marvel Entertainment","liveBroadcastContent":"none"}},
+{"kind":"youtube#searchResult","etag":"\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/4Soy5gX-r5Uay4QvdvzPm9oI41k\"","id":{"kind":"youtube#video","videoId":"moY78qMJuxM"},"snippet":{"publishedAt":"2018-09-18T12:41:36.000Z","channelId":"UCT0hbLDa-unWsnZ6Rjzkfug","title":"CAPTAIN MARVEL Trailer (2019)","description":"Here is the first trailer for Captain Marvel Get your Marvel movie on Blu Ray: https://amzn.to/2DvJFQH.","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/moY78qMJuxM/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/moY78qMJuxM/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/moY78qMJuxM/hqdefault.jpg","width":480,"height":360}},"channelTitle":"FilmSelect Trailer","liveBroadcastContent":"none"}},
+{"kind":"youtube#searchResult","etag":"\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/OZLV8z7arku5QRe-Zpl_F9s5nII\"","id":{"kind":"youtube#video","videoId":"7vTdylBGJKU"},"snippet":{"publishedAt":"2019-01-08T03:40:01.000Z","channelId":"UC1cVTv6C0Unv6TtadjBvYRA","title":"CAPTAIN MARVEL Final Trailer (2019) Brie Larson, Marvel Superhero Movie HD","description":"CAPTAIN MARVEL Final Trailer (2019) Brie Larson, Marvel Superhero Movie HD Subscribe to Rapid Trailer For All The Latest Movie Trailers!","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/7vTdylBGJKU/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/7vTdylBGJKU/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/7vTdylBGJKU/hqdefault.jpg","width":480,"height":360}},"channelTitle":"Rapid Trailer","liveBroadcastContent":"none"}},
+{"kind":"youtube#searchResult","etag":"\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/GZOCR8J98TcJFWC4T5BJrllw2K4\"","id":{"kind":"youtube#video","videoId":"5PvijXdag-c"},"snippet":{"publishedAt":"2019-04-04T10:00:01.000Z","channelId":"UCWOSgEKGpS5C026lY4Y4KGw","title":"AVENGERS 4 ENDGAME Captain Marvel Arrives In Wakanda Trailer (NEW 2019) Marvel Superhero Movie HD","description":"new movie trailer for AVENGERS 4 ENDGAME.","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/5PvijXdag-c/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/5PvijXdag-c/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/5PvijXdag-c/hqdefault.jpg","width":480,"height":360}},"channelTitle":"Furious Trailer","liveBroadcastContent":"none"}},
+{"kind":"youtube#searchResult","etag":"\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/u3JiltjiHu-XHo1geVIXMUEPxuk\"","id":{"kind":"youtube#video","videoId":"EvcjZf-mnsI"},"snippet":{"publishedAt":"2019-03-22T16:18:22.000Z","channelId":"UCWOSgEKGpS5C026lY4Y4KGw","title":"AVENGERS 4 ENDGAME Thor Loves Captain Marvel Trailer (NEW 2019) Marvel Superhero Movie HD","description":"new movie trailer for Avengers 4 Endgame.","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/EvcjZf-mnsI/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/EvcjZf-mnsI/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/EvcjZf-mnsI/hqdefault.jpg","width":480,"height":360}},"channelTitle":"Furious Trailer","liveBroadcastContent":"none"}}
+]
+													</code>
+												</pre>
+												<dl>
+													<dt>
+														Type
+													</dt>
+													<dd>
+
+														<span class="param-type">Array</span>
+
+
+													</dd>
+												</dl>
+
+
+												<h4 class="name" id="intervalChannels"><span class="type-signature"></span>intervalChannels<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+												<div class="description">
+													Interval Channels function<br>
+													Saves new channels every 6 hrs<br>
+												</div>
+
+
+													<dl class="details">
+
+
+														<dt class="tag-source">Source:</dt>
+														<dd class="tag-source">
+															<ul class="dummy">
+																<li>
+																	<a href="app.js.html">app.js</a>,
+																	<a href="app.js.html#line1160">line 1160</a>
+																</li>
+															</ul>
+														</dd>
+
+
+													</dl>
+
+
+													<h5>Returns:</h5>
+
+
+													<div class="param-desc">
+														No return value as function repeats -> however the requested
+														data is saved in JSONs
+													</div>
+
+
+													<dl>
+														<dt>
+															Type
+														</dt>
+														<dd>
+
+															<span class="param-type">undefined</span>
+
+
+														</dd>
+													</dl>
+
+
+													<h4 class="name" id="intervalRecents"><span class="type-signature"></span>intervalRecents<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+
+													<div class="description">
+														Calls the intervalSavingRecentsFunction every 45 mins<br>
+														This calls the Youtube API and stores the result JSON in recents.json<br>
+													</div>
+
+
+														<dl class="details">
+
+
+															<dt class="tag-source">Source:</dt>
+															<dd class="tag-source">
+																<ul class="dummy">
+																	<li>
+																		<a href="app.js.html">app.js</a>,
+																		<a href="app.js.html#line1149">line 1149</a>
+																	</li>
+																</ul>
+															</dd>
+
+
+														</dl>
+
+
+														<h5>Returns:</h5>
+
+
+														<div class="param-desc">
+															No return value as function repeats -> however requested
+															data is saved in recent.json
+														</div>
+
+
+														<dl>
+															<dt>
+																Type
+															</dt>
+															<dd>
+
+																<span class="param-type">undefined</span>
+
+
+															</dd>
+														</dl>
+
+
+														<h4 class="name" id="intervalSavingChannels"><span class="type-signature"></span>intervalSavingChannels<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+
+														<div class="description">
+															Runs with the interval function at the bottom of this file
+															locally<br>
+															Runs for all popular channels as these will have the most requests<br>
+															This helps limit the number of requests to YT and therefore the total quota for the day<br>
+														</div>
+
+
+															<dl class="details">
+
+
+																<dt class="tag-source">Source:</dt>
+																<dd class="tag-source">
+																	<ul class="dummy">
+																		<li>
+																			<a href="app.js.html">app.js</a>,
+																			<a href="app.js.html#line775">line 775</a>
+																		</li>
+																	</ul>
+																</dd>
+
+
+															</dl>
+
+
+															<h5>Returns:</h5>
+
+
+															<div class="param-desc">
+																The JSON responses from YT are stored in files named
+																after the channel they relate to
+															</div>
+
+
+															<dl>
+																<dt>
+																	Type
+																</dt>
+																<dd>
+
+																	<span class="param-type">Array</span>
+
+
+																</dd>
+															</dl>
+
+
+															<h4 class="name" id="intervalSavingRecents"><span class="type-signature"></span>intervalSavingRecents<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+
+															<div class="description">
+																Runs with the interval function at the bottom of this
+																file locally<br>
+																If it is in the morning it requests "Trailers" from Youtube<br>
+																If it is in the afternoon it requests "Official Trailers" from Youtube<br>
+																The two requests give slightly different responses<br>
+																The responses are saved in recent.JSON
+															</div>
+
+
+																<dl class="details">
+
+
+																	<dt class="tag-source">Source:</dt>
+																	<dd class="tag-source">
+																		<ul class="dummy">
+																			<li>
+																				<a href="app.js.html">app.js</a>,
+																				<a href="app.js.html#line735">line 735</a>
+																			</li>
+																		</ul>
+																	</dd>
+
+
+																</dl>
+
+
+																<h5>Returns:</h5>
+
+
+																<div class="param-desc">
+																	The JSON responses from YT are saved in recent.JSON
+																	in a later function
+																</div>
+
+
+																<dl>
+																	<dt>
+																		Type
+																	</dt>
+																	<dd>
+
+																		<span class="param-type">Array</span>
+
+
+																	</dd>
+																</dl>
+
+
+																<h4 class="name" id="postDeleteAccount"><span class="type-signature"></span>POST /deleteAccount</h4>
+
+
+																<div class="description">
+																	When posting to this URL, no body is required but
+																	the token is required in the header.<br>
+																	The function will then remove the account linked to the id in the token from the server.
+																</div>
+																<h5>Resource URL:</h5>
+																<code>https://trailerscentral.herokuapp.com/deleteAccount</code>				
+
+																	<h5>Parameters:</h5>
+
+
+																	<table class="params">
+																		<thead>
+																			<tr>
+
+																				<th>Name</th>
+
+
+																				<th>Required</th>
+
+
+																				<th class="last">Description</th>
+																			</tr>
+																		</thead>
+
+																		<tbody>
+
+
+																			<tr>
+
+																				<td class="name"><code>x-access-token (embedded in the header of the request)</code></td>
+
+
+																				<td class="type">
+
+
+																					<span class="param-type">required</span>
+
+
+																				</td>
+
+
+																				<td class="description last">The token through which the account will be deleted
+																			</tr>
+																		</tbody>
+																	</table>
+
+
+																	<dl class="details">
+
+
+																		<dt class="tag-source">Source:</dt>
+																		<dd class="tag-source">
+																			<ul class="dummy">
+																				<li>
+																					<a href="app.js.html">app.js</a>,
+																					<a href="app.js.html#line663">line 663</a>
+																				</li>
+																			</ul>
+																		</dd>
+
+
+																	</dl>
+
+																	<h5>Example Request:</h5>
+																	<pre class="prettyprint">
+																		<code>			
+$.ajax({
+	url: "https://trailerscentral.herokuapp.com/delete",
+	type: "post",
+	headers: {
+		"x-access-token": REQUEST_TOKEN
+	})
+																		</code>
+																	</pre>
+																	<h5>Example Response:</h5>
+																	<pre class="prettyprint">
+																		<code>
+	{"success":true,}																		
+																		</code>
+																	</pre>
+
+																	<dl>
+																		<dt>
+																			Type
+																		</dt>
+																		<dd>
+
+																			<span class="param-type">Object</span>
+
+
+																		</dd>
+																	</dl>
+
+
+																	<h4 class="name" id="postLogin"><span class="type-signature"></span>POST /login</h4>
+
+
+																	<div class="description">
+																		Logs in depending on whether the username and
+																		password is correct<br>
+																		The email and password body attributes are required<br>
+																		It then searches for the user with the same email account then runs the bcrypt compare function to check whether the sent password and the stored passwords match
+																	</div>
+																	<h5>Resource URL:</h5>
+																	<code>https://trailerscentral.herokuapp.com/login</code>					
+
+
+																		<h5>Parameters:</h5>
+
+
+																		<table class="params">
+																			<thead>
+																				<tr>
+
+																					<th>Name</th>
+
+
+																					<th>Required</th>
+
+
+																					<th class="last">Description</th>
+																				</tr>
+																			</thead>
+
+																			<tbody>
+
+
+																				<tr>
+
+																					<td class="name"><code>email</code>
+																					</td>
+
+
+																					<td class="type">
+
+
+																						<span class="param-type">required</span>
+
+																					</td>
+
+
+																					<td class="description last">Email for the login request</td>
+																				</tr>
+
+
+																				<tr>
+
+																					<td class="name"><code>pword</code>
+																					</td>
+
+
+																					<td class="type">
+
+
+																						<span class="param-type">request</span>
+
+
+																					</td>
+
+
+																					<td class="description last">Password for the login request</td>
+																				</tr>
+
+
+																			</tbody>
+																		</table>
+
+
+																		<dl class="details">
+
+
+																			<dt class="tag-source">Source:</dt>
+																			<dd class="tag-source">
+																				<ul class="dummy">
+																					<li>
+																						<a href="app.js.html">app.js</a>,
+																						<a href="app.js.html#line577">line 577</a>
+																					</li>
+																				</ul>
+																			</dd>
+
+
+																		</dl>
+
+
+																		<h5>Example Request:</h5>
+																		
+																		<pre class="prettyprint">
+																			<code>			
+$.ajax({
+	url:"https://trailerscentral.herokuapp.com/login",
+	type:"post",
+	headers: {"Content-Type": "application/x-www-form-urlencoded"},
+	data:{ email: EMAIL, pword: PASSWORD }
+})
+																			</code>
+																		</pre>
+																		<h5>Example Response:</h5>
+																		<pre class="prettyprint">
+																			<code>
+{
+	"fName": NAME,
+	"prefs": ["Marvel","Disney","FOX","DC"]
+	"exists": true,
+	"correctPassword": true,
+	"token": REQUEST_TOKEN
+}					
+																			</code>
+																		</pre>
+
+
+																		<dl>
+																			<dt>
+																				Type
+																			</dt>
+																			<dd>
+
+																				<span class="param-type">Object</span>
+
+
+																			</dd>
+																		</dl>
+
+
+																		<h4 class="name" id="postPrefs"><span class="type-signature"></span>POST /prefs</h4>
+
+
+																		<div class="description">
+																			Checks whether the token is embedded in the
+																			header, and whether there is some new prefs
+																			array which needs updating<br>
+																			It verifies the token with the secret defined in the environment variables file<br>
+																			Then writes to the users prefs attribute with their new prefs
+																			</div>
+
+																			<h5>Resource URL:</h5>
+																			<code>https://trailerscentral.herokuapp.com/prefs</code>
+							
+																			<h5>Parameters:</h5>
+
+
+																			<table class="params">
+																				<thead>
+																					<tr>
+
+																						<th>Name</th>
+
+
+																						<th>Required</th>
+
+
+																						<th class="last">Description</th>
+																					</tr>
+																				</thead>
+
+																				<tbody>
+
+
+																					<tr>
+
+																						<td class="name">
+																							<code>prefs</code></td>
+
+
+																						<td class="type">
+
+
+																							<span class="param-type">required</span>
+
+
+																						</td>
+
+
+																						<td class="description last">The new preferences the user wants to update to</td>
+																					</tr>
+
+
+																					<tr>
+
+																						<td class="name">
+																							<code>x-access-token (embedded in the header of the request)</code></td>
+
+
+																						<td class="type">
+
+
+																							<span class="param-type">required</span>
+
+
+																						</td>
+
+
+																						<td class="description last">The token through which the user is linked to and the account to update preferences for</td>
+																					</tr>
+
+
+																				</tbody>
+																			</table>
+
+
+																			<dl class="details">
+
+
+																				<dt class="tag-source">Source:</dt>
+																				<dd class="tag-source">
+																					<ul class="dummy">
+																						<li>
+																							<a href="app.js.html">app.js</a>,
+																							<a href="app.js.html#line360">line 360</a>
+																						</li>
+																					</ul>
+																				</dd>
+
+
+																			</dl>
+
+
+																			<h5>Example Request:</h5>
+																		
+																			<pre class="prettyprint">
+																				<code>			
+$.ajax({
+	url:"https://trailerscentral.herokuapp.com/prefs",
+	type:"post",
+	headers: {"Content-Type": "application/x-www-form-urlencoded"},
+	data:{ prefs: ["Marvel","Disney","FOX","DC"] }
+})
+																				</code>
+																			</pre>
+																			<h5>Example Response:</h5>
+																			<pre class="prettyprint">
+																				<code>
+	{"success":true}				
+																				</code>
+																			</pre>
+
+																			<dl>
+																				<dt>
+																					Type
+																				</dt>
+																				<dd>
+
+																					<span class="param-type">Object</span>
+
+
+																				</dd>
+																			</dl>
+
+
+																			<h4 class="name" id="postRegister"><span class="type-signature"></span>POST /register</h4>
+
+
+																			<div class="description">
+																				Adds the account to account.json<br>
+																				The account details are sent in req.body -> with required attributes of email and password<br>
+																				I then encrypt the password with industry standard bcrypt hashing
+																			</div>
+
+																			<h5>Resource URL:</h5>
+																			<code>https://trailerscentral.herokuapp.com/register</code>
+
+																				<h5>Parameters:</h5>
+
+
+																				<table class="params">
+																					<thead>
+																						<tr>
+
+																							<th>Name</th>
+
+
+																							<th>Required</th>
+
+
+																							<th class="last">Description
+																							</th>
+																						</tr>
+																					</thead>
+
+																					<tbody>
+
+
+																						<tr>
+
+																							<td class="name">
+																								<code>email</code></td>
+
+
+																							<td class="type">
+
+
+																								<span class="param-type">required</span>
+
+
+																							</td>
+
+
+																							<td class="description last">Email for the new account</td>
+																						</tr>
+
+
+																						<tr>
+
+																							<td class="name">
+																								<code>password</code></td>
+
+
+																							<td class="type">
+
+
+																								<span class="param-type">required</span>
+
+
+																							</td>
+
+
+																							<td
+																								class="description last">Password for the new account</td>
+																						</tr>
+																						<tr>
+
+																								<td class="name">
+																									<code>fName</code></td>
+	
+	
+																								<td class="type">
+	
+	
+																									<span class="param-type">optional</span>
+	
+	
+																								</td>
+	
+	
+																								<td
+																									class="description last">First name for the new account</td>
+																						</tr>
+																						<tr>
+
+																								<td class="name">
+																									<code>lName</code></td>
+	
+	
+																								<td class="type">
+	
+	
+																									<span class="param-type">optional</span>
+	
+	
+																								</td>
+	
+	
+																								<td
+																									class="description last">Last name for the new account</td>
+																						</tr>
+																						<tr>
+
+																								<td class="name">
+																									<code>prefs</code></td>
+	
+	
+																								<td class="type">
+	
+	
+																									<span class="param-type">optional</span>
+	
+	
+																								</td>
+	
+	
+																								<td
+																									class="description last">Preferences for the new account</td>
+																						</tr>
+
+
+																					</tbody>
+																				</table>
+
+
+																				<dl class="details">
+
+
+																					<dt class="tag-source">Source:</dt>
+																					<dd class="tag-source">
+																						<ul class="dummy">
+																							<li>
+																								<a href="app.js.html">app.js</a>,
+																								<a href="app.js.html#line430">line 430</a>
+																							</li>
+																						</ul>
+																					</dd>
+
+
+																				</dl>
+
+
+																				<h5>Example Request:</h5>
+																		
+																			<pre class="prettyprint">
+																				<code>			
+$.ajax({
+	url:"https://trailerscentral.herokuapp.com/register",
+	type:"post",
+	headers: {"Content-Type": "application/x-www-form-urlencoded"},
+	data:{ email: EMAIL, pword: PASSWORD, fName: FIRST_NAME, lName, LAST_NAME, prefs: ["Marvel","Disney","FOX","DC"]}
+})
+																				</code>
+																			</pre>
+																			<h5>Example Response:</h5>
+																			<pre class="prettyprint">
+																				<code>
+	{"auth":true, "token": REQUEST_TOKEN}				
+																				</code>
+																			</pre>
+
+
+																				<dl>
+																					<dt>
+																						Type
+																					</dt>
+																					<dd>
+
+																						<span class="param-type">Object</span>
+
+
+																					</dd>
+																				</dl>
+
+
+																				<h4 class="name" id="removeEmptyParameters"><span class="type-signature"></span>removeEmptyParameters<span class="signature">(params)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+
+																				<div class="description">
+																					Youtube's function to remove
+																					parameters that arent in use so we
+																					dont get<br>
+																					?snippet=<br>
+																					for the snippet section, instead the snippet query wouldnt exist
+																				</div>
+
+
+																					<h5>Parameters:</h5>
+
+
+																					<table class="params">
+																						<thead>
+																							<tr>
+
+																								<th>Name</th>
+
+
+																								<th>Type</th>
+
+
+																								<th class="last">
+																									Description</th>
+																							</tr>
+																						</thead>
+
+																						<tbody>
+
+
+																							<tr>
+
+																								<td class="name">
+																									<code>params</code>
+																								</td>
+
+
+																								<td class="type">
+
+
+																									<span class="param-type">Object</span>
+
+
+																								</td>
+
+
+																								<td
+																									class="description last">
+																									the current params
+																									to send to youtube
+																								</td>
+																							</tr>
+
+
+																						</tbody>
+																					</table>
+
+
+																					<dl class="details">
+
+
+																						<dt class="tag-source">Source:</dt>
+																						<dd class="tag-source">
+																							<ul class="dummy">
+																								<li>
+																									<a href="app.js.html">app.js</a>,
+																									<a href="app.js.html#line1002">line 1002</a>
+																								</li>
+																							</ul>
+																						</dd>
+
+
+																					</dl>
+
+
+																					<h5>Returns:</h5>
+
+
+																					<div class="param-desc">
+																						The new params with empty values
+																						removed
+																					</div>
+
+
+																					<dl>
+																						<dt>
+																							Type
+																						</dt>
+																						<dd>
+
+																							<span class="param-type">Object</span>
+
+
+																						</dd>
+																					</dl>
+
+
+																					<h4 class="name" id="searchListByKeyword"><span class="type-signature"></span>searchListByKeyword<span class="signature">(requestData, res, channel)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+
+																					<div class="description">
+																						Function which makes request to
+																						youtube api<br>
+																						Handles response appropriately<br>
+																						Either sends the response back to client -> if res exists<br>
+																						Or saves in a predefined JSON file
+																					</div>
+
+
+																						<h5>Parameters:</h5>
+
+
+																						<table class="params">
+																							<thead>
+																								<tr>
+
+																									<th>Name</th>
+
+
+																									<th>Type</th>
+
+
+																									<th class="last">
+																										Description</th>
+																								</tr>
+																							</thead>
+
+																							<tbody>
+
+
+																								<tr>
+
+																									<td class="name">
+																										<code>requestData</code>
+																									</td>
+
+
+																									<td class="type">
+
+
+																										<span class="param-type">Object</span>
+
+
+																									</td>
+
+
+																									<td
+																										class="description last">
+																										the params and
+																										filters that I
+																										am searching by
+																									</td>
+																								</tr>
+
+
+																								<tr>
+
+																									<td class="name">
+																										<code>res</code>
+																									</td>
+
+
+																									<td class="type">
+
+
+																										<span class="param-type">Object</span>
+
+
+																									</td>
+
+
+																									<td
+																										class="description last">
+																										response JSON
+																									</td>
+																								</tr>
+
+
+																								<tr>
+
+																									<td class="name">
+																										<code>channel</code>
+																									</td>
+
+
+																									<td class="type">
+
+
+																										<span class="param-type">String</span>
+
+
+																									</td>
+
+
+																									<td
+																										class="description last">
+																										channel name if
+																										necessary</td>
+																								</tr>
+
+
+																							</tbody>
+																						</table>
+
+
+																						<dl class="details">
+
+
+																							<dt class="tag-source">Source:</dt>
+																							<dd class="tag-source">
+																								<ul class="dummy">
+																									<li>
+																										<a href="app.js.html">app.js</a>,
+																										<a href="app.js.html#line1027">line 1027</a>
+																									</li>
+																								</ul>
+																							</dd>
+
+
+																						</dl>
+
+
+																						<h5>Returns:</h5>
+
+
+																						<div class="param-desc">
+																							Using the response received
+																							from Google, either Saves
+																							the data or sends the data
+																							back to the client
+																						</div>
+
+
+																						<dl>
+																							<dt>
+																								Type
+																							</dt>
+																							<dd>
+
+																								<span class="param-type">Object</span>
+
+
+																							</dd>
+																						</dl>
+
+
+			</article>
+
+		</section>
+
+
+	</div>
+
+	<nav>
+		<h2><a href="../index.html">Back to Trailers Central</a></h2><h3>Trailers Central API Documentation</h3>
+		<ul>
+			<li><a href="apiDOC.html#callChannelData">callChannelData</a></li>
+			<li><a href="apiDOC.html#callTrailers">callTrailers</a></li>
+			<li><a href="apiDOC.html#getChannelData">GET /channeldata</a></li>
+			<li><a href="apiDOC.html#getChannelID">GET /channelID</a></li>
+			<li><a href="apiDOC.html#getCheckAccount">GET /checkAccount</a></li>
+			<li><a href="apiDOC.html#getPrefs">GET /prefs</a></li>
+			<li><a href="apiDOC.html#getRecent">GET /recent</a></li>
+			<li><a href="apiDOC.html#getSearch">GET /search</a></li>
+			<li><a href="apiDOC.html#intervalChannels">intervalChannels</a></li>
+			<li><a href="apiDOC.html#intervalRecents">intervalRecents</a></li>
+			<li><a href="apiDOC.html#intervalSavingChannels">intervalSavingChannels</a></li>
+			<li><a href="apiDOC.html#intervalSavingRecents">intervalSavingRecents</a></li>
+			<li><a href="apiDOC.html#postDeleteAccount">POST /deleteAccount</a></li>
+			<li><a href="apiDOC.html#postLogin">POST /login</a></li>
+			<li><a href="apiDOC.html#postPrefs">POST /prefs</a></li>
+			<li><a href="apiDOC.html#postRegister">POST /register</a></li>
+			<li><a href="apiDOC.html#removeEmptyParameters">removeEmptyParameters</a></li>
+			<li><a href="apiDOC.html#searchListByKeyword">searchListByKeyword</a></li>
+		</ul>
+	</nav>
+
+	<br class="clear">
+
+	<footer>
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 23 2019 12:40:50
+		GMT+0100 (British Summer Time)
+	</footer>
+
+	<script>
+		prettyPrint();
+
+	</script>
+	<script src="scripts/linenumber.js"> </script>
+</body>
+
+</html>
