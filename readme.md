@@ -71,7 +71,7 @@ From top to bottom of the list above, we have:
 
 getChannelID, which will return 3 channels with the given title query given in the URL.
 
-getSearch, which will return 6 videos with the given search criteria q given in the URL, such that it searches Youtube for ```javascript q + " Trailer"```.
+getSearch, which will return 6 videos with the given search criteria q given in the URL, such that it searches Youtube for `q + " Trailer"`.
 
 getChannelData, which will return the JSON data for the given channel in the URL, if it isn't saved (and is part of my list in channels.json) then it will search Youtube for it.
 
@@ -88,6 +88,10 @@ getCheckAccount, which will return a basic JSON to see whether the account exist
 postLogin, which will log the user in to the website, using their email and password which are on the server. The password will be bcrypt compared with the stored password asynchronously. Log in will occur if successful which will send log in data to the client
 
 postDeleteAccount, which will delete the account linked to the token which is sent in the header.
+
+The few extra functions are generally called through the above functions. The few that don't are the interval saving functions which will call requests every x miliseconds.
+I have this strategically set to use the majority but not all of my quota in one day. These functions are there to save the requested data to JSONs rather than pinging Youtube after every request to my server.
+This greatly reduces the chances of my daily quota being used up.
 
 ## Server-side code
 See full Server side code documentation provided on the website:
@@ -112,6 +116,10 @@ Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('htt
 A link to fix this is: https://stackoverflow.com/questions/7443578/youtube-iframe-api-how-do-i-control-a-iframe-player-thats-already-in-the-html
 
 Transparent background stops appearing after watching a few videos and switching between fullscreen and normal.
+
+When using safari the console logs: The source list for Content Security Policy directive 'script-src' contains an invalid source: ''strict-dynamic''. It will be ignored.
+
+When in Chrome, timeout violations occur: `[Violation] 'setTimeout' handler took <N>ms`
 
 NOTE: When using https://trailerscentral.herokuapp.com, the data isn't persistant, and therefore does not save new accounts permanently when the server resets (which is nightly or when it is not used for a longer period of time). Instead use the localhost process to test this.
 
