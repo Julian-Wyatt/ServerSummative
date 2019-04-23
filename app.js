@@ -241,7 +241,7 @@ function getPrefs (req,res) {
 
 			}
 			// account doesn't exist
-			res.statusCode = 404;
+			res.statusCode = 200;
 			res.end();
 
 		}
@@ -384,6 +384,7 @@ function postPrefs (req,res) {
 					throw new Error(er);
 
 				}
+				res.statusCode = 201;
 				res.json({"success":true,});
 				res.end();
 
@@ -483,7 +484,7 @@ function postRegister (req,res) {
 					let token = jwt.sign({ id: user["id"] }, process.env.secret || "superSecret", {
 						expiresIn: 86400 // expires in 24 hours
 					});
-					res.statusCode = 200;
+					res.statusCode = 201;
 					res.json({"auth":true, "token": token});
 					res.end();
 
@@ -604,13 +605,14 @@ function postLogin (req,res) {
 							expiresIn: 86400 // expires in 24 hours
 						});
 						let response = {"fName":accounts["users"][i]["fName"], "prefs": accounts["users"][i]["prefs"], "exists":true, "correctPassword":true, "token": token};
+						res.statusCode = 201;
 						res.json(response);
 
 					}
 					else {
 
 						// can't sign in
-						res.statusCode = 401;
+						res.statusCode = 200;
 						res.json({"exists":true,"correctPassword":false});
 
 					}
@@ -627,7 +629,7 @@ function postLogin (req,res) {
 
 		}
 
-		res.statusCode = 404;
+		res.statusCode = 200;
 		res.json({"exists":false, "correctPassword":false});
 		res.end();
 
@@ -683,6 +685,7 @@ function postDeleteAccount (req,res) {
 					throw new Error(er);
 
 				}
+				res.statusCode = 200;
 				res.json({"success":true,});
 				res.end();
 
