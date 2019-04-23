@@ -23,27 +23,40 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("client"));
 
 /**
- * makes request to youtube in order to look up channel IDs when creating the channels.JSON file -> <br>
- * therefore used in development and testing so eslint is disabled
- * @param  {String} title the title for the channel to look up
- * @returns {Array} Request should return 3 channels based on the title provided -> this is used to add to channels.json to provide future channel based look-ups
+ * Makes request to youtube in order to look up channel IDs when creating the channels.JSON file -> <br>
+ * Therefore used in development and testing so eslint is disabled
+ * @param  {Object} req request JSON
+ * @param  {String} req.query.title the title for the channel to look up
+ * @param  {Object} res response JSON
+ * @returns {Array} Request should return 3 channels based on the title provided -> this is used to add to channels.json to provide future channel based look-ups -> response sent to res
  */
-function getChannelID (title) { // eslint-disable-line no-unused-vars
+function getChannelID (req,res) {
 
+	if (req.query.title != undefined) {
 
-	searchListByKeyword({"params": {
-		"maxResults": "3",
-		"part": "snippet",
-		"q": title,
-		"type": "channel",
-		"order": "date"
-		// "videoDuration": "short",
-		// "relevanceLanguage": "en"
-		// "videoLicense": "creativeCommon"
-	}});
+		res.statusCode = 200;
+		searchListByKeyword({"params": {
+			"maxResults": "3",
+			"part": "snippet",
+			"q": req.query.title,
+			"type": "channel",
+			// "videoDuration": "short",
+			// "relevanceLanguage": "en"
+			// "videoLicense": "creativeCommon"
+		}},res);
+
+	}
+	else{
+
+		res.statusCode = 422;
+		res.end();
+
+	}
+
 
 }
 
+app.get("/channelID",getChannelID);
 app.get("/search",getSearch);
 app.get("/channeldata",getChannelData);
 app.get("/recent", getRecent);
@@ -52,7 +65,7 @@ app.post ("/prefs", postPrefs);
 app.post("/register",postRegister);
 app.get("/checkAccount",getCheckAccount);
 app.post("/login", postLogin);
-app.post("/delete", postDeleteAccount);
+app.post("/deleteaccount", postDeleteAccount);
 
 
 /**
@@ -90,7 +103,7 @@ function getSearch (req,res) {
  * @param  {Object} req request JSON
  * @param  {String} req.query.channel The channel the user wishes to get trailers for
  * @param  {Object} res response JSON
- * @returns {Array} channel trailers for the channel specified
+ * @returns {Array} Channel trailers for the channel specified
  */
 function getChannelData (req,res) {
 
@@ -136,14 +149,6 @@ function getChannelData (req,res) {
  */
 function getRecent (req,res) {
 
-	if (req.query.page == undefined) {
-
-		res.statusCode = 422;
-		res.end();
-		return;
-
-	}
-
 
 	res.statusCode = 200;
 
@@ -151,13 +156,15 @@ function getRecent (req,res) {
 
 		if (err) {
 
+			res.statusCode == 500;
+			res.end();
 			throw new Error(err);
 
 
 		}
 		data = JSON.parse(data);
 
-		if (req.query.page == 1) {
+		if (req.query.page == 1 || req.query.page == undefined) {
 
 
 			data = data.slice(0,20);
@@ -185,7 +192,8 @@ function getRecent (req,res) {
  * I use JSONWebToken to verify the token here -> which hashes the users id into the token<br>
  * In this instance it unhashes the id out of the token
  * @param  {Object} req request JSON
- * @param  {String} req.headers["x-access-token"] The token through which the getPrefs method can be made
+ * @param  {String} req.headers["x-access-token"] The token through which the getPrefs method can be made, which belongs to the account linked to the requested preferences
+ * @param  {String} req.query.email The email for the account to get the preferences for
  * @param  {Object} res response JSON
  * @returns {Object} JSON back as a response which contains: the users prefs and their name
  */
@@ -203,6 +211,8 @@ function getPrefs (req,res) {
 
 		if (er) {
 
+			res.statusCode == 500;
+			res.end();
 			throw new Error(er);
 
 		}
@@ -406,9 +416,9 @@ function postPrefs (req,res) {
  * @param  {Object} req request JSON
  * @param  {String} req.body.email Email for the new account
  * @param  {String} req.body.password Password for the new account
- * @param  {String} req.body.fName fName for the new account
- * @param  {String} req.body.lName lName for the new account
- * @param  {Array} req.body.prefs prefs for the new account
+ * @param  {String} req.body.fName First name for the new account
+ * @param  {String} req.body.lName Last name for the new account
+ * @param  {Array} req.body.prefs Preferences for the new account
  * @param  {Object} res response JSON
  * @returns {Object} JSON back as a response which contains: the token the new user must use
  */
@@ -506,7 +516,7 @@ function postRegister (req,res) {
  * @param  {Object} req request JSON
  * @param  {String} req.query.email the requested email query
  * @param  {Object} res response JSON
- * @returns {Object} JSON with exists with a boolean value of true or false for whether the account is there or not
+ * @returns {Object} JSON which includes: exists - a boolean value of true or false for whether the account is there or not
  */
 function getCheckAccount (req,res) {
 
@@ -643,7 +653,7 @@ function postLogin (req,res) {
  * @param  {Object} req request JSON
  * @param  {String} req.headers["x-access-token"] The token through which the getPrefs method can be made
  * @param  {Object} res response JSON
- * @returns {Object} basic success JSON to see whether the process is successful
+ * @returns {Object} Basic success JSON to see whether the process is successful
  */
 function postDeleteAccount (req,res) {
 
@@ -714,7 +724,7 @@ function postDeleteAccount (req,res) {
  * If it is in the morning it requests "Trailers" from Youtube<br>
  * If it is in the afternoon it requests "Official Trailers" from Youtube<br>
  * The two requests give slightly different responses<br>
- * The responses are saved in recent.JSON -> Seen below
+ * The responses are saved in recent.JSON
  * @returns {Array} The JSON responses from YT are saved in recent.JSON in a later function
  */
 function intervalSavingRecents () {
@@ -779,7 +789,7 @@ let intervalSavingChannels = function intervalSavingChannels () {
  * If there is not then it requests Youtube for the information, which is sent back through the res object
  * @param  {String} channel requested channel
  * @param  {Object} res response JSON
- * @returns {Arrray} The JSON responses from YT are stored in files named after the channel they relate to
+ * @returns {Arrray} The JSON responses from YT are stored in files named after the channel they relate to or sent back throught the res object (if it isn't undefined)
  */
 function callChannelData (channel,res) {
 
@@ -1129,7 +1139,7 @@ function searchListByKeyword (requestData, res, channel) {
 /**
  * Calls the intervalSavingRecentsFunction every 45 mins<br>
  * This calls the Youtube API and stores the result JSON in recents.json<br>
- * @returns {undefined} no return value as function repeats -> however requested data is saved in recent.json
+ * @returns {undefined} No return value as function repeats -> however requested data is saved in recent.json
  */
 function intervalRecents () {
 
@@ -1138,9 +1148,9 @@ function intervalRecents () {
 
 }
 /**
- * interval recents function<br>
- * saves new channels every 6 hrs<br>
- * @returns {undefined} no return value as function repeats -> however the requested data is saved in JSONs
+ * Interval Channels function<br>
+ * Saves new channels every 6 hrs<br>
+ * @returns {undefined} No return value as function repeats -> however the requested data is saved in JSONs
  */
 function intervalChannels () {
 
