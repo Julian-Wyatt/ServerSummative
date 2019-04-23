@@ -190,6 +190,10 @@ ion-icon {
 	}
 }
 @media (max-width: 768px) {
+	#blur.active{
+		z-index: 0 !important;
+		background-color: rgba(51, 51, 51, 0) !important;
+	}
 	
 
     #sidebar {
