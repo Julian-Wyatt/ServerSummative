@@ -326,16 +326,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		.addEventListener("click", signOut);
 	/**
 	 * Fetches the requested channel's trailers
-	 * @param  {String} channel name of channel
-	 * @returns {Array} the response from the server -> should be array of video information from the channel provided
+	 * @param  {String} channel Name of channel
+	 * @returns {Array} The response from the server -> should be array of video information from the channel provided
 	 */
 	async function requestChannelData (channel) {
 
 		try {
 
 			// let response = await fetch("http://localhost:8080/channeldata?channel=" + channel);
-			let response = await fetch("https://trailerscentral.herokuapp.com/channeldata?channel=" +
-				channel);
+			let response = await fetch("https://trailerscentral.herokuapp.com/channeldata?channel=" + channel);
 			let body = await response.text();
 
 			let recents = JSON.parse(body);
@@ -350,8 +349,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	/**
 	 * Fetches the recent trailers
-	 * @param  {Number} page either 1 or 2 to request which page the user is on from the JSON stored on the server
-	 * @returns {Array} the response from the server -> should be array of recent trailer video information
+	 * @param  {Number} page Either 1 or 2 to request which page the user is on from the JSON stored on the server
+	 * @returns {Array} The response from the server -> should be array of recent trailer video information
 	 */
 	async function requestData (page) {
 
@@ -428,7 +427,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						.classList.remove("hide");
 
 				}
-				console.log(videoData);
+				// console.log(videoData);
 				for (let i = 1; i <= 20; i++) {
 
 					if (videoData[i - 1]) {
@@ -520,7 +519,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			.value || document.getElementById("search_query_nav")
 			.value;
 
-		console.log(q);
+		// console.log(q);
 		if (q != "") {
 
 			requestSearchData(q)
@@ -540,7 +539,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						.value = "";
 					document.getElementById("search_query_nav")
 						.value = "";
-					console.log(videoData.length);
+					// console.log(videoData.length);
 					for (let i = 1; i <= 4; i++) {
 
 						let frame = document.getElementById("video" + i);
@@ -602,7 +601,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						.classList.add("hide");
 					document.getElementById("backPage")
 						.classList.add("hide");
-					console.log(videoData);
+					// console.log(videoData);
 					for (let i = 1; i <= 20; i++) {
 
 						if (document.getElementById("video" + i)) {
@@ -795,6 +794,7 @@ document.addEventListener("DOMContentLoaded", function () {
 							setCookie("Token", resp["token"]);
 
 						};
+
 						email.value = "";
 						password.value = "";
 						confPwd.value = "";
@@ -851,7 +851,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				.value },
 			function (result) {
 
-				console.log(result);
+
 				if (result["exists"] && result["correctPassword"]) {
 
 					email.value = "";
@@ -956,7 +956,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			// post delete
 			$.ajax({
 				// url: "http://localhost:8080/delete",
-				url: "https://trailerscentral.herokuapp.com/delete",
+				url: "https://trailerscentral.herokuapp.com/deleteaccount",
 				type: "post",
 				headers: {
 					"x-access-token": getCookie("Token") // If your header name has spaces or any other char not appropriate
