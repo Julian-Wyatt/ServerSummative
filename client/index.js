@@ -936,10 +936,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.getElementById("updatePrefsBtn")
 		.addEventListener("click", updatePrefs);
 
-	document.getElementById("deleteAccountBtn").addEventListener(function () {
+	document.getElementById("deleteAccountBtn").addEventListener("click",function () {
 
-		document.getElementById("deleteAccountYesConfBtn").classList.remove("hide");
-		document.getElementById("deleteAccountNoConfBtn").classList.remove("hide");
+		document.getElementById("ConfBtns").classList.remove("hide");
 
 	});
 
@@ -959,8 +958,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				url: "https://trailerscentral.herokuapp.com/delete",
 				type: "post",
 				headers: {
-					"x-access-token": getCookie(
-						"Token") // If your header name has spaces or any other char not appropriate
+					"x-access-token": getCookie("Token") // If your header name has spaces or any other char not appropriate
 				},
 				/**
 				 * Customises page with all prefs if successful - if unsuccessful - it alerts the user and page remains the same
@@ -985,19 +983,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 		else {
 
-			document.getElementById("deleteAccountNoConfBtn").classList.add("hide");
-			document.getElementById("deleteAccountYesConfBtn").classList.add("hide");
+			document.getElementById("ConfBtns").classList.add("hide");
 
 		}
 
 	}
 
-	document.getElementById("deleteAccountYesConfBtn").addEventListener(function () {
+	document.getElementById("deleteAccountYesConfBtn").addEventListener("click",function () {
 
 		deleteConf(true);
 
 	});
-	document.getElementById("deleteAccountNoConfBtn").addEventListener(function () {
+	document.getElementById("deleteAccountNoConfBtn").addEventListener("click",function () {
 
 		deleteConf(false);
 

@@ -536,19 +536,31 @@
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" id="updatePrefsBtn">Update Preferences</button>
+								<div class="row">
+									<div class="col-lg col-sm-12 col-md-12">
+										<button type="button" class="btn btn-secondary" id="updatePrefsBtn">Update Preferences</button>
+									</div>
+									<div class="col-lg col-sm-12 col-md-12">
+											<button type="button" class="btn btn-secondary" id="deleteAccountBtn">Delete Account</button>
+									</div>
+								</div>
 							</div>
 						</div>
 
-						<div class="modal-content">
+						<div class="modal-content hide" id="ConfBtns">
 
 							<div class="modal-header">
-								<button type="button" class="btn btn-secondary" id="deleteAccountBtn">Delete Account</button>
+								<h2 style="text-align:center;margin:auto;" >Are you sure?</h2>
 							</div>
 							<div class="modal-body">
-								Are you sure? 
-								<button type="button" class="btn btn-secondary hide" id="deleteAccountYesConfBtn">Yes</button>
-								<button type="button" class="btn btn-secondary hide" id="deleteAccountNoConfBtn">No</button>
+								<div class="row">
+									<div class="col-lg col-sm-12 col-md">
+										<button type="button" class="btn btn-secondary" id="deleteAccountYesConfBtn">Yes</button>
+									</div>
+									<div class="col-lg col-sm-12 col-md">
+										<button type="button" class="btn btn-secondary" id="deleteAccountNoConfBtn">No</button>
+									</div>
+								</div>
 							</div>
 						</div>
 
