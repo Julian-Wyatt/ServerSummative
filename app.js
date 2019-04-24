@@ -66,6 +66,8 @@ app.post("/register",postRegister);
 app.get("/checkAccount",getCheckAccount);
 app.post("/login", postLogin);
 app.post("/deleteaccount", postDeleteAccount);
+app.get("/NEW/Recent",getNEWRecents);
+app.get("/NEW/Channels",getNEWChannelData);
 
 
 /**
@@ -708,6 +710,33 @@ function postDeleteAccount (req,res) {
 	});
 
 }
+/**
+ * Used for the GET Method for requesting new recent trailers
+ * @param  {Object} req request JSON
+ * @param  {Object} res response JSON
+ * @returns {Array} New recent trailers JSON
+ */
+function getNEWRecents (req,res) {
+
+	intervalSavingRecents(res);
+
+}
+
+/**
+ * Used for the GET Method for requesting new channel data
+ * @param  {Object} req request JSON
+ * @param  {Object} res response JSON
+ * @returns {Array} New channel data saved to local JSONs, then available on request. Cannot send back through res as there would be more than one res which isn't possible
+ */
+function getNEWChannelData (req,res) {
+
+	if (req) {
+
+		intervalSavingChannels(res);
+
+	}
+
+}
 
 
 // ////////////////////////////////////////////////////
@@ -725,9 +754,10 @@ function postDeleteAccount (req,res) {
  * If it is in the afternoon it requests "Official Trailers" from Youtube<br>
  * The two requests give slightly different responses<br>
  * The responses are saved in recent.JSON
+ * @param {Object} res response JSON
  * @returns {Array} The JSON responses from YT are saved in recent.JSON in a later function
  */
-function intervalSavingRecents () {
+function intervalSavingRecents (res) {
 
 	// let d = moment().subtract(12,"months").format("YYYY-MM-DDTHH:mm:ssZ");
 	let d = new Date();
@@ -741,7 +771,7 @@ function intervalSavingRecents () {
 			// "publishedAfter":d,
 			// "videoDuration": "short",
 			// "regionCode": "GB"
-		}});
+		}},res);
 
 	} else {
 
@@ -753,10 +783,9 @@ function intervalSavingRecents () {
 			// "publishedAfter":d,
 			// "videoDuration": "short",
 			// "regionCode": "GB"
-		}});
+		}},res);
 
 	}
-	intervalRecents();
 
 
 }
@@ -765,21 +794,22 @@ function intervalSavingRecents () {
  * Runs with the interval function at the bottom of this file locally<br>
  * Runs for all popular channels as these will have the most requests<br>
  * This helps limit the number of requests to YT and therefore the total quota for the day<br>
+ * @param {Object} res response JSON
  * @returns {Array} The JSON responses from YT are stored in files named after the channel they relate to
  */
-let intervalSavingChannels = function intervalSavingChannels () {
+function intervalSavingChannels (res) {
 
 	callChannelData("Disney");
-	callChannelData("Marvel");
-	callChannelData("DC");
-	callChannelData("Netflix");
-	callChannelData("FOX");
-	callChannelData("WarnerBros");
-	callChannelData("Sony");
+	callChannelData("Marvel",);
+	callChannelData("DC",);
+	callChannelData("Netflix",);
+	callChannelData("FOX",);
+	callChannelData("WarnerBros",);
+	callChannelData("Sony",);
 
-	intervalChannels();
+	res.end();
 
-};
+}
 
 // https://issuetracker.google.com/128835104 - won't sort output -> ***FIXED***
 
@@ -832,30 +862,22 @@ function callChannelData (channel,res) {
 
 }
 /**
- * If there is a search query -> then search YT for it <br>
- * If not return
+ * Search YT for the given search query-> then search YT for it
  * @param  {Object} res response JSON
  * @param  {String} q search query
  * @returns {Array} Sends the requested data back to the client through res
  */
 function callTrailers (res, q) {
 
-	if (q === undefined) {
+	searchListByKeyword({"params": {
+		"maxResults": "6",
+		"part": "snippet",
+		"q": q + " Trailer",
+		"type": "video",
+		"videoDuration": "undefined",
+		// "regionCode": "GB"
+	}}, res);
 
-		return;
-
-	}else {
-
-		searchListByKeyword({"params": {
-			"maxResults": "6",
-			"part": "snippet",
-			"q": q + " Trailer",
-			"type": "video",
-			// "videoDuration": "short",
-			// "regionCode": "GB"
-		}}, res);
-
-	}
 
 	// old server side code which used client secret for auth
 	// fs.readFile("client_secret.json", function processClientSecrets (err, content) {
@@ -1067,15 +1089,8 @@ function searchListByKeyword (requestData, res, channel) {
 				}
 
 			}
-			if (res != undefined) {
 
-				res.statusCode = 200;
-				res.json(response["data"]["items"]);
-				res.end();
-
-			}
-
-			if (res === undefined && channel === undefined) {
+			if (channel === undefined && (parameters["q"] == "Trailer" || parameters["q"] == "Official Trailer")) {
 
 				fs.writeFile("Database/recents.json",JSON.stringify(response["data"]["items"]),function (err) {
 
@@ -1094,7 +1109,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 				});
 
-			} else if (res === undefined && channel != undefined) {
+			} else if (channel != undefined) {
 
 				fs.writeFile("Database/" + channel + ".json",JSON.stringify(response["data"]["items"]),function (err) {
 
@@ -1113,6 +1128,13 @@ function searchListByKeyword (requestData, res, channel) {
 					console.log("written " + channel + " file");
 
 				});
+
+			}
+			if (res != undefined) {
+
+				res.statusCode = 200;
+				res.json(response["data"]["items"]);
+				res.end();
 
 			}
 
@@ -1136,31 +1158,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 }
 
-/**
- * Calls the intervalSavingRecentsFunction every 45 mins<br>
- * This calls the Youtube API and stores the result JSON in recents.json<br>
- * @returns {undefined} No return value as function repeats -> however requested data is saved in recent.json
- */
-function intervalRecents () {
 
-	setTimeout(intervalSavingRecents, 1000 * 60 * 45);
-	// setTimeout(intervalSavingRecents, 1000 * 3);
-
-}
-/**
- * Interval Channels function<br>
- * Saves new channels every 6 hrs<br>
- * @returns {undefined} No return value as function repeats -> however the requested data is saved in JSONs
- */
-function intervalChannels () {
-
-	setTimeout(intervalSavingChannels, 1000 * 60 * 60 * 8);
-
-	// setTimeout(intervalSavingChannels, 1000 * 4);
-
-}
-
-
-module.exports = {app, intervalRecents , intervalChannels};
+module.exports = {app, intervalSavingRecents , intervalSavingChannels};
 
 

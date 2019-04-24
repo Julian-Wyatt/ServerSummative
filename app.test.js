@@ -107,6 +107,7 @@ describe("Test the youtube api interaction", () => {
 			.expect("Content-type",/json/)
 			.expect(function (res) {
 
+				console.log(res.body.length);
 				if (res.body.length != 20) {
 
 					throw new Error ("page 1 doesn't have a length of 20");
@@ -124,6 +125,7 @@ describe("Test the youtube api interaction", () => {
 			.expect("Content-type",/json/)
 			.expect(function (res) {
 
+				console.log(res.body.length);
 				if (res.body.length != 20) {
 
 					throw new Error ("page 1 doesn't have a length of 20");
@@ -222,7 +224,7 @@ describe("Test the youtube api interaction", () => {
 	test("GET /channeldata fails from bad request", (done) => {
 
 		return request(app)
-			.get("/channeldata")
+			.get("/channelID")
 			.expect(422)
 			.end(function (err) {
 
@@ -231,6 +233,33 @@ describe("Test the youtube api interaction", () => {
 
 			});
 
+
+	});
+	test("GET /NEW/Channels succeeds and saves data", (done) => {
+
+		return request(app)
+			.get("/NEW/Channels")
+			.expect(200)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
+
+	});
+	test("GET /NEW/recent succeeds and returns JSON from YT", (done) => {
+
+		return request(app)
+			.get("/NEW/Recent")
+			.expect(200)
+			.expect("Content-type",/json/)
+			.end(function (err) {
+
+				if (err) return done(err);
+				done();
+
+			});
 
 	});
 
@@ -714,7 +743,7 @@ describe("Test the /delete post method", () => {
 	test("POST /delete fails - no token", (done) => {
 
 		return request(app)
-			.post("/delete")
+			.post("/deleteaccount")
 			.expect(422)
 			.end(function (err) {
 
@@ -727,7 +756,7 @@ describe("Test the /delete post method", () => {
 	test("POST /delete fails - invalid token", (done) => {
 
 		return request(app)
-			.post("/delete")
+			.post("/deleteaccount")
 			.set("x-access-token", "34")
 			.expect(500)
 			.expect({"auth": false, "message": "Failed to authenticate token." })
@@ -742,7 +771,7 @@ describe("Test the /delete post method", () => {
 	test("POST /delete suceeds", (done) => {
 
 		return request(app)
-			.post("/delete")
+			.post("/deleteaccount")
 			.set("x-access-token", token)
 			.expect(200)
 			.expect({"success":true})
