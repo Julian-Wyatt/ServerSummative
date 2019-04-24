@@ -127,7 +127,7 @@
 						<dd class="tag-source">
 							<ul class="dummy">
 								<li>
-									<a href="app.js.html">app.js</a>, <a href="app.js.html#line799">line 799</a>
+									<a href="app.js.html">app.js</a>, <a href="app.js.html#line853">line 853</a>
 								</li>
 							</ul>
 						</dd>
@@ -162,8 +162,7 @@
 
 
 					<div class="description">
-						If there is a search query -> then search YT for it <br>
-						If not return
+						Search YT for the given search query-> then search YT for it
 					</div>
 
 
@@ -234,7 +233,7 @@
 							<dd class="tag-source">
 								<ul class="dummy">
 									<li>
-										<a href="app.js.html">app.js</a>, <a href="app.js.html#line846">line 846</a>
+										<a href="app.js.html">app.js</a>, <a href="app.js.html#line899">line 899</a>
 									</li>
 								</ul>
 							</dd>
@@ -331,7 +330,7 @@
 								<dd class="tag-source">
 									<ul class="dummy">
 										<li>
-											<a href="app.js.html">app.js</a>, <a href="app.js.html#line109">line 109</a>
+											<a href="app.js.html">app.js</a>, <a href="app.js.html#line117">line 117</a>
 										</li>
 									</ul>
 								</dd>
@@ -427,7 +426,7 @@
 										<ul class="dummy">
 											<li>
 												<a href="app.js.html">app.js</a>,
-												<a href="app.js.html#line33">line 33</a>
+												<a href="app.js.html#line35">line 35</a>
 											</li>
 										</ul>
 									</dd>
@@ -609,7 +608,7 @@
 											<ul class="dummy">
 												<li>
 													<a href="app.js.html">app.js</a>,
-													<a href="app.js.html#line526">line 526</a>
+													<a href="app.js.html#line540">line 540</a>
 												</li>
 											</ul>
 										</dd>
@@ -639,6 +638,100 @@
 
 										</dd>
 									</dl>
+
+									<h4 class="name" id="getNEWChannelData"><span class="type-signature"></span>GET /NEW/Channels</h4>
+
+
+									<div class="description">
+										Saves popular channel data to corresponding JSON files
+									</div>
+
+										<h5>Resource URL:</h5>
+										<code>https://trailerscentral.herokuapp.com/NEW/Channels</code>
+
+
+										<h5>Parameters:</h5>
+										<h6>N/A</h6>
+										
+
+										<dl class="details">
+
+
+											<dt class="tag-source">Source:</dt>
+											<dd class="tag-source">
+												<ul class="dummy">
+													<li>
+														<a href="app.js.html">app.js</a>,
+														<a href="app.js.html#line751">line 751</a>
+													</li>
+												</ul>
+											</dd>
+
+
+										</dl>
+
+
+										<h5>Example Request:</h5>
+										<code>https://trailerscentral.herokuapp.com/NEW/Channels</code><br>
+
+										<h5>Example Response:</h5>
+										
+										Visit 
+										<code>
+											https://trailerscentral.herokuapp.com/channeldata
+										</code>
+										To see the new videos
+
+									<br><br>
+										<h4 class="name" id="getNEWRecents"><span class="type-signature"></span>GET /NEW/recent</h4>
+
+
+									<div class="description">
+										Saves recent trailers data to corresponding JSON files and sends it back as a response
+									</div>
+
+										<h5>Resource URL:</h5>
+										<code>https://trailerscentral.herokuapp.com/NEW/recent</code>
+
+
+										<h5>Parameters:</h5>
+										<h6>N/A</h6>
+										
+
+										<dl class="details">
+
+
+											<dt class="tag-source">Source:</dt>
+											<dd class="tag-source">
+												<ul class="dummy">
+													<li>
+														<a href="app.js.html">app.js</a>,
+														<a href="app.js.html#line739">line 739</a>
+													</li>
+												</ul>
+											</dd>
+
+
+										</dl>
+										
+
+										<h5>Example Request:</h5>
+										<code>https://trailerscentral.herokuapp.com/NEW/recent</code><br>
+
+										<h5>Example Response:</h5>
+										<pre class="prettyprint">
+											<code>
+[
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/Wy9va15AJKt2c1z659Iis_r6_98\"", "id": { "kind": "youtube#video", "videoId": "AbyJignbSj0" }, "snippet": { "publishedAt": "2019-04-23T13:00:03.000Z", "channelId": "UCF9imwPMSGz4Vq1NiTWCC7g", "title": "Gemini Man (2019) - Official Trailer - Paramount Pictures", "description": "Watch the new trailer from visionary director Ang Lee, starring Will Smith. Gemini Man is In Theatres October 11th, 2019. Gemini Man (#GeminiMan) is an ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/AbyJignbSj0/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/AbyJignbSj0/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/AbyJignbSj0/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Paramount Pictures", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/B8Nvfc8rPNry38-hrRhi9TqRM3o\"", "id": { "kind": "youtube#video", "videoId": "qeau7UWjEms" }, "snippet": { "publishedAt": "2019-04-18T12:15:42.000Z", "channelId": "UCi8e0iOVk1fEOogdfu4YgfA", "title": "Hobbs &amp; Shaw Trailer #1 (2019) | Movieclips Trailers", "description": "Check out the official Hobbs & Shaw Trailer starring Dwayne Johnson! Let us know what you think in the comments below. ▻ Sign up for a Fandango FanAlert ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/qeau7UWjEms/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/qeau7UWjEms/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/qeau7UWjEms/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Movieclips Trailers", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/ru88vfv2RcriN8kTFgH8vhmnkhY\"", "id": { "kind": "youtube#video", "videoId": "ubDmUVoXdLI" }, "snippet": { "publishedAt": "2019-04-17T14:19:04.000Z", "channelId": "UCi8e0iOVk1fEOogdfu4YgfA", "title": "Dark Phoenix Final Trailer (2019) | Movieclips Trailers", "description": "Check out the official X-Men: Dark Phoenix Trailer starring Jennifer Lawrence! Let us know what you think in the comments below. ▻ Sign up for a Fandango ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/ubDmUVoXdLI/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/ubDmUVoXdLI/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/ubDmUVoXdLI/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Movieclips Trailers", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/nPHQ4J7hIbdKSViwAi02Mlc04iI\"", "id": { "kind": "youtube#video", "videoId": "xRc3WviXk2M" }, "snippet": { "publishedAt": "2019-04-03T13:23:20.000Z", "channelId": "UCi8e0iOVk1fEOogdfu4YgfA", "title": "Joker Teaser Trailer #1 (2019) | Movieclips Trailers", "description": "Check out the official Joker Teaser starring Joaquin Phoenix! Let us know what you think in the comments below. ▻ Sign up for a Fandango FanAlert for Joker: ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/xRc3WviXk2M/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/xRc3WviXk2M/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/xRc3WviXk2M/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Movieclips Trailers", "liveBroadcastContent": "none" } },
+{ "kind": "youtube#searchResult", "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/VjcR1h2otj8UJdMUInEYeOFUPuk\"", "id": { "kind": "youtube#video", "videoId": "Z6yTXsCauIc" }, "snippet": { "publishedAt": "2019-04-10T22:07:55.000Z", "channelId": "UCi8e0iOVk1fEOogdfu4YgfA", "title": "Anna Trailer #1 (2019) | Movieclips Trailers", "description": "Check out the official Anna Trailer starring Sasha Luss! Let us know what you think in the comments below. ▻ Sign up for a Fandango FanAlert for Anna: ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/Z6yTXsCauIc/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/Z6yTXsCauIc/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/Z6yTXsCauIc/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Movieclips Trailers", "liveBroadcastContent": "none" } },
+...]
+									</code>
+										</pre>	
+										
+				
 
 
 									<h4 class="name" id="getPrefs"><span class="type-signature"></span>GET /prefs</h4>
@@ -729,7 +822,7 @@
 												<ul class="dummy">
 													<li>
 														<a href="app.js.html">app.js</a>,
-														<a href="app.js.html#line207">line 207</a>
+														<a href="app.js.html#line214">line 214</a>
 													</li>
 												</ul>
 											</dd>
@@ -824,7 +917,7 @@
 													<ul class="dummy">
 														<li>
 															<a href="app.js.html">app.js</a>,
-															<a href="app.js.html#line151">line 151</a>
+															<a href="app.js.html#line161">line 161</a>
 														</li>
 													</ul>
 												</dd>
@@ -920,7 +1013,7 @@
 														<ul class="dummy">
 															<li>
 																<a href="app.js.html">app.js</a>,
-																<a href="app.js.html#line81">line 81</a>
+																<a href="app.js.html#line86">line 86</a>
 															</li>
 														</ul>
 													</dd>
@@ -964,23 +1057,6 @@
 												</div>
 
 
-													<dl class="details">
-
-
-														<dt class="tag-source">Source:</dt>
-														<dd class="tag-source">
-															<ul class="dummy">
-																<li>
-																	<a href="app.js.html">app.js</a>,
-																	<a href="app.js.html#line1160">line 1160</a>
-																</li>
-															</ul>
-														</dd>
-
-
-													</dl>
-
-
 													<h5>Returns:</h5>
 
 
@@ -1011,22 +1087,6 @@
 														This calls the Youtube API and stores the result JSON in recents.json<br>
 													</div>
 
-
-														<dl class="details">
-
-
-															<dt class="tag-source">Source:</dt>
-															<dd class="tag-source">
-																<ul class="dummy">
-																	<li>
-																		<a href="app.js.html">app.js</a>,
-																		<a href="app.js.html#line1149">line 1149</a>
-																	</li>
-																</ul>
-															</dd>
-
-
-														</dl>
 
 
 														<h5>Returns:</h5>
@@ -1070,7 +1130,7 @@
 																	<ul class="dummy">
 																		<li>
 																			<a href="app.js.html">app.js</a>,
-																			<a href="app.js.html#line775">line 775</a>
+																			<a href="app.js.html#line827">line 827</a>
 																		</li>
 																	</ul>
 																</dd>
@@ -1122,7 +1182,7 @@
 																		<ul class="dummy">
 																			<li>
 																				<a href="app.js.html">app.js</a>,
-																				<a href="app.js.html#line735">line 735</a>
+																				<a href="app.js.html#line784">line 784</a>
 																			</li>
 																		</ul>
 																	</dd>
@@ -1212,7 +1272,7 @@
 																			<ul class="dummy">
 																				<li>
 																					<a href="app.js.html">app.js</a>,
-																					<a href="app.js.html#line663">line 663</a>
+																					<a href="app.js.html#line680">line 680</a>
 																				</li>
 																			</ul>
 																		</dd>
@@ -1333,7 +1393,7 @@ $.ajax({
 																				<ul class="dummy">
 																					<li>
 																						<a href="app.js.html">app.js</a>,
-																						<a href="app.js.html#line577">line 577</a>
+																						<a href="app.js.html#line593">line 593</a>
 																					</li>
 																				</ul>
 																			</dd>
@@ -1465,7 +1525,7 @@ $.ajax({
 																					<ul class="dummy">
 																						<li>
 																							<a href="app.js.html">app.js</a>,
-																							<a href="app.js.html#line360">line 360</a>
+																							<a href="app.js.html#line371">line 371</a>
 																						</li>
 																					</ul>
 																				</dd>
@@ -1644,7 +1704,7 @@ $.ajax({
 																						<ul class="dummy">
 																							<li>
 																								<a href="app.js.html">app.js</a>,
-																								<a href="app.js.html#line430">line 430</a>
+																								<a href="app.js.html#line443">line 443</a>
 																							</li>
 																						</ul>
 																					</dd>
@@ -1755,7 +1815,7 @@ $.ajax({
 																							<ul class="dummy">
 																								<li>
 																									<a href="app.js.html">app.js</a>,
-																									<a href="app.js.html#line1002">line 1002</a>
+																									<a href="app.js.html#line1050">line 1050</a>
 																								</li>
 																							</ul>
 																						</dd>
@@ -1902,7 +1962,7 @@ $.ajax({
 																								<ul class="dummy">
 																									<li>
 																										<a href="app.js.html">app.js</a>,
-																										<a href="app.js.html#line1027">line 1027</a>
+																										<a href="app.js.html#line1078">line 1078</a>
 																									</li>
 																								</ul>
 																							</dd>
