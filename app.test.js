@@ -2,7 +2,9 @@
 
 const request = require("supertest");
 const appJS = require("./app.js");
-
+const dotenv = require("dotenv");
+// const fs = require("fs");
+dotenv.config();
 const app = appJS.app;
 let token = null;
 
@@ -85,20 +87,24 @@ describe("Test the youtube api interaction", () => {
 			.expect(422);
 
 	});
-	test("GET /search succeeds and returns JSON", (done) => {
+	if (process.env.GOOGLE_API_KEY) {
 
-		return request(app)
-			.get("/search?q=end%20game")
-			.expect(200)
-			.expect("Content-type",/json/)
-			.end(function (err) {
+		test("GET /search succeeds and returns JSON", (done) => {
 
-				if (err) return done(err);
-				done();
+			return request(app)
+				.get("/search?q=end%20game")
+				.expect(200)
+				.expect("Content-type",/json/)
+				.end(function (err) {
 
-			});
+					if (err) return done(err);
+					done();
 
-	});
+				});
+
+		});
+
+	}
 	test("GET /recent succeeds without page query", () => {
 
 		return request(app)
@@ -176,21 +182,28 @@ describe("Test the youtube api interaction", () => {
 			});
 
 	});
-	test("GET /channeldata succeeds and returns JSON from YT", (done) => {
+	if (process.env.GOOGLE_API_KEY) {
 
-		return request(app)
-			.get("/channeldata?channel=Disney-Pixar")
-			.expect(200)
-			.expect("Content-type",/json/)
-			.end(function (err) {
+		test("GET /channeldata succeeds and returns JSON from YT", (done) => {
 
-				if (err) return done(err);
-				done();
+			return request(app)
+				.get("/channeldata?channel=Disney-Pixar")
+				.expect(200)
+				.expect("Content-type",/json/)
+				.end(function (err) {
 
-			});
+					if (err) return done(err);
+					done();
 
-	});
+				});
 
+		});
+
+	} else {
+
+		console.log("Missing API KEY\nTherefore missing few tests and lots of branches and functions");
+
+	}
 	test("GET /channeldata fails from bad request", (done) => {
 
 		return request(app)
@@ -205,22 +218,24 @@ describe("Test the youtube api interaction", () => {
 
 
 	});
+	if (process.env.GOOGLE_API_KEY) {
 
-	test("GET /channelID succeeds and returns JSON from YT", (done) => {
+		test("GET /channelID succeeds and returns JSON from YT", (done) => {
 
-		return request(app)
-			.get("/channelID?title=Marvel")
-			.expect(200)
-			.expect("Content-type",/json/)
-			.end(function (err) {
+			return request(app)
+				.get("/channelID?title=Marvel")
+				.expect(200)
+				.expect("Content-type",/json/)
+				.end(function (err) {
 
-				if (err) return done(err);
-				done();
+					if (err) return done(err);
+					done();
 
-			});
+				});
 
-	});
+		});
 
+	}
 	test("GET /channeldata fails from bad request", (done) => {
 
 		return request(app)
@@ -235,35 +250,39 @@ describe("Test the youtube api interaction", () => {
 
 
 	});
-	test("GET /NEW/Channels succeeds and saves data", (done) => {
+	if (process.env.GOOGLE_API_KEY) {
 
-		return request(app)
-			.get("/NEW/Channels")
-			.expect(200)
-			.end(function (err) {
+		test("GET /NEW/Channels succeeds and saves data", (done) => {
 
-				if (err) return done(err);
-				done();
+			return request(app)
+				.get("/NEW/Channels")
+				.expect(200)
+				.end(function (err) {
 
-			});
+					if (err) return done(err);
+					done();
 
-	});
-	test("GET /NEW/recent succeeds and returns JSON from YT", (done) => {
+				});
 
-		return request(app)
-			.get("/NEW/Recent")
-			.expect(200)
-			.expect("Content-type",/json/)
-			.end(function (err) {
-
-				if (err) return done(err);
-				done();
-
-			});
-
-	});
+		});
 
 
+		test("GET /NEW/recent succeeds and returns JSON from YT", (done) => {
+
+			return request(app)
+				.get("/NEW/Recent")
+				.expect(200)
+				.expect("Content-type",/json/)
+				.end(function (err) {
+
+					if (err) return done(err);
+					done();
+
+				});
+
+		});
+
+	}
 	// Couldn't get the timeing functions to test properly
 
 	// jest.useFakeTimers();
@@ -367,6 +386,47 @@ describe("Test the registration post methods and whether the account is free", (
 				done();
 
 			});
+
+	});
+
+	// This is how these functions would be tested
+	// however I cannot test through the get method or from calling the function
+	test("GET /checkAccount fails - Error during reading file", () => {
+
+
+		jest.mock("fs", () => ({
+
+			readFile: jest.fn((file,callback) => {
+
+				callback("Some Error",{});
+
+			})
+
+		}));
+
+		const fs = require("fs");
+		let res = { statusCode: null, end: jest.fn(() => null) };
+
+
+		fs.readFile("Database/accounts.json",function (er,accounts) {
+
+			if (er) {
+
+				res.statusCode = 500;
+				res.end();
+				return;
+
+			}
+			else {
+
+				return accounts;
+
+			}
+
+		});
+
+		expect(res.statusCode).toEqual(500);
+
 
 	});
 
