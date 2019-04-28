@@ -4,8 +4,6 @@ let fs = require("fs");
 // let readline = require("readline");
 const {google} = require("googleapis");
 let bcrypt = require("bcrypt");
-// let moment = require("moment");
-// const {OAuth2Client} = require("google-auth-library");
 let jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
@@ -61,7 +59,7 @@ app.get("/search",getSearch);
 app.get("/channeldata",getChannelData);
 app.get("/recent", getRecent);
 app.get("/prefs", getPrefs);
-app.post ("/prefs", postPrefs);
+app.post("/prefs", postPrefs);
 app.post("/register",postRegister);
 app.get("/checkAccount",getCheckAccount);
 app.post("/login", postLogin);
@@ -158,7 +156,7 @@ function getRecent (req,res) {
 
 		if (err) {
 
-			res.statusCode == 500;
+			res.statusCode = 500;
 			res.end();
 			throw new Error(err);
 
@@ -213,7 +211,7 @@ function getPrefs (req,res) {
 
 		if (er) {
 
-			res.statusCode == 500;
+			res.statusCode = 500;
 			res.end();
 			throw new Error(er);
 
@@ -369,7 +367,7 @@ function postPrefs (req,res) {
 
 		if (er) {
 
-			res.statusCode == 500;
+			res.statusCode = 500;
 			res.end();
 			throw new Error(er);
 
@@ -391,7 +389,7 @@ function postPrefs (req,res) {
 
 				if (er) {
 
-					res.statusCode == 500;
+					res.statusCode = 500;
 					res.end();
 					throw new Error(er);
 
@@ -439,7 +437,7 @@ function postRegister (req,res) {
 
 		if (er) {
 
-			res.statusCode == 500;
+			res.statusCode = 500;
 			res.end();
 			throw new Error(er);
 
@@ -451,7 +449,7 @@ function postRegister (req,res) {
 
 			if (er) {
 
-				res.statusCode == 500;
+				res.statusCode = 500;
 				res.end();
 				throw new Error(er);
 
@@ -461,7 +459,7 @@ function postRegister (req,res) {
 
 				if (er) {
 
-					res.statusCode == 500;
+					res.statusCode = 500;
 					res.end();
 					throw new Error(er);
 
@@ -488,7 +486,7 @@ function postRegister (req,res) {
 
 					if (er) {
 
-						res.statusCode == 500;
+						res.statusCode = 500;
 						res.end();
 						throw new Error(er);
 
@@ -533,7 +531,7 @@ function getCheckAccount (req,res) {
 
 		if (er) {
 
-			res.statusCode == 500;
+			res.statusCode = 500;
 			res.end();
 			throw new Error(er);
 
@@ -589,7 +587,7 @@ function postLogin (req,res) {
 
 		if (er) {
 
-			res.statusCode == 500;
+			res.statusCode = 500;
 			res.end();
 			throw new Error(er);
 
@@ -603,7 +601,7 @@ function postLogin (req,res) {
 
 					if (er) {
 
-						res.statusCode == 500;
+						res.statusCode = 500;
 						res.end();
 						throw new Error(er);
 
@@ -670,7 +668,7 @@ function postDeleteAccount (req,res) {
 
 		if (er) {
 
-			res.statusCode == 500;
+			res.statusCode = 500;
 			res.end();
 			throw new Error(er);
 
@@ -692,7 +690,7 @@ function postDeleteAccount (req,res) {
 
 				if (er) {
 
-					res.statusCode == 500;
+					res.statusCode = 500;
 					res.end();
 					throw new Error(er);
 
@@ -830,7 +828,7 @@ function callChannelData (channel,res) {
 
 			if (res != undefined) {
 
-				res.statusCode == 500;
+				res.statusCode = 500;
 				res.end();
 
 			}
@@ -1055,7 +1053,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 				if (res != undefined) {
 
-					res.statusCode == 500;
+					res.statusCode = 500;
 					res.send(err);
 					res.end();
 
@@ -1098,7 +1096,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 						if (res != undefined) {
 
-							res.statusCode == 500;
+							res.statusCode = 500;
 							res.end();
 
 						}
@@ -1117,7 +1115,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 						if (res != undefined) {
 
-							res.statusCode == 500;
+							res.statusCode = 500;
 							res.send(err);
 							res.end();
 
@@ -1144,7 +1142,7 @@ function searchListByKeyword (requestData, res, channel) {
 
 			if (res != undefined) {
 
-				res.statusCode == 500;
+				res.statusCode = 500;
 				res.send(err);
 				res.end();
 
@@ -1159,6 +1157,6 @@ function searchListByKeyword (requestData, res, channel) {
 }
 
 
-module.exports = {app, intervalSavingRecents , intervalSavingChannels};
+module.exports = {app, intervalSavingRecents , intervalSavingChannels, getCheckAccount};
 
 
