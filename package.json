@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage",
     "start": "node server.js",
-    "pretest": "eslint client/index.js server.js app.js"
+    "pretest": "eslint client/index.js server.js app.js app.test.js --fix "
   },
   "repository": {
     "type": "git",
