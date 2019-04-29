@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
         <title>Server Summative:</title>
@@ -21,7 +21,7 @@
         <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
     </head>
     <body>
-		<h1><a href="../index.html" style="color:#fafafa">Return back to Trailers Central</a></h1>
+		<h1><a href="../index.html" style="color:black">Return back to Trailers Central</a></h1>
         <h1 id="server-summative">Server Summative:</h1>
 <h3 id="website-and-api-description">Website and API Description:</h3>
 <p>The Webpage will contain trailers and the user will be able to customise account details and search parameters when searching for specific trailers.
@@ -53,7 +53,8 @@ There are also blurs when trailers move behind the top navbar.</p>
 <p>For the full server-side code documentation see the link below; this will just be a summary.</p>
 <p>App.js contains all of the get/ post functions as well as a few extra functions. Server.js contains the app.listen only, this is so I can jest test app.js with app.test.js</p>
 <p>I decided to name all the app.js functions so I can list the GET &amp; POST methods with:</p>
-<pre><code class="language-javascript"><div>app.get(<span class="hljs-string">"/channelID"</span>,getChannelID);
+<pre><code class="language-javascript">
+app.get(<span class="hljs-string">"/channelID"</span>,getChannelID);
 app.get(<span class="hljs-string">"/search"</span>,getSearch);
 app.get(<span class="hljs-string">"/channeldata"</span>,getChannelData);
 app.get(<span class="hljs-string">"/recent"</span>, getRecent);
@@ -63,7 +64,7 @@ app.post(<span class="hljs-string">"/register"</span>,postRegister);
 app.get(<span class="hljs-string">"/checkAccount"</span>,getCheckAccount);
 app.post(<span class="hljs-string">"/login"</span>, postLogin);
 app.post(<span class="hljs-string">"/deleteaccount"</span>, postDeleteAccount);
-</div></code></pre>
+</code></pre>
 <p>This therefore looks much neater, while also allowing me to properly JSDoc comment my functions as they won't be anonymous.</p>
 <p>From top to bottom of the list above, we have:</p>
 <p>getChannelID, which will return 3 channels with the given title query given in the URL.</p>
@@ -81,8 +82,8 @@ I have this strategically set to use the majority but not all of my quota in one
 This greatly reduces the chances of my daily quota being used up.</p>
 <p>NOTE: you must assign certain values in a .env file for certain actions to work.
 For example request an API KEY from google for requests and place this in .env like:</p>
-<pre><code class="language-javascript"><div>GOOGLE_API_KEY=<span class="hljs-string">"NEW_YOUTUBE_API_KEY"</span>
-</div></code></pre>
+<pre><code class="language-javascript">GOOGLE_API_KEY=<span class="hljs-string">"NEW_YOUTUBE_API_KEY"</span>
+</code></pre>
 <p>Other variables in .env include PORT - the port to run the server on, secret - the secret used to encrypt the tokens.
 These variables are accessed through <code>Process.env.VAR_NAME</code></p>
 <h2 id="server-side-code">Server-side code</h2>
