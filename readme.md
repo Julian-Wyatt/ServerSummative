@@ -93,6 +93,15 @@ The few extra functions are generally called through the above functions. The fe
 I have this strategically set to use the majority but not all of my quota in one day. These functions are there to save the requested data to JSONs rather than pinging Youtube after every request to my server.
 This greatly reduces the chances of my daily quota being used up.
 
+NOTE: you must assign certain values in a .env file for certain actions to work.
+For example request an API KEY from google for requests and place this in .env like: 
+
+```javascript
+GOOGLE_API_KEY="NEW_YOUTUBE_API_KEY"
+``` 
+Other variables in .env include PORT - the port to run the server on, secret - the secret used to encrypt the tokens.
+These variables are accessed through ```Process.env.VAR_NAME```
+
 ## Server-side code
 See full Server side code documentation provided on the website:
 

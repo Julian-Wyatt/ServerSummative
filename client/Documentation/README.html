@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <title>Server Summative:</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body>
+		<h1><a href="../index.html" style="color:#fafafa">Return back to Trailers Central</a></h1>
+        <h1 id="server-summative">Server Summative:</h1>
+<h3 id="website-and-api-description">Website and API Description:</h3>
+<p>The Webpage will contain trailers and the user will be able to customise account details and search parameters when searching for specific trailers.
+The API will make all the requests to YT, as well as serving the client side data, and customisation.</p>
+<h1 id="client-side-documentation">Client-side Documentation</h1>
+<h2 id="general-instructions-and-descriptions">General instructions and descriptions:</h2>
+<p>Documentation for website hosted on <a href="https://trailerscentral.herokuapp.com/Documentation:">https://trailerscentral.herokuapp.com/Documentation:</a></p>
+<p>When the page loads you have the main trailers section which is the middle part, along with the sidebar and main navbar.</p>
+<p>By default the website will show the recent trailers, which is sent to the client side by a fetch request for a JSON file.</p>
+<p>The client side pocesses the recieved JSON and adds the links to the iframes, which automatically update the thumbnails.</p>
+<p>There is a second page of recents available at the bottom, which sends the next 20+ video data in an iframe.</p>
+<p>There would be more pages but I had to limit this. I will explain in the API documentation.</p>
+<p>Along the sidebar, the user can select different (preselected channels to view trailers from, if for example they wish to see just Disney or just Marvel trailers.) These act similarly to genres.</p>
+<p>The user can create an account at the bottom, this will enable them to alter their preferences so they see different channels along the sidebar,
+it will also minorly customise the page, with a welcome of their name, and should they link their google account it will show their google profile picture as well.</p>
+<p>In order link your google account you must have an account with the same email as your google account (obviously the password should be different).</p>
+<p>Along the topmost navbar there is a search section, which will show exactly 4 results for what has been searched, which will shift and automatically update over the trailers section.</p>
+<p>The footer along the bottom of the page is there for general info, ie a little about the author, and links to my github account, along with webpages for both the client side and server side documentation.</p>
+<p>However for submission most of the footer will contain placeholder text for anonymity purposes.</p>
+<h2 id="little-extra-detail">Little extra detail:</h2>
+<p>I decided to use the youtube iframe api. This allows me to use event listeners for actions such as playing and stopping videos.
+Therefore I decided that on play would result in changing the bootstrap card size in the column, while also blurring the background in the process.
+The background only has a faint blur during this and moves down from the top (this is also quite fragile as it is an experimental feature in MDN CSS and they're only available in edge and safari browsers).
+There are also blurs when trailers move behind the top navbar.</p>
+<h2 id="client-side-code">Client-side code:</h2>
+<p>See full client side code documentation provided on the website:</p>
+<p><a href="https://trailerscentral.herokuapp.com/Documentation/clientDOC.html">https://trailerscentral.herokuapp.com/Documentation/clientDOC.html</a></p>
+<h1 id="server-side-documentation">Server-side Documentation</h1>
+<p>For the full server-side code documentation see the link below; this will just be a summary.</p>
+<p>App.js contains all of the get/ post functions as well as a few extra functions. Server.js contains the app.listen only, this is so I can jest test app.js with app.test.js</p>
+<p>I decided to name all the app.js functions so I can list the GET &amp; POST methods with:</p>
+<pre><code class="language-javascript"><div>app.get(<span class="hljs-string">"/channelID"</span>,getChannelID);
+app.get(<span class="hljs-string">"/search"</span>,getSearch);
+app.get(<span class="hljs-string">"/channeldata"</span>,getChannelData);
+app.get(<span class="hljs-string">"/recent"</span>, getRecent);
+app.get(<span class="hljs-string">"/prefs"</span>, getPrefs);
+app.post (<span class="hljs-string">"/prefs"</span>, postPrefs);
+app.post(<span class="hljs-string">"/register"</span>,postRegister);
+app.get(<span class="hljs-string">"/checkAccount"</span>,getCheckAccount);
+app.post(<span class="hljs-string">"/login"</span>, postLogin);
+app.post(<span class="hljs-string">"/deleteaccount"</span>, postDeleteAccount);
+</div></code></pre>
+<p>This therefore looks much neater, while also allowing me to properly JSDoc comment my functions as they won't be anonymous.</p>
+<p>From top to bottom of the list above, we have:</p>
+<p>getChannelID, which will return 3 channels with the given title query given in the URL.</p>
+<p>getSearch, which will return 6 videos with the given search criteria q given in the URL, such that it searches Youtube for <code>q + &quot; Trailer&quot;</code>.</p>
+<p>getChannelData, which will return the JSON data for the given channel in the URL, if it isn't saved (and is part of my list in channels.json) then it will search Youtube for it.</p>
+<p>getRecent, which is similar to getChannelData, except it is recent trailers saved in recents.json.</p>
+<p>getPrefs, which will return the preferences and some other data for a given token or email. If an email is given a new token will be provided.</p>
+<p>postPrefs, which will update the users preferences, defined by the <code>x-access-token</code> provided in the header of the request.</p>
+<p>postRegister, which will take in form data, such as email and password (the required data), and some preferences and possibly a name, creating an account which will customise the page the user sees. The password will be encrypted using industry standard bcrypt and stored in a JSON.</p>
+<p>getCheckAccount, which will return a basic JSON to see whether the account exists or not, which will return 200 codes as the request is successful and a JSON is received as a response.</p>
+<p>postLogin, which will log the user in to the website, using their email and password which are on the server. The password will be bcrypt compared with the stored password asynchronously. Log in will occur if successful which will send log in data to the client</p>
+<p>postDeleteAccount, which will delete the account linked to the token which is sent in the header.</p>
+<p>The few extra functions are generally called through the above functions. The few that don't are the interval saving functions which will call requests every x miliseconds.
+I have this strategically set to use the majority but not all of my quota in one day. These functions are there to save the requested data to JSONs rather than pinging Youtube after every request to my server.
+This greatly reduces the chances of my daily quota being used up.</p>
+<p>NOTE: you must assign certain values in a .env file for certain actions to work.
+For example request an API KEY from google for requests and place this in .env like:</p>
+<pre><code class="language-javascript"><div>GOOGLE_API_KEY=<span class="hljs-string">"NEW_YOUTUBE_API_KEY"</span>
+</div></code></pre>
+<p>Other variables in .env include PORT - the port to run the server on, secret - the secret used to encrypt the tokens.
+These variables are accessed through <code>Process.env.VAR_NAME</code></p>
+<h2 id="server-side-code">Server-side code</h2>
+<p>See full Server side code documentation provided on the website:</p>
+<p><a href="https://trailerscentral.herokuapp.com/Documentation/apiDOC.html">https://trailerscentral.herokuapp.com/Documentation/apiDOC.html</a></p>
+<h1 id="licensing-links">Licensing Links:</h1>
+<p>Placeholder.png -&gt; <a href="https://pixabay.com/service/terms/">https://pixabay.com/service/terms/</a> -&gt; <a href="https://pixabay.com/users/wingtilldie-3058071/">https://pixabay.com/users/wingtilldie-3058071/</a></p>
+<p>Youtube's Terms of Service: <a href="https://www.youtube.com/static?gl=GB&amp;template=terms">https://www.youtube.com/static?gl=GB&amp;template=terms</a> -&gt; Relevent sections are: 5.1.A &amp; 5.1.C</p>
+<p>Favicon.ico's link: <a href="https://icons8.com/icons/set/film">https://icons8.com/icons/set/film</a></p>
+<h1 id="known-bugs">Known Bugs</h1>
+<p>Ad-blockers must be turned off due to further erroring in the console</p>
+<p>The YT Iframe API gives errors in the console such as:</p>
+<p>Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('<a href="https://www.youtube.com">https://www.youtube.com</a>') does not match the recipient window's origin ('<a href="https://trailerscentral.herokuapp.com">https://trailerscentral.herokuapp.com</a>').</p>
+<p>A link to fix this is: <a href="https://stackoverflow.com/questions/7443578/youtube-iframe-api-how-do-i-control-a-iframe-player-thats-already-in-the-html">https://stackoverflow.com/questions/7443578/youtube-iframe-api-how-do-i-control-a-iframe-player-thats-already-in-the-html</a></p>
+<p>Transparent background stops appearing after watching a few videos and switching between fullscreen and normal.</p>
+<p>When using safari the console logs: The source list for Content Security Policy directive 'script-src' contains an invalid source: ''strict-dynamic''. It will be ignored.</p>
+<p>When in Chrome, timeout violations occur: <code>[Violation] 'setTimeout' handler took &lt;N&gt;ms</code></p>
+<p>NOTE: When using <a href="https://trailerscentral.herokuapp.com">https://trailerscentral.herokuapp.com</a>, the data isn't persistant, and therefore does not save new accounts permanently when the server resets (which is nightly or when it is not used for a longer period of time). Instead use the localhost process to test this.</p>
+<p>NOTE: When using the localhost version, you must provide your own API Key in the environment variables file (named .env) in the server's directory. Otherwise no YT based interaction will work.</p>
+<p>NOTE: When using the localhost version or jest testing you must leave lines 15 and 16 in app.js annotated out. These are there to redirect all requests without https to the https version, therefore making it a secure connection.</p>
+
+    </body>
+    </html>
