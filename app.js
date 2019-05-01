@@ -220,7 +220,7 @@ function getPrefs (req,res) {
 
 		if (req.headers["x-access-token"]) {
 
-			jwt.verify(req.headers["x-access-token"], process.env.secret, function (err, decoded) {
+			jwt.verify(req.headers["x-access-token"], process.env.secret || "superSecret", function (err, decoded) {
 
 				if (err) {
 
@@ -373,7 +373,7 @@ function postPrefs (req,res) {
 
 		}
 
-		jwt.verify(req.headers["x-access-token"] , process.env.secret, function (err, decoded) {
+		jwt.verify(req.headers["x-access-token"] , process.env.secret || "superSecret", function (err, decoded) {
 
 			if (err) {
 
@@ -674,7 +674,7 @@ function postDeleteAccount (req,res) {
 
 		}
 
-		jwt.verify(req.headers["x-access-token"] , process.env.secret, function (err, decoded) {
+		jwt.verify(req.headers["x-access-token"] , process.env.secret || "superSecret", function (err, decoded) {
 
 			if (err) {
 
@@ -1044,7 +1044,7 @@ function searchListByKeyword (requestData, res, channel) {
 	let service = google.youtube("v3");
 	// var parameters = requestData["params"];
 	let parameters = removeEmptyParameters(requestData["params"]);
-	parameters["key"] = process.env.GOOGLE_API_KEY;
+	parameters["key"] = process.env.GOOGLE_API_KEY; // expect 400 response when this isn't defined.
 	service.search.list(parameters, function (err, response) {
 
 		try {
