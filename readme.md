@@ -40,6 +40,8 @@ Therefore I decided that on play would result in changing the bootstrap card siz
 The background only has a faint blur during this and moves down from the top (this is also quite fragile as it is an experimental feature in MDN CSS and they're only available in edge and safari browsers). 
 There are also blurs when trailers move behind the top navbar.  
 
+**Note: The file: googlef50573ce84d3ee44.html, is used for hosted site verification by google and should not be validated.**
+
 ## Client-side code: 
 See full client side code documentation provided on the website:
 
@@ -100,7 +102,8 @@ For example request an API KEY from google for requests and place this in .env l
 GOOGLE_API_KEY="NEW_YOUTUBE_API_KEY"
 ``` 
 **Other variables in .env include PORT - the port to run the server on, secret - the secret used to encrypt the tokens.**
-These variables are accessed through ```Process.env.VAR_NAME```
+These variables are accessed through ```Process.env.VAR_NAME```.
+I have assigned a default token secret, however I shouldn't need to. 
 
 ## Server-side code
 See full Server side code documentation provided on the website:
