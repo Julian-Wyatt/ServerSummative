@@ -105,6 +105,9 @@ GOOGLE_API_KEY="NEW_YOUTUBE_API_KEY"
 These variables are accessed through ```Process.env.VAR_NAME```.
 I have assigned a default token secret, however I shouldn't need to. 
 
+**When JEST testing, please add your own Youtube API Key, this will then run all functions. (without it lots of branches won't run as they will definitely error)**
+
+
 ## Server-side code
 See full Server side code documentation provided on the website:
 
